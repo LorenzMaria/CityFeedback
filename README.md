@@ -38,3 +38,19 @@ Das Skript nennt außerdem Lernhilfen wie **Pro Git**, **Git Magic**, das **Git 
 
 **Ein Beispiel aus unserer Teamarbeit:**
 Ich schreibe meinen Abschnitt in VS Code. Anschließend prüfe ich die Änderungen in GitHub Desktop, erstelle einen Commit und lade meinen Branch hoch. Auf GitHub kann das Team meinen Pull Request lesen und Feedback geben.
+
+Dabei muss ich die Git-Schritte nicht in mehreren Programmen wiederholen: Ich wähle die Oberfläche, mit der ich gut zurechtkomme.
+
+### Ein kurzer Ausblick: Automatisierung
+
+Das Skript behandelt GitHub Actions und erwähnt auch die integrierten CI/CD-Funktionen von GitLab sowie weitere Automatisierungswerkzeuge (z. B. Jenkins). Diese können beispielsweise nach einem Push automatisch Tests ausführen. Für unser Handout ist das noch nicht nötig, bei einem späteren Softwareprojekt helfen solche Prüfungen, Fehler früh zu erkennen.
+
+### Quellen und weiterführende Links
+
+- Modulskript „Moderne Softwareentwicklung", Kapitel 1 und 2.
+- [GitHub Desktop](https://docs.github.com/en/desktop)
+- [Git in VS Code](https://code.visualstudio.com/docs/sourcecontrol/overview)
+- [GitLens](https://help.gitkraken.com/gitlens/gitlens-features/)
+- [Sourcetree](https://www.sourcetreeapp.com/)
+- [GitHub CLI](https://cli.github.com/manual/)
+- [Learn Git Branching](https://learngitbranching.js.org/?locale=de_DE)
