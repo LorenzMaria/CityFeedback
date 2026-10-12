@@ -190,7 +190,7 @@ Bevor du beginnst, stelle sicher, dass du Folgendes installiert und eingerichtet
 - Wähle "File > New > Project" aus dem Hauptmenü.
 - Konfiguriere dein Projekt nach Bedarf und klicke auf "Create".
 
-![Beispiel Neues Projekt](https://i.ibb.co/61fYYCp/IJ-Neues-Projekt-small.webp)
+![Beispiel Neues Projekt](/img/IJ-Neues-Projekt-small.webp)
 
 _Beispiel: Neues Projekt anlegen_
 
@@ -200,7 +200,7 @@ _Beispiel: Neues Projekt anlegen_
 - Wähle "Git" aus dem Dropdown-Menü und bestätige.
 - Alternativ kannst du im Terminal-Fenster der IDE `git init` eingeben.
 
-![Beispiel Git](https://i.ibb.co/HNv3VPX/IJ-VCS-Git-s.webp)
+![Beispiel Git](/img/IJ-VCS-Git-s.webp)
 
 _Beispiel: Menüpunkt "VCS > Enable Version Control Integration > Git"_
 
@@ -227,7 +227,7 @@ _Beispiel: Menüpunkt "VCS > Enable Version Control Integration > Git"_
     - Optional: Pushe die Änderungen mit:
         - `git push`.
 
-![Beispiel Commit](https://i.ibb.co/rH4n2RH/IJ-commit.webp)
+![Beispiel Commit](/img/IJ-commit.webp)
 
 _Beispiel: Commit-Möglichkeit via GUI_
 
@@ -238,7 +238,7 @@ _Beispiel: Commit-Möglichkeit via GUI_
 - Gehe zu GitHub, GitLab oder Bitbucket und erstelle ein neues Repository.
 - Kopiere die URL des Remote-Repositories.
 
-![Beispiel Github Copy Remote](https://i.ibb.co/YfMgDG3/GH-copy-URL.webp)
+![Beispiel Github Copy Remote](/img/GH-copy-URL.webp)
 
 _Beispiel: Copy GitHub URL_
 
@@ -249,7 +249,7 @@ _Beispiel: Copy GitHub URL_
 - Gib "origin" als Name ein und füge die kopierte URL ein.
 - Bestätige mit "OK".
 
-![Beispiel IntelliJ Manage Remotes](https://i.ibb.co/BfGH1Wd/IJ-manage-remotes.webp)
+![Beispiel IntelliJ Manage Remotes](/img/IJ-manage-remotes.webp)
 
 _Beispiel: Remote Repository hinzufügen_
 
