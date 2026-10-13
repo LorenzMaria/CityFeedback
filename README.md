@@ -225,7 +225,8 @@ _Beispiel: Menüpunkt "VCS > Enable Version Control Integration > Git"_
     - Führe den Commit aus mit:
         - `git commit -m "Deine aussagekräftige Commit-Nachricht"`.
     - Optional: Pushe die Änderungen mit:
-        - `git push`.
+        - `git push -u origin main`(beim ersten Commit).
+        -  `git push`(wenn bereits gepusht wurde)
 
 ![Beispiel Commit](/img/IJ-commit.webp)
 
