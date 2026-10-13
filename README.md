@@ -130,7 +130,11 @@ CONFLICT (content): Merge conflict in datei.txt
 Die betroffene Datei enthält Konfliktmarker:
 
 ```plaintext
+<<<<<<< HEAD
 Version aus aktuellem Branch
+=======
+Version aus feature-branch
+>>>>>>> feature-branch
 ```
 
 ---
@@ -182,6 +186,17 @@ Bevor du beginnst, stelle sicher, dass du Folgendes installiert und eingerichtet
 - **IntelliJ** oder **PyCharm**: Wähle die für deine Programmiersprache geeignete IDE von [JetBrains](https://www.jetbrains.com/) und installiere sie.
 - **Git-Integration**: Die JetBrains IDEs haben in der Regel Git bereits integriert. Überprüfe in den Einstellungen unter "Version Control > Git", ob der Pfad zur Git-ausführbaren Datei korrekt ist.
 
+## Klonen oder `git init`?
+
+> **Hinweis:** `git init` brauchst du nur, wenn du ein komplett neues, lokales Projekt startest.
+> Gibt es das Repository bereits auf GitHub, GitLab oder Bitbucket (wie z. B. dieses Projekt), dann klonst du es stattdessen.
+> Ein geklontes Repository ist schon fertig eingerichtet und mit dem Remote `origin` verbunden, `git init` ist dann nicht nötig.
+>
+> - In der IDE: "File > New > Project from Version Control", URL einfügen und auf "Clone" klicken.
+> - Im Terminal: `git clone <URL>`
+>
+> Die folgenden Abschnitte "Lokales Repository erstellen" und "Remote Repository verbinden" beschreiben den Weg für ein neues Projekt.
+
 ## Lokales Repository erstellen
 
 1. **Neues Projekt anlegen**:
@@ -225,8 +240,8 @@ _Beispiel: Menüpunkt "VCS > Enable Version Control Integration > Git"_
     - Führe den Commit aus mit:
         - `git commit -m "Deine aussagekräftige Commit-Nachricht"`.
     - Optional: Pushe die Änderungen mit:
-        - `git push -u origin main`(beim ersten Commit).
-        -  `git push`(wenn bereits gepusht wurde)
+        - `git push -u origin main` (beim ersten Push).
+        - `git push` (wenn bereits gepusht wurde).
 
 ![Beispiel Commit](/img/IJ-commit.webp)
 
