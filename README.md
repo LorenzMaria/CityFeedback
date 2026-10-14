@@ -26,8 +26,6 @@ Fazit: Git sorgt dafür, dass man beim Programmieren den Überblick über Änder
 
 **2. Grundlegende Git-Befehle**
 
- **Projekt erstellen**
-
  `git help + Befehl` = öffnet die originale Dokumentationsseite des Befehls
 
  `git init` = alle notwendigen Datien werden unter .git erstellt, das Verzeichnis wird gitifiziert
@@ -46,23 +44,25 @@ Fazit: Git sorgt dafür, dass man beim Programmieren den Überblick über Änder
  
  `git commit -a -m "Nachricht"` = es werden die Dateien unter die aufsicht von git gestellte und im Anschluss mit einer passenden Nachricht hinzugefügt
 
- `git push` = alle lokalen Commits wrden m it dem Remote-Server synchronisiert
+ `git push` = alle lokalen Commits werden mit dem Remote-Server synchronisiert
+
+ `git push --force` = schiebt den lokalen Stand auf das Remoterepositpry und überschreibt die bereits vorhandene Historie auf jeden Fall
 
  `$ git reset -- soft HEAD` = einen falschen Commit ändern
 
- `git rm`
+ `git rm` = entfernt eine von git verfolgte Datei aus dem Arbeitsverzeichnis
 
  `git log` = zeigt die Historie  der Commits an
 
- `git branch`
+ `git branch` = listet die lokalen Branches auf und markiert den aktuell ausgecheckten Branch
 
- `git merge`
+ `git branch (branch name)` = erstellt einen neuen Branch mit dem angegebenen Branch Namen
 
- 
+ `git branch -d (branch name)` = löscht den angegebenen Branch
 
- 
+ `git checkout (branch name)` = wechselt auf den angegebenen Branch
 
- 
+ `git merge (branch name)` =übernimmt die Änderungen aus dem angegeben Branch in den aktuellen mit dem man gerade arbeitet.
 
  
 **3. Branches und ihre Nutzung, Umgang mit Merge-Konflikten**
