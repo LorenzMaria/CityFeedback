@@ -26,8 +26,46 @@ Fazit: Git sorgt dafür, dass man beim Programmieren den Überblick über Änder
 
 **2. Grundlegende Git-Befehle**
 
+ `git help + Befehl` = öffnet die originale Dokumentationsseite des Befehls
 
-## 3. Branches und ihre Nutzung und Umgang mit Merge-Konflikten
+ `git init` = alle notwendigen Dateien werden unter .git erstellt, das Verzeichnis wird gitifiziert
+
+ `git clone` = es wird eine lokale Kopie des Server-Repositorys erstellt
+
+ `git status` = zeigt an welche Dateien geändert wurden und in welchem Zustand diese sich befinden
+
+ `git diff` = listet alle Änderungen im Detail auf (neuer Inhalt grün und alter Inhalt rot)
+ 
+ `git pull` = vergleicht wie Änderungen auf dem Server mit dem lokalen Branch
+
+ `git add` = Dateien oder Verzeichnisbäume werden unter die Aufsicht an git gestellt
+
+ `git commit` = unter Angabe einer passenden Nachricht werden die gestageten Änderungen hinzugefügt
+ 
+ `git commit -a -m "Nachricht"` = es werden die Dateien unter die aufsicht von git gestellte und im Anschluss mit einer passenden Nachricht hinzugefügt
+
+ `git push` = alle lokalen Commits werden mit dem Remote-Server synchronisiert
+
+ `git push --force` = schiebt den lokalen Stand auf das Remoterepositpry und überschreibt die bereits vorhandene Historie auf jeden Fall
+
+ `$ git reset -- soft HEAD` = einen falschen Commit ändern
+
+ `git rm` = entfernt eine von git verfolgte Datei aus dem Arbeitsverzeichnis
+
+ `git log` = zeigt die Historie  der Commits an
+
+ `git branch` = listet die lokalen Branches auf und markiert den aktuell ausgecheckten Branch
+
+ `git branch (branch name)` = erstellt einen neuen Branch mit dem angegebenen Branch Namen
+
+ `git branch -d (branch name)` = löscht den angegebenen Branch
+
+ `git checkout (branch name)` = wechselt auf den angegebenen Branch
+
+ `git merge (branch name)` =übernimmt die Änderungen aus dem angegeben Branch in den aktuellen mit dem man gerade arbeitet.
+
+ 
+**3. Branches und ihre Nutzung, Umgang mit Merge-Konflikten**
 
 ### Was sind Branches?
 
@@ -130,11 +168,7 @@ CONFLICT (content): Merge conflict in datei.txt
 Die betroffene Datei enthält Konfliktmarker:
 
 ```plaintext
-<<<<<<< HEAD
-Version aus aktuellem Branch
-=======
 Version aus feature-branch
->>>>>>> feature-branch
 ```
 
 ---
