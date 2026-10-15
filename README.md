@@ -28,15 +28,15 @@ Fazit: Git sorgt dafür, dass man beim Programmieren den Überblick über Änder
 
  `git help + Befehl` = öffnet die originale Dokumentationsseite des Befehls
 
- `git init` = alle notwendigen Datien werden unter .git erstellt, das Verzeichnis wird gitifiziert
+ `git init` = alle notwendigen Dateien werden unter .git erstellt, das Verzeichnis wird gitifiziert
 
  `git clone` = es wird eine lokale Kopie des Server-Repositorys erstellt
 
  `git status` = zeigt an welche Dateien geändert wurden und in welchem Zustand diese sich befinden
 
- `git diff` = listet alle Änderungen im Detail auf(neuer Inhalt grün und alter Inhalt rot)
+ `git diff` = listet alle Änderungen im Detail auf (neuer Inhalt grün und alter Inhalt rot)
  
- `git pull` = vergleicht wie. Änderungen auf dem Server mit dem lokalen Branch
+ `git pull` = vergleicht wie Änderungen auf dem Server mit dem lokalen Branch
 
  `git add` = Dateien oder Verzeichnisbäume werden unter die Aufsicht an git gestellt
 
