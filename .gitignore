@@ -1,0 +1,16 @@
+## Exclude IntelliJ settings folder
+.idea/
+*.iml
+.vscode/
+
+## Exclude macOS and other system files
+.DS_Store
+Thumbs.db
+
+## Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
