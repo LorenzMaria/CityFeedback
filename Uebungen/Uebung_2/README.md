@@ -31,7 +31,7 @@ Weitere Assoziationen aus dem Brainstorming: Qualitätssicherung, Sicherheit, Me
 2. GitHub Actions baut die Anwendung und führt die Tests aus
 3. Nach dem Merge in `main` wird automatisch auf die Zielplattform deployed
 
-Durch diesen Ablauf wird sichergestellt, dass stets nur eine getestete, funktionierende Version des Codes deployed wird.
+Durch diesen Ablauf wird sichergestellt, dass stets nur getesteter und funktionierender Code nach main deployed wird und die Live/Produktionsseite getested ist und funktioniert.
 
 ### Relevante Plattformen
 
