@@ -39,7 +39,7 @@ Durch diesen Ablauf wird sichergestellt, dass stets nur eine getestete, funktion
 |---|---|---|
 | GitHub Actions (CI) | Direkt im Repo integriert, kostenlos für öffentliche Repos | Bindung an GitHub |
 | Jenkins (CI/CD) | Open Source, sehr flexibel durch viele Plugins, selbst gehostet | Eigener Server nötig, aufwendige Einrichtung und Wartung |
-| Vercel | Sehr einfaches Setup, Preview-Deployments pro Pull Request | Primär für Web-Frontends, Backend eingeschränkt |
+| Vercel | Sehr einfaches Setup, Preview-Deployments pro Pull Request | Primär für Web-Frontends, Backend eingeschränkt, Kosten |
 | Cloudflare (Pages/Workers) | Großzügiger Free-Tier, globales Edge-Netzwerk, Preview-Deployments pro Pull Request | Eigene Runtime mit Einschränkungen (z. B. nur teilweise Node.js-kompatibel), Bindung an Cloudflare |
 | Azure / AWS | Sehr flexibel und skalierbar | Komplexe Konfiguration, Kosten |
 | Eigener Server mit Docker | Volle Kontrolle | Hoher Wartungsaufwand |
