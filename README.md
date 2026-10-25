@@ -1,5 +1,4 @@
-# CityFeedback
-Bürgerbeteiligungs- und Beschwerdesystem
+# CityFeedback: Bürgerbeteiligungs- und Beschwerdesystem
 
 
 **1. Was ist git und warum sollte es verwendet werden?**
