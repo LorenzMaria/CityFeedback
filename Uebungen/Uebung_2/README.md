@@ -22,7 +22,7 @@ Weitere Assoziationen aus dem Brainstorming: Qualitätssicherung, Sicherheit, Me
 - Bei jedem Push bzw. Pull Request laufen Build und Unit-Tests in einer Pipeline, nur grüne Änderungen werden gemergt
 - Laufende Pipelines liefern direkte Fehlermeldungen an das Team
 
-**Erfahrungswerte:** Im Team bisher wenig, vor allem aus Uni-, privaten und beruflichen Projekten.
+**Erfahrungswerte:** Im Team bisher wenig, vor allem aus Uni-, privaten und teilweise ersten beruflichen Projekten.
 
 ![Brainstorming: Erfahrungswerte](img/brainstorming-ci-cd-erfahrungswerte.jpg)
 
