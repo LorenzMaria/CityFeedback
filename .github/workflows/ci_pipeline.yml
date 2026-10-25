@@ -16,5 +16,11 @@ jobs:
       - name: Repository Checkout
         uses: actions/checkout@v4
       
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
       - name: run tests
-        run: echo "GitHub Actions is running tests..."
+        run: ./gradlew test
