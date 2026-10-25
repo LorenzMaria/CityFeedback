@@ -1,9 +1,5 @@
 # Übung 2: CI/CD
 
-Die Ergebnisse unserer Brainstorming-Session sind im folgenden Bild festgehalten.
-
-![Brainstorming CI/CD](img/brainstorming-ci-cd.png)
-
 ## 1. Einführung in CI/CD
 
 ### (a) Grundlegende Konzepte
@@ -11,7 +7,9 @@ Die Ergebnisse unserer Brainstorming-Session sind im folgenden Bild festgehalten
 - **Continuous Integration (CI):** Jede Änderung wird regelmäßig in den gemeinsamen Branch integriert und automatisch gebaut und getestet
 - **Continuous Deployment (CD):** Jeder erfolgreiche Build wird automatisch ausgeliefert, der Code ist dadurch jederzeit ausführbar
 
-Weitere Assoziationen aus dem Brainstorming: Qualitätssicherung, Sicherheit, Mehraugenprinzip, strukturierter Code-Release und ein standardisierter Prozess im Team (siehe Bild links).
+Weitere Assoziationen aus dem Brainstorming: Qualitätssicherung, Sicherheit, Mehraugenprinzip, strukturierter Code-Release und ein standardisierter Prozess im Team.
+
+![Brainstorming: Was ist CI/CD?](img/brainstorming-ci-cd-was-ist-ci-cd.jpg)
 
 ### (b) Unterstützung der Softwareentwicklung
 
@@ -19,9 +17,13 @@ Weitere Assoziationen aus dem Brainstorming: Qualitätssicherung, Sicherheit, Me
 - Bei jedem Push bzw. Pull Request laufen Build und Unit-Tests in einer Pipeline, nur grüne Änderungen werden gemergt
 - Laufende Pipelines liefern direkte Fehlermeldungen an das Team
 
-**Erfahrungswerte:** Im Team bisher wenig, vor allem aus Uni-, privaten und beruflichen Projekten (siehe Bild oben rechts).
+**Erfahrungswerte:** Im Team bisher wenig, vor allem aus Uni-, privaten und beruflichen Projekten.
 
-**Bekannte Tools:** Jenkins, Azure DevOps, Travis CI, Vercel, GitLab CI und GitHub Actions (siehe Bild unten rechts).
+![Brainstorming: Erfahrungswerte](img/brainstorming-ci-cd-erfahrungswerte.jpg)
+
+**Bekannte Tools:** Jenkins, Azure DevOps, Travis CI, Vercel, GitLab CI und GitHub Actions.
+
+![Brainstorming: Bekannte Tools](img/brainstorming-ci-cd-tools.jpg)
 
 ## 4. Deployment-Konzepte
 
