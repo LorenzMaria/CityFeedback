@@ -1,5 +1,8 @@
 # Übung 2: CI/CD
 
+Zum Einstieg haben wir im Team ein Brainstorming mit [Excalidraw](https://excalidraw.com) durchgeführt.
+Die Ergebnisse halten wir in dieser README fest.
+
 ## 1. Einführung in CI/CD
 
 ### (a) Grundlegende Konzepte
@@ -11,6 +14,8 @@ Weitere Assoziationen aus dem Brainstorming: Qualitätssicherung, Sicherheit, Me
 
 ![Brainstorming: Was ist CI/CD?](img/brainstorming-ci-cd-was-ist-ci-cd.jpg)
 
+*Abbildung 1: Brainstorming zur Frage "Was ist CI/CD?"*
+
 ### (b) Unterstützung der Softwareentwicklung
 
 - Fehler werden durch automatische Tests früh erkannt, das spart Zeit
@@ -21,9 +26,13 @@ Weitere Assoziationen aus dem Brainstorming: Qualitätssicherung, Sicherheit, Me
 
 ![Brainstorming: Erfahrungswerte](img/brainstorming-ci-cd-erfahrungswerte.jpg)
 
+*Abbildung 2: Erfahrungswerte des Teams mit CI/CD*
+
 **Bekannte Tools:** Jenkins, Azure DevOps, Travis CI, Vercel, GitLab CI und GitHub Actions.
 
 ![Brainstorming: Bekannte Tools](img/brainstorming-ci-cd-tools.jpg)
+
+*Abbildung 3: Bekannte CI/CD-Tools*
 
 ## 4. Deployment-Konzepte
 
