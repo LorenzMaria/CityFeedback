@@ -15,5 +15,9 @@ Thumbs.db
 *~
 .cache/
 
+# Gradle
+.gradle/
+build/
+
 ## Claude Code local settings
 /.claude/
