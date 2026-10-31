@@ -143,7 +143,7 @@ Die beiden Core Domains sind das, was CityFeedback ausmacht. Benutzerverwaltung 
 
 Das Beschwerdemanagement und die Bürgerbeteiligung schicken keine Nachrichten selbst. Sie veröffentlichen nur ihre Events, und der Benachrichtigungs-Context entscheidet, wer worüber informiert wird. Dadurch können wir später zum Beispiel eine Push-Benachrichtigung ergänzen, ohne die Kernlogik anzufassen.
 
-### Gleiche Begriffe, unterschiedliche Bedeutung
+### 3.1. Kontextabhängige Fachbegriffe (Ubiquitous Language )
 
 Die Trennung zeigt sich auch daran, dass manche Begriffe in den Contexts etwas anderes bedeuten:
 
