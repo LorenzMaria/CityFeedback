@@ -157,7 +157,61 @@ Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch w
 
 ## 4. Entitäten und Aggregates
 <!-- Maria -->
-[Output: Dokument (hier)]
+## Bounded Context : Beschwerde eingereicht
+
+Entität : Bürger:in
+
+Aggregate : Beschwerde
+
+    Attribute : - beschwerdeID: int
+                - titel: string
+                - beschreibung: string
+                - absender: string
+                - status: string
+                - kategorie: string
+                - ertselltAm: date
+
+    Methoden:   - einreichen()
+                - bearbeiteb()
+
+
+## Bounded Context : Beschwerde an Fachamt weitergeleitet
+
+Entität : Stadtverwaltung
+
+Aggregate : Beschwerde
+
+    Attribute : - stadtverwaltungID: int
+                - fachamtName: string
+                - email: string
+
+    Methoden:   - beschwerdeWeiterleiten()
+                - antworten()
+                - auswerten()
+                - statusAendern()
+                - zustaendigkeitErmitteln()
+                - fachamtHinzufuegen()
+
+
+
+## Bounded Context : Beschwerde erledigt
+
+Entität : Fachamt
+
+Aggregate : Beschwerde
+
+    Attribute : - beschwerdeID: int
+                - titel: string
+                - absender: string
+                - status: string
+                - kategorie: string
+                - loesungBeschreiben: date
+
+    Methoden:   - statusAendern()
+                - schließen()
+                - bearbeiten()
+                - antworten()
+
 ## 5. Domain Services und Repositories
 <!-- Jesse -->
 [Output: Übersicht (hier)]
