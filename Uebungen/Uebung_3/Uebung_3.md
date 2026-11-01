@@ -157,7 +157,7 @@ Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch w
 
 ## 4. Entitäten und Aggregates
 <!-- Maria -->
-## Bounded Context : Beschwerdemanagement
+**Bounded Context : Beschwerdemanagement**
 
 Das Beschwerdemanagement ist eine Core Domain. Das zentrale Aggregat ist die Beschwerde. Eine Beschwerde kann sich im Laufe ihrer Bearbeitung verändern und besitzt deshalb eine eigene Identität.
 
@@ -181,7 +181,7 @@ Aggregate : Beschwerde, Fachamt
                 
 
 
-## Bounded Context : Buergerbeteiligung
+**Bounded Context : Buergerbeteiligung**
 
 Die Bürgerbeteiligung ist ebenfalls eine Core Domain. Das zentrale Aggregat ist der Vorschlag.
 
@@ -200,34 +200,34 @@ Aggregate : Vorschlag
                 - bearbeitungAbgeschlossen()
                
 
-## Beziehungen zwischen den Aggregaten
+### Beziehungen zwischen den Aggregaten**
 
 Die Aggregate bleiben möglichst unabhängig voneinander. Beziehungen zu anderen Aggregaten werden deshalb grundsätzlich über IDs hergestellt.
 
-### Beschwerde
+**Beschwerde**
 
-Beschwerde
- ├── benutzerId ──────────> Benutzerkonto
- ├── fachamtId ───────────> Fachamt
- ├── Kategorie
- ├── Status
- ├── Anhang
- ├── Statusänderungen
- └── Kommentare
+Beschwerde<br>
+ ├── benutzerId ──────────> Benutzerkonto<br>
+ ├── fachamtId ───────────> Fachamt<br>
+ ├── Kategorie<br>
+ ├── Status<br>
+ ├── Anhang<br>
+ ├── Statusänderungen<br>
+ └── Kommentare<br>
 
-### Vorschlag
+**Vorschlag**
 
-Vorschlag
- ├── benutzerId ──────────> Benutzerkonto
- ├── Kategorie
- ├── Status
- ├── Unterstützungen
- ├── Kommentare
- └── Stellungnahme
+Vorschlag<br>
+ ├── benutzerId ──────────> Benutzerkonto<br>
+ ├── Kategorie<br>
+ ├── Status<br>
+ ├── Unterstützungen<br>
+ ├── Kommentare<br>
+ └── Stellungnahme<br>
 
-### Fachamt
+**Fachamt**
 
-Fachamt
+Fachamt<br>
  └── zuständige Kategorien
 
 ## 5. Domain Services und Repositories
