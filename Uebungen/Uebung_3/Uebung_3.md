@@ -157,60 +157,78 @@ Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch w
 
 ## 4. Entitäten und Aggregates
 <!-- Maria -->
-## Bounded Context : Beschwerde eingereicht
+## Bounded Context : Beschwerdemanagement
 
-Entität : Bürger:in
+Das Beschwerdemanagement ist eine Core Domain. Das zentrale Aggregat ist die Beschwerde. Eine Beschwerde kann sich im Laufe ihrer Bearbeitung verändern und besitzt deshalb eine eigene Identität.
 
-Aggregate : Beschwerde
+Entität : Kommentar, Beschwerde
 
-    Attribute : - beschwerdeID: int
+Aggregate : Beschwerde, Fachamt
+
+    Attribute : - beschwerdeId: int
+                - benutzerId: int
                 - titel: string
                 - beschreibung: string
                 - absender: string
-                - status: string
+                - beschwerdeStatus: string
                 - kategorie: string
-                - ertselltAm: date
+                - ertsellungsdatum: date
 
     Methoden:   - einreichen()
-                - bearbeiteb()
+                - annehmen()
+                - ablehnen()
+                - schließen()
+                
 
 
-## Bounded Context : Beschwerde an Fachamt weitergeleitet
+## Bounded Context : Buergerbeteiligung
 
-Entität : Stadtverwaltung
+Die Bürgerbeteiligung ist ebenfalls eine Core Domain. Das zentrale Aggregat ist der Vorschlag.
 
-Aggregate : Beschwerde
+Entität : Kommentar, Vorschlag
 
-    Attribute : - stadtverwaltungID: int
+Aggregate : Vorschlag
+
+    Attribute : - stadtverwaltungId: int
                 - fachamtName: string
                 - email: string
 
     Methoden:   - beschwerdeWeiterleiten()
-                - antworten()
-                - auswerten()
-                - statusAendern()
-                - zustaendigkeitErmitteln()
-                - fachamtHinzufuegen()
+                - beschwerdeAngenommen()
+                - weiterleitenAnFachamt()
+                - bearbeitungBegonnen()
+                - bearbeitungAbgeschlossen()
+               
 
+## Beziehungen zwischen den Aggregaten
 
+Die Aggregate bleiben möglichst unabhängig voneinander. Beziehungen zu anderen Aggregaten werden deshalb grundsätzlich über IDs hergestellt.
 
-## Bounded Context : Beschwerde erledigt
+### Beschwerde
 
-Entität : Fachamt
+Beschwerde
+ ├── benutzerId ──────────> Benutzerkonto
+ ├── fachamtId ───────────> Fachamt
+ ├── Kategorie
+ ├── Status
+ ├── Anhang
+ ├── Statusänderungen
+ └── Kommentare
 
-Aggregate : Beschwerde
+### Vorschlag
 
-    Attribute : - beschwerdeID: int
-                - titel: string
-                - absender: string
-                - status: string
-                - kategorie: string
-                - loesungBeschreiben: date
+Vorschlag
+ ├── benutzerId ──────────> Benutzerkonto
+ ├── Kategorie
+ ├── Status
+ ├── Unterstützungen
+ ├── Kommentare
+ └── Stellungnahme
 
-    Methoden:   - statusAendern()
-                - schließen()
-                - bearbeiten()
-                - antworten()
+### Fachamt
+
+Fachamt
+ └── zuständige Kategorien
 
 ## 5. Domain Services und Repositories
 <!-- Jesse -->
