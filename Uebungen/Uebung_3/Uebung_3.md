@@ -235,4 +235,4 @@ Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
 - CI/CD: GitHub Actions
 - DB: NoSQL
 - UI: HTML, JavaScript/TypeScript (React.js)
-- Build, Test, Deployment auf GitHub Pages
+- Build und Test mit GitHub Actions, Deployment des Frontends auf GitHub Pages
