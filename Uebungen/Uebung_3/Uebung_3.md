@@ -284,3 +284,11 @@ public class Beschwerde {
 }
 
 ```
+
+## Aufgabenverteilung – Übung 3
+
+| Teammitglied | Übernommene Aufgaben |
+|---|---|
+| Maria Lorenz | Teilaufgabe 1 gemeinsam mit dem Team, Teilaufgabe 4 |
+| Jesse Khala | Teilaufgabe 1 gemeinsam mit dem Team, Teilaufgaben 5 und 6 |
+| Yara Abdullah | Teilaufgabe 1 gemeinsam mit dem Team und Zusammenfassung, Teilaufgaben 2 und 3 |
