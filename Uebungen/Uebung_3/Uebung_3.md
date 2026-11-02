@@ -201,7 +201,29 @@ Vorschlag
 
 ## 5. Domain Services und Repositories
 <!-- Jesse -->
-[Output: Übersicht (hier)]
+
+### 5.1. Repositories
+
+Pro Aggregate Root aus Teilaufgabe 4 gibt es genau ein Repository.
+
+| Repository | Context | Methoden |
+|---|---|---|
+| BeschwerdeRepository | Beschwerdemanagement | `speichern(Beschwerde)`, `findeNachId(BeschwerdeId)`, `findeNachEinreicher(BenutzerId)`, `findeNachFachamt(FachamtId)` |
+| FachamtRepository | Beschwerdemanagement | `findeNachId(FachamtId)`, `findeNachKategorie(Kategorie)` |
+| VorschlagRepository | Bürgerbeteiligung | `speichern(Vorschlag)`, `findeNachId(VorschlagId)`, `findeVeroeffentlichte()` |
+| BenutzerkontoRepository | Benutzerverwaltung | `speichern(Benutzerkonto)`, `findeNachId(BenutzerId)`, `findeNachEmail(EmailAdresse)` |
+| BenachrichtigungRepository | Benachrichtigung | `speichern(Benachrichtigung)`, `findeNachEmpfaenger(BenutzerId)` |
+
+### 5.2. Domain Services
+
+Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
+
+| Domain Service | Context | Aufgabe |
+|---|---|---|
+| ZuweisungsService | Beschwerdemanagement | Sucht das Fachamt für die Kategorie der Beschwerde und ruft `beschwerde.weiterleiten(fachamtId)` auf |
+| RegistrierungsService | Benutzerverwaltung | Prüft, ob die E-Mail-Adresse noch frei ist, und legt das Benutzerkonto an |
+| BenachrichtigungsService | Benachrichtigung | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse und versendet die Benachrichtigung |
+
 ## 6. Implementierungsstrategie
 <!-- Jesse -->
 [Output: Dokument (hier)]
