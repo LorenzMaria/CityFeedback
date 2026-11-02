@@ -262,7 +262,7 @@ de.cityfeedback
 
 ```java
 // Aggregat: Beschwerde
-// Reines Java ohne Spring, daher direkt mit JUnit testbar.
+// Das Code-Beispiel ist reines Java (ohne Framework), daher direkt mit JUnit testbar.
 // Die Geschäftsregeln (z. B. nur angenommene Beschwerden weiterleiten) liegen im Aggregat selbst.
 public class Beschwerde {
   private final BeschwerdeId id;
@@ -282,4 +282,5 @@ public class Beschwerde {
     status = BeschwerdeStatus.WEITERGELEITET;
   }
 }
+
 ```
