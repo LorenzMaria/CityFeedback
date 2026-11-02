@@ -236,3 +236,53 @@ Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
 - DB: NoSQL (tbd.)
 - UI: HTML, JavaScript/TypeScript (React.js)
 - Build und Test mit GitHub Actions, Deployment des Frontends auf GitHub Pages
+
+### 6.2. Vorgehen
+
+Jeder Bounded Context aus Teilaufgabe 3 wird ein eigenes Package (z. B. `beschwerdemanagement`) mit den Unterpaketen `domain`, `repository` und `service`.
+
+1. **Entitäten und Aggregate:** Eine Java-Klasse pro Entität und Aggregat mit den Attributen und Methoden aus Teilaufgabe 4, ohne Framework-Abhängigkeiten.
+2. **Repositories:** Ein Interface pro Aggregate Root aus Teilaufgabe 5, umgesetzt mit Spring Data.
+3. **Domain Services:** Eine Klasse pro Service aus Teilaufgabe 5, die Aggregate über die Repositories lädt und speichert.
+4. **Domain Events:** Zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, asynchrone Listener im Context Benachrichtigung versenden die Nachrichten.
+5. **Tests:** Unit-Tests mit JUnit für die Aggregate (ohne Spring), Integrationstests mit `@SpringBootTest` für Services und Repositories.
+
+### 6.3. Codebeispiel
+
+```java
+// Aggregat: Beschwerde (ohne Framework-Abhängigkeiten)
+public class Beschwerde {
+  private final BeschwerdeId id;
+  private Kategorie kategorie;
+  private BeschwerdeStatus status;
+  private FachamtId zustaendigesFachamt;
+  private final List<StatusAenderung> statusAenderungen = new ArrayList<>();
+  // weitere Attribute siehe Teilaufgabe 4
+
+  public void weiterleiten(FachamtId fachamtId) {
+    if (status != BeschwerdeStatus.ANGENOMMEN) {
+      throw new IllegalStateException("Nur angenommene Beschwerden können weitergeleitet werden");
+    }
+    zustaendigesFachamt = fachamtId;
+    statusAenderungen.add(new StatusAenderung(status, BeschwerdeStatus.WEITERGELEITET, LocalDateTime.now()));
+    status = BeschwerdeStatus.WEITERGELEITET;
+  }
+}
+
+// Domain Service: Zuweisung
+@Service
+public class ZuweisungsService {
+  private final BeschwerdeRepository beschwerden;
+  private final FachamtRepository fachaemter;
+  private final ApplicationEventPublisher events;
+
+  @Transactional
+  public void zuweisen(BeschwerdeId id) {
+    Beschwerde beschwerde = beschwerden.findeNachId(id).orElseThrow();
+    Fachamt amt = fachaemter.findeNachKategorie(beschwerde.getKategorie()).orElseThrow();
+    beschwerde.weiterleiten(amt.getId());
+    beschwerden.speichern(beschwerde);
+    events.publishEvent(new BeschwerdeWeitergeleitet(id, amt.getId()));
+  }
+}
+```
