@@ -282,24 +282,4 @@ public class Beschwerde {
     status = BeschwerdeStatus.WEITERGELEITET;
   }
 }
-
-// Domain Service: Zuweisung
-// Verbindet die Aggregate Beschwerde und Fachamt, die sich nur über IDs kennen.
-// Spring übernimmt Transaktion und Event-Versand, die Logik bleibt im Aggregat.
-@Service
-public class ZuweisungsService {
-  private final BeschwerdeRepository beschwerden;
-  private final FachamtRepository fachaemter;
-  private final ApplicationEventPublisher events;
-
-  @Transactional
-  public void zuweisen(BeschwerdeId id) {
-    Beschwerde beschwerde = beschwerden.findeNachId(id).orElseThrow();
-    Fachamt amt = fachaemter.findeNachKategorie(beschwerde.getKategorie()).orElseThrow();
-    beschwerde.weiterleiten(amt.getId());
-    beschwerden.speichern(beschwerde);
-    // Der Context Benachrichtigung reagiert auf dieses Event
-    events.publishEvent(new BeschwerdeWeitergeleitet(id, amt.getId()));
-  }
-}
 ```
