@@ -155,7 +155,7 @@ Die Trennung zeigt sich auch daran, dass manche Begriffe in den Contexts etwas a
 
 Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch wenn die Klassen ähnlich heißen.
 
-## 4. Entitäten und Aggregate
+## 4. Entitäten und Aggregates
 <!-- Maria -->
 
 Die Attribute stammen aus dem Domänenmodell (Teilaufgabe 2, Abbildung 2), die Typen `Kategorie`, `BeschwerdeStatus` und `VorschlagStatus` sind die dort definierten Enums.
