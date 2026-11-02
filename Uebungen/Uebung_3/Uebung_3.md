@@ -155,80 +155,49 @@ Die Trennung zeigt sich auch daran, dass manche Begriffe in den Contexts etwas a
 
 Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch wenn die Klassen ähnlich heißen.
 
-## 4. Entitäten und Aggregates
+## 4. Entitäten und Aggregate
 <!-- Maria -->
-**Bounded Context : Beschwerdemanagement**
 
-Das Beschwerdemanagement ist eine Core Domain. Das zentrale Aggregat ist die Beschwerde. Eine Beschwerde kann sich im Laufe ihrer Bearbeitung verändern und besitzt deshalb eine eigene Identität.
+Die Attribute stammen aus dem Domänenmodell (Teilaufgabe 2, Abbildung 2), die Typen `Kategorie`, `BeschwerdeStatus` und `VorschlagStatus` sind die dort definierten Enums.
+Die Methoden entsprechen den Commands aus dem Event Storming (Teilaufgabe 1).
+Jede Methode prüft den aktuellen Status und erzeugt das passende Domain Event.
 
-Entität : Kommentar, Beschwerde
+### 4.1. Bounded Context Beschwerdemanagement
 
-Aggregate : Beschwerde, Fachamt
+| Baustein | Art | Attribute | Methoden |
+|---|---|---|---|
+| Beschwerde | Aggregate Root | `BeschwerdeId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `BeschwerdeStatus status`, `BenutzerId eingereichtVon`, `FachamtId zustaendigesFachamt`, `LocalDateTime eingereichtAm`, `List<Anhang> anhaenge`, `List<StatusAenderung> statusAenderungen`, `List<Kommentar> kommentare` | `einreichen()`, `annehmen()`, `ablehnen()`, `weiterleiten(FachamtId)`, `bearbeitungStarten()`, `abschliessen()`, `kommentieren(BenutzerId, String)` |
+| Kommentar | Entity (Teil der Beschwerde) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
+| Fachamt | Aggregate Root | `FachamtId id`, `String name`, `List<Kategorie> zustaendigFuer` | `istZustaendigFuer(Kategorie)` |
 
-    Attribute : - beschwerdeId: int
-                - benutzerId: int
-                - titel: string
-                - beschreibung: string
-                - absender: string
-                - beschwerdeStatus: string
-                - kategorie: string
-                - ertsellungsdatum: date
+Die Reihenfolge der Methoden folgt Prozess 2 aus Teilaufgabe 1: Eine Beschwerde kann nur weitergeleitet werden, wenn sie angenommen ist, und nur abgeschlossen werden, wenn sie in Bearbeitung ist.
+Jede Statusänderung wird als `StatusAenderung` gespeichert.
 
-    Methoden:   - einreichen()
-                - annehmen()
-                - ablehnen()
-                - schließen()
-                
+### 4.2. Bounded Context Bürgerbeteiligung
 
+| Baustein | Art | Attribute | Methoden |
+|---|---|---|---|
+| Vorschlag | Aggregate Root | `VorschlagId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `VorschlagStatus status`, `BenutzerId eingereichtVon`, `LocalDateTime eingereichtAm`, `List<Unterstuetzung> unterstuetzungen`, `List<Kommentar> kommentare`, `Stellungnahme stellungnahme` | `einreichen()`, `freigeben()`, `unterstuetzen(BenutzerId)`, `kommentieren(BenutzerId, String)`, `stellungnahmeAbgeben(String)` |
+| Kommentar | Entity (Teil des Vorschlags) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
 
-**Bounded Context : Buergerbeteiligung**
+Wie in Prozess 3 aus Teilaufgabe 1 ist Unterstützen und Kommentieren erst nach der Freigabe möglich, und jede Person kann einen Vorschlag nur einmal unterstützen.
 
-Die Bürgerbeteiligung ist ebenfalls eine Core Domain. Das zentrale Aggregat ist der Vorschlag.
+Benutzerkonto und Benachrichtigung gehören zu den unterstützenden Contexts und werden direkt wie im Domänenmodell (Teilaufgabe 2) übernommen.
 
-Entität : Kommentar, Vorschlag
+### 4.3. Beziehungen zwischen den Aggregaten
 
-Aggregate : Vorschlag
+Wie in Teilaufgabe 2 beschrieben, verweisen Aggregate nur über IDs aufeinander, Entitäten und Werte gehören fest zu ihrem Aggregat.
 
-    Attribute : - stadtverwaltungId: int
-                - fachamtName: string
-                - email: string
+```
+Beschwerde
+ ├── eingereichtVon (BenutzerId) ──> Benutzerkonto
+ ├── zustaendigesFachamt (FachamtId) ──> Fachamt
+ └── enthält: Kommentare, Anhänge, Statusänderungen, Standort
 
-    Methoden:   - beschwerdeWeiterleiten()
-                - beschwerdeAngenommen()
-                - weiterleitenAnFachamt()
-                - bearbeitungBegonnen()
-                - bearbeitungAbgeschlossen()
-               
-
-### Beziehungen zwischen den Aggregaten**
-
-Die Aggregate bleiben möglichst unabhängig voneinander. Beziehungen zu anderen Aggregaten werden deshalb grundsätzlich über IDs hergestellt.
-
-**Beschwerde**
-
-Beschwerde<br>
- ├── benutzerId ──────────> Benutzerkonto<br>
- ├── fachamtId ───────────> Fachamt<br>
- ├── Kategorie<br>
- ├── Status<br>
- ├── Anhang<br>
- ├── Statusänderungen<br>
- └── Kommentare<br>
-
-**Vorschlag**
-
-Vorschlag<br>
- ├── benutzerId ──────────> Benutzerkonto<br>
- ├── Kategorie<br>
- ├── Status<br>
- ├── Unterstützungen<br>
- ├── Kommentare<br>
- └── Stellungnahme<br>
-
-**Fachamt**
-
-Fachamt<br>
- └── zuständige Kategorien
+Vorschlag
+ ├── eingereichtVon (BenutzerId) ──> Benutzerkonto
+ └── enthält: Kommentare, Unterstützungen, Stellungnahme, Standort
+```
 
 ## 5. Domain Services und Repositories
 <!-- Jesse -->
