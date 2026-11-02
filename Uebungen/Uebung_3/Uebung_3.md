@@ -226,4 +226,13 @@ Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
 
 ## 6. Implementierungsstrategie
 <!-- Jesse -->
-[Output: Dokument (hier)]
+
+### 6.1. Technische Annahmen
+
+- Java-Framework: Spring Boot
+- Build-Automation: Maven
+- Testing: JUnit
+- CI/CD: GitHub Actions
+- DB: NoSQL
+- UI: HTML, JavaScript/TypeScript (React.js)
+- Build, Test, Deployment auf GitHub Pages
