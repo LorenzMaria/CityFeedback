@@ -261,7 +261,9 @@ de.cityfeedback
 ### 6.3. Codebeispiel
 
 ```java
-// Aggregat: Beschwerde (ohne Framework-Abhängigkeiten)
+// Aggregat: Beschwerde
+// Reines Java ohne Spring, daher direkt mit JUnit testbar.
+// Die Geschäftsregeln (z. B. nur angenommene Beschwerden weiterleiten) liegen im Aggregat selbst.
 public class Beschwerde {
   private final BeschwerdeId id;
   private Kategorie kategorie;
@@ -275,12 +277,15 @@ public class Beschwerde {
       throw new IllegalStateException("Nur angenommene Beschwerden können weitergeleitet werden");
     }
     zustaendigesFachamt = fachamtId;
+    // Jeder Statuswechsel wird für die Historie gespeichert
     statusAenderungen.add(new StatusAenderung(status, BeschwerdeStatus.WEITERGELEITET, LocalDateTime.now()));
     status = BeschwerdeStatus.WEITERGELEITET;
   }
 }
 
 // Domain Service: Zuweisung
+// Verbindet die Aggregate Beschwerde und Fachamt, die sich nur über IDs kennen.
+// Spring übernimmt Transaktion und Event-Versand, die Logik bleibt im Aggregat.
 @Service
 public class ZuweisungsService {
   private final BeschwerdeRepository beschwerden;
@@ -293,6 +298,7 @@ public class ZuweisungsService {
     Fachamt amt = fachaemter.findeNachKategorie(beschwerde.getKategorie()).orElseThrow();
     beschwerde.weiterleiten(amt.getId());
     beschwerden.speichern(beschwerde);
+    // Der Context Benachrichtigung reagiert auf dieses Event
     events.publishEvent(new BeschwerdeWeitergeleitet(id, amt.getId()));
   }
 }
