@@ -239,9 +239,20 @@ Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
 
 ### 6.2. Vorgehen
 
-Jeder Bounded Context aus Teilaufgabe 3 wird ein eigenes Package (z. B. `beschwerdemanagement`) mit den Unterpaketen `domain`, `repository` und `service`.
+Jeder Bounded Context aus Teilaufgabe 3 wird ein eigenes Package, die anderen drei Contexts sind genauso aufgebaut wie `beschwerdemanagement`:
 
-1. **Entitäten und Aggregate:** Eine Java-Klasse pro Entität und Aggregat mit den Attributen und Methoden aus Teilaufgabe 4, ohne Framework-Abhängigkeiten.
+```
+de.cityfeedback
+ ├── beschwerdemanagement
+ │    ├── domain        (Beschwerde, Kommentar, Fachamt, Events)
+ │    ├── repository
+ │    └── service       (ZuweisungsService)
+ ├── buergerbeteiligung
+ ├── benutzerverwaltung
+ └── benachrichtigung
+```
+
+1. **Entitäten und Aggregate:** Eine Java-Klasse pro Entität und Aggregat mit den Attributen und Methoden aus Teilaufgabe 4, dabei gibt es keine Framework-Abhängigkeiten.
 2. **Repositories:** Ein Interface pro Aggregate Root aus Teilaufgabe 5, umgesetzt mit Spring Data.
 3. **Domain Services:** Eine Klasse pro Service aus Teilaufgabe 5, die Aggregate über die Repositories lädt und speichert.
 4. **Domain Events:** Zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, asynchrone Listener im Context Benachrichtigung versenden die Nachrichten.
