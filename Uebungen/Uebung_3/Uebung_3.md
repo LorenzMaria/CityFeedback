@@ -233,6 +233,6 @@ Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
 - Build-Automation: Maven
 - Testing: JUnit
 - CI/CD: GitHub Actions
-- DB: NoSQL
+- DB: NoSQL (tbd.)
 - UI: HTML, JavaScript/TypeScript (React.js)
 - Build und Test mit GitHub Actions, Deployment des Frontends auf GitHub Pages
