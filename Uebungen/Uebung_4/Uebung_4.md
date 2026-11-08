@@ -5,19 +5,19 @@ Als wichtigste Domain Events unseres Projekts wurden BeschwerdeEingereicht, Besc
 
 Prompt: 
 
-[Prompt an ChatGPT](Uebungen/Uebung_4/imgprompt_role.png)
+![Prompt an ChatGPT](img/prompt_role.png)
 
-[Prompt: Rolle für Implementierungsstrategie](Uebungen/Uebung_4/imgprompt_role.png)
+![Prompt: Rolle für Implementierungsstrategie](img/prompt_role.png)
 
-[Prompt: Ausschnitt 1](Uebungen/Uebung_4/imgprompt_part_4.png)
-[Prompt: Ausschnitt 2](Uebungen/Uebung_4/imgprompt_part_5.png)
-[Prompt: Ausschnitt 3](Uebungen/Uebung_4/imgprompt_part_6.png)
-[Prompt: Ausschnitt 4](Uebungen/Uebung_4/imgprompt_part_7.png)
+![Prompt: Ausschnitt 1](img/prompt_part_4.png)
+![Prompt: Ausschnitt 2](img/prompt_part_5.png)
+![Prompt: Ausschnitt 3](img/prompt_part_6.png)
+![Prompt: Ausschnitt 4](img/prompt_part_7.png)
 
-[Antwort von LLM](Uebungen/Uebung_4/img/prompt_antwort_1.png)
-[Antwort von LLM](Uebungen/Uebung_4/imgprompt_antwort_2.png)
-[Antwort von LLM](Uebungen/Uebung_4/imgprompt_antwort_3.png)
-[Antwort von LLM](Uebungen/Uebung_4/imgprompt_antwort_4.png)
+![Antwort von LLM](img/prompt_antwort_1.png)
+![Antwort von LLM](img/prompt_antwort_2.png)
+![Antwort von LLM](img/prompt_antwort_3.png)
+![Antwort von LLM](img/prompt_antwort_4.png)
 
 
 # 2. Tesfälle mit LLM generieren und validieren
