@@ -1,8 +1,9 @@
-import org.junit.Test;
+package beschwerdemanagement.domain.event;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 public class NumberCheckerTest {
 
     @Test
