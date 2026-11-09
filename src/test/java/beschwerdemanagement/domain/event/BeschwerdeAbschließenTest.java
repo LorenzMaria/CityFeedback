@@ -7,7 +7,7 @@ class BeschwerdeAbschliessenTest {
     
 @Test
 @DisplayName("Eine Beschwerde wird abgeschlossen")
-    void sollteBeschwerdeAbschliessen() {
+    void beschwerdeAbschliessen() {
 
         // Arrange
         Beschwerde beschwerde = neueBeschwerde();
@@ -25,7 +25,7 @@ class BeschwerdeAbschliessenTest {
 
     @Test 
        @DisplayName("Eine Beschwerde darf ohne Bearbeitungsbeginn nicht abgeschlossen werden")
-    void sollteBeschwerdeOhneBearbeitungsbeginnNichtAbschliessen() {
+    void beschwerdeOhneBearbeitungsbeginnNichtAbschliessen() {
 
         // Arrange
         Beschwerde beschwerde = neueBeschwerde();

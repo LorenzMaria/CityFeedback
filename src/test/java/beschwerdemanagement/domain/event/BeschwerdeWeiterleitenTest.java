@@ -69,7 +69,7 @@ void sollteBeschwerdeNurAnZustaendigesFachamtWeiterleiten() {
 
 @Test
 @DisplayName("Die Bearbeitung darf nicht vor der Weiterleitung beginnen")
-void sollteBearbeitungVorWeiterleitungVerhindern() {
+void bearbeitungVorWeiterleitungVerhindern() {
 
     // Arrange
     Beschwerde beschwerde = Beschwerde.einreichen(

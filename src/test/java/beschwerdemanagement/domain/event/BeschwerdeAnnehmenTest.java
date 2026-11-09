@@ -9,7 +9,7 @@ class BeschwerdeAnnehmenTest {
     
 @Test
 @DisplayName("Eine eingereichte Beschwerde wird angenommen")
-void sollteBeschwerdeAnnehmen() {
+void beschwerdeAnnehmen() {
 
         // Arrange
         Beschwerde beschwerde = neueBeschwerde();

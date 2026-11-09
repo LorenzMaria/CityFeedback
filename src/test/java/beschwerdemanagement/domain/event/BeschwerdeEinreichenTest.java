@@ -11,7 +11,7 @@ public class BeschwerdeEinreichenTest {
 
 @Test
 @DisplayName("Eine Beschwerde wird eingereicht")
-void sollteBeschwerdeMitStatusEingereichtErstellen() {
+void beschwerdeErstellen() () {
 
     // Arrange
     String beschreibung = "Straßenbeleuchtung funktioniert nicht";

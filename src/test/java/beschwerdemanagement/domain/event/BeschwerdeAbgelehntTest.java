@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 public class BeschwerdeAbgelehntTest {
  @Test
     @DisplayName("Eine Beschwerde wird abgelehnt")
-    void sollteAbgelehnteBeschwerdeNichtWeiterleiten() {
+    void abgelehnteBeschwerdeNichtWeiterleiten() {
 
         // Arrange
         Beschwerde beschwerde = neueBeschwerde();

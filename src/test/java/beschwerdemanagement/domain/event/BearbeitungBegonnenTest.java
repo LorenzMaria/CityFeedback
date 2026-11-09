@@ -7,7 +7,7 @@ class BeschwerdeBegonnenTest {
 
     @Test
     @DisplayName("HP-05: Die Bearbeitung einer weitergeleiteten Beschwerde beginnt")
-    void sollteBearbeitungBeginnen() {
+    void bearbeitungBeginnen() {
 
         // Arrange
         Beschwerde beschwerde = neueBeschwerde();

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 public class BeschwerdeprozessTest {
     @Test
 @DisplayName("Eine Beschwerde durchläuft den vollständigen Lebenszyklus")
-void sollteVollstaendigenBeschwerdeprozessDurchlaufen() {
+void vollstaendigenBeschwerdeprozessDurchlaufen() {
 
     // Arrange
     Beschwerde beschwerde = Beschwerde.einreichen(
