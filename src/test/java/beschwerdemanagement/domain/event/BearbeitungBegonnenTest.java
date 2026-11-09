@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 class BeschwerdeBegonnenTest {
 
     @Test
-    @DisplayName("HP-05: Die Bearbeitung einer weitergeleiteten Beschwerde beginnt")
+    @DisplayName("Die Bearbeitung einer weitergeleiteten Beschwerde beginnt")
     void bearbeitungBeginnen() {
 
         // Arrange
