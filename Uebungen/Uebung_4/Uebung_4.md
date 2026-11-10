@@ -62,7 +62,13 @@ Bei der Regex-validierung wurde folgende Regel verwendet um sicher zu gehen, das
 
 # 3. Implementierung der Domänenlogik (TDD Schritt 2) mit LLM-Pair-Programming
 
-## LLM Prompt
+## 3.1 LLM Prompt
+
+Das LLM bekam die Rolle eines Senior Java-Entwicklers als Pair-Programming-Partner, dazu die Beschreibung des Statusablaufs einer Beschwerde, die gewünschte Package-Struktur und alle acht Testdateien aus Aufgabe 2.
+Für den ersten Schritt wurde bewusst die minimale Implementierung ohne fortgeschrittene Java-Techniken verlangt, damit die LLM nicht schon in diesem Schritt komplexeren Code generiert..
+Da die Tests an einigen Stellen widersprüchliche Erwartungen haben, sollte das LLM diese zuerst auflisten und Lösungen vorschlagen, aber nicht selbst entscheiden.
+
+Der vollständige Prompt liegt unter [llm-prompts/aufg-4-3-1-prompt.md](llm-prompts/aufg-4-3-1-prompt.md).
 
 ## Code-Generierung
 
