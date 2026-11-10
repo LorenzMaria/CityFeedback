@@ -1,3 +1,4 @@
+package beschwerdemanagement.domain.event;
 public class NumberChecker {
 
     public boolean isEven(int number) {
