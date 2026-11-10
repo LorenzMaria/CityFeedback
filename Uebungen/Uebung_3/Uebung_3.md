@@ -158,64 +158,137 @@ Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch w
 ## 4. Entitäten und Aggregates
 <!-- Maria -->
 
-## Bounded Context : Beschwerde eingereicht
+Die Attribute stammen aus dem Domänenmodell (Teilaufgabe 2, Abbildung 2), die Typen `Kategorie`, `BeschwerdeStatus` und `VorschlagStatus` sind die dort definierten Enums.
+Die Methoden entsprechen den Commands aus dem Event Storming (Teilaufgabe 1).
+Jede Methode prüft den aktuellen Status und erzeugt das passende Domain Event.
 
-Entität : Bürger:in
+### 4.1. Bounded Context Beschwerdemanagement
 
-    Aggregate : Beschwerde
+| Baustein | Art | Attribute | Methoden |
+|---|---|---|---|
+| Beschwerde | Aggregate Root | `BeschwerdeId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `BeschwerdeStatus status`, `BenutzerId eingereichtVon`, `FachamtId zustaendigesFachamt`, `LocalDateTime eingereichtAm`, `List<Anhang> anhaenge`, `List<StatusAenderung> statusAenderungen`, `List<Kommentar> kommentare` | `einreichen()`, `annehmen()`, `ablehnen()`, `weiterleiten(FachamtId)`, `bearbeitungStarten()`, `abschliessen()`, `kommentieren(BenutzerId, String)` |
+| Kommentar | Entity (Teil der Beschwerde) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
+| Fachamt | Aggregate Root | `FachamtId id`, `String name`, `List<Kategorie> zustaendigFuer` | `istZustaendigFuer(Kategorie)` |
 
-    Attribute : - beschwerdeID: int
-                - titel: string
-                - beschreibung: string
-                - absender: string
-                - status: string
-                - kategorie: string
-                - ertselltAm: date
+Die Reihenfolge der Methoden folgt Prozess 2 aus Teilaufgabe 1: Eine Beschwerde kann nur weitergeleitet werden, wenn sie angenommen ist, und nur abgeschlossen werden, wenn sie in Bearbeitung ist.
+Jede Statusänderung wird als `StatusAenderung` gespeichert.
 
-    Methoden:   - einreichen()
-                - bearbeiteb()
+### 4.2. Bounded Context Bürgerbeteiligung
 
+| Baustein | Art | Attribute | Methoden |
+|---|---|---|---|
+| Vorschlag | Aggregate Root | `VorschlagId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `VorschlagStatus status`, `BenutzerId eingereichtVon`, `LocalDateTime eingereichtAm`, `List<Unterstuetzung> unterstuetzungen`, `List<Kommentar> kommentare`, `Stellungnahme stellungnahme` | `einreichen()`, `freigeben()`, `unterstuetzen(BenutzerId)`, `kommentieren(BenutzerId, String)`, `stellungnahmeAbgeben(String)` |
+| Kommentar | Entity (Teil des Vorschlags) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
 
-## Bounded Context : Beschwerde an Fachamt weitergeleitet
+Wie in Prozess 3 aus Teilaufgabe 1 ist Unterstützen und Kommentieren erst nach der Freigabe möglich, und jede Person kann einen Vorschlag nur einmal unterstützen.
 
-Entität : Stadtverwaltung
+Benutzerkonto und Benachrichtigung gehören zu den unterstützenden Contexts und werden direkt wie im Domänenmodell (Teilaufgabe 2) übernommen.
 
-Aggregate : Beschwerde
+### 4.3. Beziehungen zwischen den Aggregaten
 
-    Attribute : - stadtverwaltungID: int
-                - fachamtName: string
-                - email: string
+Wie in Teilaufgabe 2 beschrieben, verweisen Aggregate nur über IDs aufeinander, Entitäten und Werte gehören fest zu ihrem Aggregat.
 
-    Methoden:   - beschwerdeWeiterleiten()
-                - antworten()
-                - auswerten()
-                - statusAendern()
-                - zustaendigkeitErmitteln()
-                - fachamtHinzufuegen()
+```
+Beschwerde
+ ├── eingereichtVon (BenutzerId) ──> Benutzerkonto
+ ├── zustaendigesFachamt (FachamtId) ──> Fachamt
+ └── enthält: Kommentare, Anhänge, Statusänderungen, Standort
 
-
-
-## Bounded Context : Beschwerde erledigt
-
-Entität : Fachamt
-
-Aggregate : Beschwerde
-
-Attribute : - beschwerdeID: int
-            - titel: string
-            - absender: string
-            - status: string
-            - kategorie: string
-            - loesungBeschreiben: date
-
-Methoden:   - statusAendern()
-            - schließen()
-            - bearbeiten()
-            - antworten()
+Vorschlag
+ ├── eingereichtVon (BenutzerId) ──> Benutzerkonto
+ └── enthält: Kommentare, Unterstützungen, Stellungnahme, Standort
+```
 
 ## 5. Domain Services und Repositories
 <!-- Jesse -->
-[Output: Übersicht (hier)]
+
+### 5.1. Repositories
+
+Pro Aggregate Root aus Teilaufgabe 4 gibt es genau ein Repository.
+
+| Repository | Context | Methoden |
+|---|---|---|
+| BeschwerdeRepository | Beschwerdemanagement | `speichern(Beschwerde)`, `findeNachId(BeschwerdeId)`, `findeNachEinreicher(BenutzerId)`, `findeNachFachamt(FachamtId)` |
+| FachamtRepository | Beschwerdemanagement | `findeNachId(FachamtId)`, `findeNachKategorie(Kategorie)` |
+| VorschlagRepository | Bürgerbeteiligung | `speichern(Vorschlag)`, `findeNachId(VorschlagId)`, `findeVeroeffentlichte()` |
+| BenutzerkontoRepository | Benutzerverwaltung | `speichern(Benutzerkonto)`, `findeNachId(BenutzerId)`, `findeNachEmail(EmailAdresse)` |
+| BenachrichtigungRepository | Benachrichtigung | `speichern(Benachrichtigung)`, `findeNachEmpfaenger(BenutzerId)` |
+
+### 5.2. Domain Services
+
+Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
+
+| Domain Service | Context | Aufgabe |
+|---|---|---|
+| ZuweisungsService | Beschwerdemanagement | Sucht das Fachamt für die Kategorie der Beschwerde und ruft `beschwerde.weiterleiten(fachamtId)` auf |
+| RegistrierungsService | Benutzerverwaltung | Prüft, ob die E-Mail-Adresse noch frei ist, und legt das Benutzerkonto an |
+| BenachrichtigungsService | Benachrichtigung | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse und versendet die Benachrichtigung |
+
 ## 6. Implementierungsstrategie
 <!-- Jesse -->
-[Output: Dokument (hier)]
+
+### 6.1. Technische Annahmen
+
+- Java-Framework: Spring Boot
+- Build-Automation: Maven
+- Testing: JUnit
+- CI/CD: GitHub Actions
+- DB: NoSQL (tbd.)
+- UI: HTML, JavaScript/TypeScript (React.js)
+- Build und Test mit GitHub Actions, Deployment des Frontends auf GitHub Pages
+
+### 6.2. Vorgehen
+
+Jeder Bounded Context aus Teilaufgabe 3 wird ein eigenes Package, die anderen drei Contexts sind genauso aufgebaut wie `beschwerdemanagement`:
+
+```
+de.cityfeedback
+ ├── beschwerdemanagement
+ │    ├── domain        (Beschwerde, Kommentar, Fachamt, Events)
+ │    ├── repository
+ │    └── service       (ZuweisungsService)
+ ├── buergerbeteiligung
+ ├── benutzerverwaltung
+ └── benachrichtigung
+```
+
+1. **Entitäten und Aggregate:** Eine Java-Klasse pro Entität und Aggregat mit den Attributen und Methoden aus Teilaufgabe 4, dabei gibt es keine Framework-Abhängigkeiten.
+2. **Repositories:** Ein Interface pro Aggregate Root aus Teilaufgabe 5, umgesetzt mit Spring Data.
+3. **Domain Services:** Eine Klasse pro Service aus Teilaufgabe 5, die Aggregate über die Repositories lädt und speichert.
+4. **Domain Events:** Zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, auf die der Context Benachrichtigung reagiert.
+5. **Tests:** Unit-Tests mit JUnit für die Aggregate (ohne Spring), Integrationstests mit `@SpringBootTest` für Services und Repositories.
+
+### 6.3. Codebeispiel
+
+```java
+// Aggregat: Beschwerde
+// Das Code-Beispiel ist reines Java (ohne Framework), daher direkt mit JUnit testbar.
+// Die Geschäftsregeln (z. B. nur angenommene Beschwerden weiterleiten) liegen im Aggregat selbst.
+public class Beschwerde {
+  private final BeschwerdeId id;
+  private Kategorie kategorie;
+  private BeschwerdeStatus status;
+  private FachamtId zustaendigesFachamt;
+  private final List<StatusAenderung> statusAenderungen = new ArrayList<>();
+  // weitere Attribute siehe Teilaufgabe 4
+
+  public void weiterleiten(FachamtId fachamtId) {
+    if (status != BeschwerdeStatus.ANGENOMMEN) {
+      throw new IllegalStateException("Nur angenommene Beschwerden können weitergeleitet werden");
+    }
+    zustaendigesFachamt = fachamtId;
+    // Jeder Statuswechsel wird für die Historie gespeichert
+    statusAenderungen.add(new StatusAenderung(status, BeschwerdeStatus.WEITERGELEITET, LocalDateTime.now()));
+    status = BeschwerdeStatus.WEITERGELEITET;
+  }
+}
+
+```
+
+## Aufgabenverteilung – Übung 3
+
+| Teammitglied | Übernommene Aufgaben |
+|---|---|
+| Maria Lorenz | Teilaufgabe 1 gemeinsam mit dem Team, Teilaufgabe 4 |
+| Jesse Khala | Teilaufgabe 1 gemeinsam mit dem Team, Teilaufgaben 5 und 6 |
+| Yara Abdullah | Teilaufgabe 1 gemeinsam mit dem Team, Überarbeitung & Zusammenfassung, Teilaufgaben 2 und 3 |
