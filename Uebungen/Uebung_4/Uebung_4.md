@@ -199,5 +199,14 @@ Der generierte Code wurde auf Korrektheit, Lesbarkeit und Wartbarkeit geprüft.
 
 ## Code-Review mit LLM
 
+Das LLM hat den fertigen Code auf Bugs und Verbesserungen geprüft.
+Die Tests laufen grün, trotzdem fanden sich fünf Punkte.
+
+- `einreichen()` prüft weder `null` noch leere Beschreibung oder Kategorie, der Regex aus Aufgabe 2 steht nur im Test und nicht in der Implementierung
+- `weiterleiten(null)` wirft eine `NullPointerException` statt einer fachlichen `IllegalArgumentException`
+- `weiterleiten()` prüft den Übergang doppelt, einmal direkt und einmal in `wechsleStatus()`
+- `Uebergangsregeln` ist nach dem Aufbau weiter veränderbar, `erlaube()` sollte nach der Initialisierung gesperrt oder die Tabelle unveränderlich sein.
+- `StatusHistorie` hat keinen Zeitstempel und `Beschwerde` keine ID, zudem enthält das Test-Package `event` keine echten Domain Events aus Aufgabe 1
+
 ## Dokumentation des Pair-Programming-Prozesses
 
