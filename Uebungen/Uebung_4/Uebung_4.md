@@ -65,10 +65,19 @@ Bei der Regex-validierung wurde folgende Regel verwendet um sicher zu gehen, das
 ## 3.1 LLM Prompt
 
 Das LLM bekam die Rolle eines Senior Java-Entwicklers als Pair-Programming-Partner, dazu die Beschreibung des Statusablaufs einer Beschwerde, die gewünschte Package-Struktur und alle acht Testdateien aus Aufgabe 2.
-Für den ersten Schritt wurde bewusst die minimale Implementierung ohne fortgeschrittene Java-Techniken verlangt, damit die LLM nicht schon in diesem Schritt komplexeren Code generiert..
+Für den ersten Schritt wurde bewusst die minimale Implementierung ohne fortgeschrittene Java-Techniken verlangt, damit die LLM nicht schon in diesem Schritt komplexeren Code generiert.
 Da die Tests an einigen Stellen widersprüchliche Erwartungen haben, sollte das LLM diese zuerst auflisten und Lösungen vorschlagen, aber nicht selbst entscheiden.
 
 Der vollständige Prompt liegt unter [llm-prompts/aufg-4-3-1-prompt.md](llm-prompts/aufg-4-3-1-prompt.md).
+
+### Verbesserungen
+- Zwei Tests nutzten verkürzte Signaturen ohne Beschreibung bzw. ohne Fachamt-Name 
+- Die Tests wurden auf die vollständige Signatur vereinheitlicht, weil eine Beschwerde ohne Beschreibung und ein Fachamt ohne Namen fachlich keinen Sinn ergeben 
+- Dadurch kommt die Implementierung mit je einer Methode bzw. einem Konstruktor aus
+- `getStatusHistorie()` liefert eine Liste von `StatusHistorie`-Objekten statt nur Status, damit später Zeitstempel oder Bearbeiter ergänzt werden können
+- Ungültige Statusübergänge werfen eine eigene `UngueltigerBeschwerdeStatusException`, die von `IllegalStateException` erbt, so bleiben alle Tests unverändert gültig
+- Zwei Testklassen wurden umbenannt, damit Klassen- und Dateiname übereinstimmen und kein "ß" im Dateinamen steht
+- Die Test-Helfer `neueBeschwerde()` und `zustaendigesFachamt()` liegen in einer gemeinsamen Klasse `BeschwerdeTestFixtures` statt in jedem Test einzeln
 
 ## Code-Generierung
 
