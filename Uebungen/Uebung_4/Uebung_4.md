@@ -64,149 +64,32 @@ Bei der Regex-validierung wurde folgende Regel verwendet um sicher zu gehen, das
 
 ## 3.1 LLM Prompt
 
-Das LLM bekam die Rolle eines Senior Java-Entwicklers als Pair-Programming-Partner, dazu die Beschreibung des Statusablaufs einer Beschwerde, die gewünschte Package-Struktur und alle acht Testdateien aus Aufgabe 2.
-Für den ersten Schritt wurde bewusst die minimale Implementierung ohne fortgeschrittene Java-Techniken verlangt, damit die LLM nicht schon in diesem Schritt komplexeren Code generiert.
-Da die Tests an einigen Stellen widersprüchliche Erwartungen haben, sollte das LLM diese zuerst auflisten und Lösungen vorschlagen, aber nicht selbst entscheiden.
+Das LLM bekam die Rolle eines Senior Java-Entwicklers, den Statusablauf einer Beschwerde, die Package-Struktur und alle acht Testdateien aus Aufgabe 2 (vollständiger Prompt: [llm-prompts/aufg-4-3-1-prompt.md](llm-prompts/aufg-4-3-1-prompt.md)).
+Verlangt wurde zunächst die minimale Implementierung ohne fortgeschrittene Techniken, Widersprüche in den Tests sollte das LLM nur auflisten und nicht selbst entscheiden.
 
-Der vollständige Prompt liegt unter [llm-prompts/aufg-4-3-1-prompt.md](llm-prompts/aufg-4-3-1-prompt.md).
+## 3.2 Code-Generierung
 
-### Verbesserungen
-- Zwei Tests nutzten verkürzte Signaturen ohne Beschreibung bzw. ohne Fachamt-Name 
-- Die Tests wurden auf die vollständige Signatur vereinheitlicht, weil eine Beschwerde ohne Beschreibung und ein Fachamt ohne Namen fachlich keinen Sinn ergeben 
-- Dadurch kommt die Implementierung mit je einer Methode bzw. einem Konstruktor aus
-- `getStatusHistorie()` liefert eine Liste von `StatusHistorie`-Objekten statt nur Status, damit später Zeitstempel oder Bearbeiter ergänzt werden können
-- Ungültige Statusübergänge werfen eine eigene `UngueltigerBeschwerdeStatusException`, die von `IllegalStateException` erbt, so bleiben alle Tests unverändert gültig
-- Zwei Testklassen wurden umbenannt, damit Klassen- und Dateiname übereinstimmen und kein "ß" im Dateinamen steht
-- Die Test-Helfer `neueBeschwerde()` und `zustaendigesFachamt()` liegen in einer gemeinsamen Klasse `BeschwerdeTestFixtures` statt in jedem Test einzeln
+Aus den Tests entstanden sechs Klassen in den Packages `model`, `valueObjects` und `exception`, mit denen alle 13 Tests grün sind.
+Kern ist eine Hilfsmethode in `Beschwerde`, die jeden Statusübergang gegen den erlaubten Vorgängerstatus prüft, in der Historie festhält und sonst eine `UngueltigerBeschwerdeStatusException` wirft.
 
-## Code-Generierung
+## 3.3 Iterative Verbesserung
 
-Aus den acht Testdateien hat das LLM sechs Klassen in den Packages `model`, `valueObjects` und `exception` erzeugt, mit denen alle 13 Tests grün sind.
-Kern der Implementierung ist eine private Hilfsmethode in `Beschwerde`, die jeden Statusübergang gegen den erlaubten Vorgängerstatus prüft und in der Historie festhält.
+Im zweiten Schritt schlug das LLM pro Technik (Records, Generics, Lambdas, Optional, Streams) eine Vorher/Nachher-Variante vor, übernommen wurden nur zwei davon.
 
-```java
-public void annehmen() {
-    wechsleStatus(BeschwerdeStatus.EINGEREICHT, BeschwerdeStatus.ANGENOMMEN);
-}
+- Records für die Value Objects `StatusHistorie` und `Fachamt`, das spart Boilerplate und liefert Unveränderlichkeit
+- Generische Klasse `Uebergangsregeln<S extends Enum<S>>`, die den gesamten Lebenszyklus an einer Stelle deklarativ beschreibt
+- Lambdas, Optional und Streams abgelehnt, weil es im Aggregat keinen echten Bedarf dafür gibt
 
-private void wechsleStatus(BeschwerdeStatus erwartet, BeschwerdeStatus neu) {
-    pruefeStatus(erwartet, neu);
-    status = neu;
-    statusHistorie.add(new StatusHistorie(neu));
-}
+## 3.4 Kritische Qualitätsprüfung
 
-private void pruefeStatus(BeschwerdeStatus erwartet, BeschwerdeStatus neu) {
-    if (status != erwartet) {
-        throw new UngueltigerBeschwerdeStatusException(
-            "Uebergang nach " + neu + " ist aus Status " + status + " nicht erlaubt");
-    }
-}
-```
+- Gut: Ein abgelehnter Übergang verändert weder Status noch Historie, und die Historie wird nur als unveränderliche Sicht herausgegeben
+- Schwach: `Fachamt` als Record hat Wertegleichheit, obwohl es fachlich eine Entität mit eigener ID wäre
+- Fehlend: Tests für ungültige Übergänge aus Endzuständen und für leere oder zu kurze Beschreibungen
 
-## Iterative Verbesserung
+## 3.5 Code-Review mit LLM
 
-Im zweiten Schritt hat das LLM pro fortgeschrittener Technik (Records, Generics, Lambdas, Optional, Streams) eine Variante mit Vorher/Nachher vorgeschlagen.
-Übernommen wurden Records und Generics, Streams und Lambdas wurden abgelehnt, weil es im Aggregat keinen echten Bedarf dafür gibt.
-(Genutzte fortgeschrittene Techniken: Record-Types für `StatusHistorie` und `Fachamt`, Generics für `Uebergangsregeln<S extends Enum<S>>`.)
+Das abschließende Review fand trotz grüner Tests die fehlende Validierung in `einreichen()`, die doppelte Übergangsprüfung in `weiterleiten()` und die weiterhin veränderbare `Uebergangsregeln`-Tabelle.
 
-Empfehlung des LLM und Entscheidung:
+## 3.6 Fazit zum Pair-Programming-Prozess
 
-| Variante | Empfehlung | Grund | Umgesetzt |
-|---|---|---|---|
-| 1 Records | Ja | Echte Value Objects, weniger Code, kostet nur zwei Testzeilen | ✅ |
-| 2 Generics `Uebergangsregeln` | Ja | Macht den Lebenszyklus deklarativ, größter Qualitätsgewinn | ✅ |
-| 3 Lambda-Guard | Nein | Löst die Doppelprüfung, aber Variante 2 löst sie ohne Indirektion gleich mit | ❌ |
-| 4 Optional `getFachamt()` | Ja, mit neuem Test | Fachlich sinnvoll, aber nicht ungetestet | ❌ (zurückgestellt) |
-| 5 Streams | Nein | Kein Bedarf, wäre Technik um der Technik willen | ❌ |
-
-### Beispiel 1: Records für Value Objects
-
-Vorher:
-
-```java
-public class StatusHistorie {
-    private final BeschwerdeStatus status;
-
-    public StatusHistorie(BeschwerdeStatus status) {
-        this.status = status;
-    }
-
-    public BeschwerdeStatus getStatus() {
-        return status;
-    }
-}
-```
-
-Nachher:
-
-```java
-public record StatusHistorie(BeschwerdeStatus status) {
-}
-```
-
-Der Record liefert Unveränderlichkeit sowie `equals`, `hashCode` und `toString` ohne eigenen Code.
-In zwei Tests wird dafür `StatusHistorie::getStatus` durch `StatusHistorie::status` ersetzt.
-
-### Beispiel 2: Generische Übergangsregeln
-
-Vorher:
-
-```java
-public void annehmen() {
-    wechsleStatus(BeschwerdeStatus.EINGEREICHT, BeschwerdeStatus.ANGENOMMEN);
-}
-```
-
-Nachher:
-
-```java
-private static final Uebergangsregeln<BeschwerdeStatus> REGELN =
-    Uebergangsregeln.fuer(BeschwerdeStatus.class)
-        .erlaube(EINGEREICHT, ANGENOMMEN, ABGELEHNT)
-        .erlaube(ANGENOMMEN, WEITERGELEITET)
-        .erlaube(WEITERGELEITET, IN_BEARBEITUNG)
-        .erlaube(IN_BEARBEITUNG, ERLEDIGT);
-
-public void annehmen() {
-    wechsleStatus(BeschwerdeStatus.ANGENOMMEN);
-}
-```
-
-Der komplette Lebenszyklus steht damit an einer Stelle deklarativ, und die generische Klasse `Uebergangsregeln<S extends Enum<S>>` ist für andere Aggregate wiederverwendbar.
-Alle Tests bleiben dabei unverändert grün.
-
-## Kritische Qualitätsprüfung
-
-Der generierte Code wurde auf Korrektheit, Lesbarkeit und Wartbarkeit geprüft.
-
-### Was gut gelungen ist
-
-- Die Übergangsregeln sind an einer Stelle deklariert und direkt mit dem Prozess aus der Aufgabenstellung vergleichbar.
-- Ein abgelehnter Übergang verändert weder Status noch Historie.
-- `getStatusHistorie()` gibt nur eine unveränderliche Sicht heraus, das Aggregat bleibt geschützt.
-
-### Was noch schwach ist
-
-- `Fachamt` als Record hat Wertegleichheit über Name und Kategorie, fachlich ist ein Fachamt aber eine Entität und braucht eine eigene ID.
-- `einreichen()` validiert die Beschreibung nicht, der Regex-Test in `beschwerdeErstellen()` prüft nur den Teststring und nicht die Implementierung.
-
-### Fehlende Tests
-
-- Ablehnen aus einem anderen Status als `EINGEREICHT`
-- Weiterleiten einer abgelehnten Beschwerde
-- Einreichen mit leerer oder zu kurzer Beschreibung
-- Edge Cases wie Statusänderung aus einem Endzustand
-
-## Code-Review mit LLM
-
-Das LLM hat den fertigen Code auf Bugs und Verbesserungen geprüft.
-Die Tests laufen grün, trotzdem fanden sich fünf Punkte.
-
-- `einreichen()` prüft weder `null` noch leere Beschreibung oder Kategorie, der Regex aus Aufgabe 2 steht nur im Test und nicht in der Implementierung
-- `weiterleiten(null)` wirft eine `NullPointerException` statt einer fachlichen `IllegalArgumentException`
-- `weiterleiten()` prüft den Übergang doppelt, einmal direkt und einmal in `wechsleStatus()`
-- `Uebergangsregeln` ist nach dem Aufbau weiter veränderbar, `erlaube()` sollte nach der Initialisierung gesperrt oder die Tabelle unveränderlich sein.
-- `StatusHistorie` hat keinen Zeitstempel und `Beschwerde` keine ID, zudem enthält das Test-Package `event` keine echten Domain Events aus Aufgabe 1
-
-## Dokumentation des Pair-Programming-Prozesses
-
+Das zweistufige Vorgehen hat sich bewährt: erst eine minimale, testgetriebene Version, dann gezielte Verbesserungen, die nur übernommen wurden, wenn sie einen echten Qualitätsgewinn bringen.
