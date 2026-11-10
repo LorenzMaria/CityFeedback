@@ -3,6 +3,8 @@ package beschwerdemanagement.domain.event;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class BeschwerdeprozessTest {
     @Test
 @DisplayName("Eine Beschwerde durchläuft den vollständigen Lebenszyklus")
