@@ -1,5 +1,12 @@
 package beschwerdemanagement.domain.model;
 
+import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.ABGELEHNT;
+import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.ANGENOMMEN;
+import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.EINGEREICHT;
+import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.ERLEDIGT;
+import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.IN_BEARBEITUNG;
+import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.WEITERGELEITET;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,8 +15,16 @@ import beschwerdemanagement.domain.exception.UngueltigerBeschwerdeStatusExceptio
 import beschwerdemanagement.domain.valueObjects.BeschwerdeStatus;
 import beschwerdemanagement.domain.valueObjects.Kategorie;
 import beschwerdemanagement.domain.valueObjects.StatusHistorie;
+import beschwerdemanagement.domain.valueObjects.Uebergangsregeln;
 
 public class Beschwerde {
+
+    private static final Uebergangsregeln<BeschwerdeStatus> REGELN =
+        Uebergangsregeln.fuer(BeschwerdeStatus.class)
+            .erlaube(EINGEREICHT, ANGENOMMEN, ABGELEHNT)
+            .erlaube(ANGENOMMEN, WEITERGELEITET)
+            .erlaube(WEITERGELEITET, IN_BEARBEITUNG)
+            .erlaube(IN_BEARBEITUNG, ERLEDIGT);
 
     private final String beschreibung;
     private final Kategorie kategorie;
@@ -19,9 +34,9 @@ public class Beschwerde {
     private Beschwerde(String beschreibung, Kategorie kategorie) {
         this.beschreibung = beschreibung;
         this.kategorie = kategorie;
-        this.statusHistorie = new ArrayList<StatusHistorie>();
-        this.status = BeschwerdeStatus.EINGEREICHT;
-        this.statusHistorie.add(new StatusHistorie(BeschwerdeStatus.EINGEREICHT));
+        this.statusHistorie = new ArrayList<>();
+        this.status = EINGEREICHT;
+        this.statusHistorie.add(new StatusHistorie(EINGEREICHT));
     }
 
     public static Beschwerde einreichen(String beschreibung, Kategorie kategorie) {
@@ -29,28 +44,28 @@ public class Beschwerde {
     }
 
     public void annehmen() {
-        wechsleStatus(BeschwerdeStatus.EINGEREICHT, BeschwerdeStatus.ANGENOMMEN);
+        wechsleStatus(ANGENOMMEN);
     }
 
     public void ablehnen() {
-        wechsleStatus(BeschwerdeStatus.EINGEREICHT, BeschwerdeStatus.ABGELEHNT);
+        wechsleStatus(ABGELEHNT);
     }
 
     public void weiterleiten(Fachamt fachamt) {
-        pruefeStatus(BeschwerdeStatus.ANGENOMMEN, BeschwerdeStatus.WEITERGELEITET);
-        if (fachamt.getKategorie() != kategorie) {
+        pruefeUebergang(WEITERGELEITET);
+        if (fachamt.kategorie() != kategorie) {
             throw new IllegalArgumentException(
-                "Fachamt " + fachamt.getName() + " ist nicht zustaendig fuer Kategorie " + kategorie);
+                "Fachamt " + fachamt.name() + " ist nicht zustaendig fuer Kategorie " + kategorie);
         }
-        wechsleStatus(BeschwerdeStatus.ANGENOMMEN, BeschwerdeStatus.WEITERGELEITET);
+        wechsleStatus(WEITERGELEITET);
     }
 
     public void bearbeitungBeginnen() {
-        wechsleStatus(BeschwerdeStatus.WEITERGELEITET, BeschwerdeStatus.IN_BEARBEITUNG);
+        wechsleStatus(IN_BEARBEITUNG);
     }
 
     public void abschliessen() {
-        wechsleStatus(BeschwerdeStatus.IN_BEARBEITUNG, BeschwerdeStatus.ERLEDIGT);
+        wechsleStatus(ERLEDIGT);
     }
 
     public String getBeschreibung() {
@@ -69,14 +84,14 @@ public class Beschwerde {
         return Collections.unmodifiableList(statusHistorie);
     }
 
-    private void wechsleStatus(BeschwerdeStatus erwartet, BeschwerdeStatus neu) {
-        pruefeStatus(erwartet, neu);
+    private void wechsleStatus(BeschwerdeStatus neu) {
+        pruefeUebergang(neu);
         status = neu;
         statusHistorie.add(new StatusHistorie(neu));
     }
 
-    private void pruefeStatus(BeschwerdeStatus erwartet, BeschwerdeStatus neu) {
-        if (status != erwartet) {
+    private void pruefeUebergang(BeschwerdeStatus neu) {
+        if (!REGELN.istErlaubt(status, neu)) {
             throw new UngueltigerBeschwerdeStatusException(
                 "Uebergang nach " + neu + " ist aus Status " + status + " nicht erlaubt");
         }

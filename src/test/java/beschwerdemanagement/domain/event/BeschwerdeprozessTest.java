@@ -37,7 +37,7 @@ void vollstaendigenBeschwerdeprozessDurchlaufen() {
         .isEqualTo(BeschwerdeStatus.ERLEDIGT);
 
     assertThat(beschwerde.getStatusHistorie())
-        .extracting(StatusHistorie::getStatus)
+        .extracting(StatusHistorie::status)
         .containsExactly(
             BeschwerdeStatus.EINGEREICHT,
             BeschwerdeStatus.ANGENOMMEN,

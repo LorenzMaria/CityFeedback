@@ -46,7 +46,7 @@ public class StatusAenderungTest {
 
         // Assert
         assertThat(beschwerde.getStatusHistorie())
-                .extracting(StatusHistorie::getStatus)
+                .extracting(StatusHistorie::status)
                 .containsExactly(
                         BeschwerdeStatus.EINGEREICHT,
                         BeschwerdeStatus.ANGENOMMEN

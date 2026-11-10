@@ -107,6 +107,7 @@ private void pruefeStatus(BeschwerdeStatus erwartet, BeschwerdeStatus neu) {
 
 Im zweiten Schritt hat das LLM pro fortgeschrittener Technik (Records, Generics, Lambdas, Optional, Streams) eine Variante mit Vorher/Nachher vorgeschlagen.
 Übernommen wurden Records und Generics, Streams und Lambdas wurden abgelehnt, weil es im Aggregat keinen echten Bedarf dafür gibt.
+(Genutzte fortgeschrittene Techniken: Record-Types für `StatusHistorie` und `Fachamt`, Generics für `Uebergangsregeln<S extends Enum<S>>`.)
 
 ### Beispiel 1: Records für Value Objects
 
