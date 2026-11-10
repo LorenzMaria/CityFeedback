@@ -81,7 +81,88 @@ Der vollständige Prompt liegt unter [llm-prompts/aufg-4-3-1-prompt.md](llm-prom
 
 ## Code-Generierung
 
+Aus den acht Testdateien hat das LLM sechs Klassen in den Packages `model`, `valueObjects` und `exception` erzeugt, mit denen alle 13 Tests grün sind.
+Kern der Implementierung ist eine private Hilfsmethode in `Beschwerde`, die jeden Statusübergang gegen den erlaubten Vorgängerstatus prüft und in der Historie festhält.
+
+```java
+public void annehmen() {
+    wechsleStatus(BeschwerdeStatus.EINGEREICHT, BeschwerdeStatus.ANGENOMMEN);
+}
+
+private void wechsleStatus(BeschwerdeStatus erwartet, BeschwerdeStatus neu) {
+    pruefeStatus(erwartet, neu);
+    status = neu;
+    statusHistorie.add(new StatusHistorie(neu));
+}
+
+private void pruefeStatus(BeschwerdeStatus erwartet, BeschwerdeStatus neu) {
+    if (status != erwartet) {
+        throw new UngueltigerBeschwerdeStatusException(
+            "Uebergang nach " + neu + " ist aus Status " + status + " nicht erlaubt");
+    }
+}
+```
+
 ## Iterative Verbesserung
+
+Im zweiten Schritt hat das LLM pro fortgeschrittener Technik (Records, Generics, Lambdas, Optional, Streams) eine Variante mit Vorher/Nachher vorgeschlagen.
+Übernommen wurden Records und Generics, Streams und Lambdas wurden abgelehnt, weil es im Aggregat keinen echten Bedarf dafür gibt.
+
+### Beispiel 1: Records für Value Objects
+
+Vorher:
+
+```java
+public class StatusHistorie {
+    private final BeschwerdeStatus status;
+
+    public StatusHistorie(BeschwerdeStatus status) {
+        this.status = status;
+    }
+
+    public BeschwerdeStatus getStatus() {
+        return status;
+    }
+}
+```
+
+Nachher:
+
+```java
+public record StatusHistorie(BeschwerdeStatus status) {
+}
+```
+
+Der Record liefert Unveränderlichkeit sowie `equals`, `hashCode` und `toString` ohne eigenen Code.
+In zwei Tests wird dafür `StatusHistorie::getStatus` durch `StatusHistorie::status` ersetzt.
+
+### Beispiel 2: Generische Übergangsregeln
+
+Vorher:
+
+```java
+public void annehmen() {
+    wechsleStatus(BeschwerdeStatus.EINGEREICHT, BeschwerdeStatus.ANGENOMMEN);
+}
+```
+
+Nachher:
+
+```java
+private static final Uebergangsregeln<BeschwerdeStatus> REGELN =
+    Uebergangsregeln.fuer(BeschwerdeStatus.class)
+        .erlaube(EINGEREICHT, ANGENOMMEN, ABGELEHNT)
+        .erlaube(ANGENOMMEN, WEITERGELEITET)
+        .erlaube(WEITERGELEITET, IN_BEARBEITUNG)
+        .erlaube(IN_BEARBEITUNG, ERLEDIGT);
+
+public void annehmen() {
+    wechsleStatus(BeschwerdeStatus.ANGENOMMEN);
+}
+```
+
+Der komplette Lebenszyklus steht damit an einer Stelle deklarativ, und die generische Klasse `Uebergangsregeln<S extends Enum<S>>` ist für andere Aggregate wiederverwendbar.
+Alle Tests bleiben dabei unverändert grün.
 
 ## Kritische Qualitätsprüfung
 
