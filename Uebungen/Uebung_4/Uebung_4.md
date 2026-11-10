@@ -33,18 +33,18 @@ Der LLM wurde eine Rolle als erfahrerner Senior Softwareentwickler mit Java Unit
 
 ## Generierte Tests
 
-Happy Path:
-    - beschwerdeMitStatusEingereichtErstellen()
-    - beschwerdeAnFachamtWeiterleiten()
-    - beschwerdeNurAnZustaendigesFachamtWeiterleiten()
-    - beschwerdeAbschliessen()
+Happy Path:  
+        - beschwerdeMitStatusEingereichtErstellen()  
+        - beschwerdeAnFachamtWeiterleiten()  
+        - beschwerdeNurAnZustaendigesFachamtWeiterleiten()  
+        - beschwerdeAbschliessen()  
 
-Negativ Path:    
-    - nichtAngenommeneBeschwerdeNichtWeiterleiten()
-    - beschwerdeOhneBearbeitungsbeginnNichtAbschliessen()
+Negativ Path:       
+        - nichtAngenommeneBeschwerdeNichtWeiterleiten()  
+        - beschwerdeOhneBearbeitungsbeginnNichtAbschliessen()  
 
-Edge-Case Path
-    - wiederholteStatusaenderungVerhindern()
+Edge-Case Path:  
+        - wiederholteStatusaenderungVerhindern() 
 
 
 ## Kritische Bewertung
