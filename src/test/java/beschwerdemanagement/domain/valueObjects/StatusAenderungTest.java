@@ -1,10 +1,12 @@
 package beschwerdemanagement.domain.valueObjects;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
+import beschwerdemanagement.domain.model.Beschwerde;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static beschwerdemanagement.domain.event.BeschwerdeTestFixtures.neueBeschwerde;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class StatusAenderungTest {
     @Test
@@ -44,6 +46,7 @@ public class StatusAenderungTest {
 
         // Assert
         assertThat(beschwerde.getStatusHistorie())
+                .extracting(StatusHistorie::getStatus)
                 .containsExactly(
                         BeschwerdeStatus.EINGEREICHT,
                         BeschwerdeStatus.ANGENOMMEN
