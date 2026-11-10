@@ -60,3 +60,17 @@ Bei der Regex-validierung wurde folgende Regel verwendet um sicher zu gehen, das
     String regex = "^(?=.*\\S).{10,}$";
 
 
+# 3. Implementierung der Domänenlogik (TDD Schritt 2) mit LLM-Pair-Programming
+
+## LLM Prompt
+
+## Code-Generierung
+
+## Iterative Verbesserung
+
+## Kritische Qualitätsprüfung
+
+## Code-Review mit LLM
+
+## Dokumentation des Pair-Programming-Prozesses
+
