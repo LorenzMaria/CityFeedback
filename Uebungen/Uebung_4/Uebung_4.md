@@ -109,6 +109,16 @@ Im zweiten Schritt hat das LLM pro fortgeschrittener Technik (Records, Generics,
 Übernommen wurden Records und Generics, Streams und Lambdas wurden abgelehnt, weil es im Aggregat keinen echten Bedarf dafür gibt.
 (Genutzte fortgeschrittene Techniken: Record-Types für `StatusHistorie` und `Fachamt`, Generics für `Uebergangsregeln<S extends Enum<S>>`.)
 
+Empfehlung des LLM und Entscheidung:
+
+| Variante | Empfehlung | Grund | Umgesetzt |
+|---|---|---|---|
+| 1 Records | Ja | Echte Value Objects, weniger Code, kostet nur zwei Testzeilen | ✅ |
+| 2 Generics `Uebergangsregeln` | Ja | Macht den Lebenszyklus deklarativ, größter Qualitätsgewinn | ✅ |
+| 3 Lambda-Guard | Nein | Löst die Doppelprüfung, aber Variante 2 löst sie ohne Indirektion gleich mit | ❌ |
+| 4 Optional `getFachamt()` | Ja, mit neuem Test | Fachlich sinnvoll, aber nicht ungetestet | ❌ (zurückgestellt) |
+| 5 Streams | Nein | Kein Bedarf, wäre Technik um der Technik willen | ❌ |
+
 ### Beispiel 1: Records für Value Objects
 
 Vorher:
@@ -166,6 +176,26 @@ Der komplette Lebenszyklus steht damit an einer Stelle deklarativ, und die gener
 Alle Tests bleiben dabei unverändert grün.
 
 ## Kritische Qualitätsprüfung
+
+Der generierte Code wurde auf Korrektheit, Lesbarkeit und Wartbarkeit geprüft.
+
+### Was gut gelungen ist
+
+- Die Übergangsregeln sind an einer Stelle deklariert und direkt mit dem Prozess aus der Aufgabenstellung vergleichbar.
+- Ein abgelehnter Übergang verändert weder Status noch Historie.
+- `getStatusHistorie()` gibt nur eine unveränderliche Sicht heraus, das Aggregat bleibt geschützt.
+
+### Was noch schwach ist
+
+- `Fachamt` als Record hat Wertegleichheit über Name und Kategorie, fachlich ist ein Fachamt aber eine Entität und braucht eine eigene ID.
+- `einreichen()` validiert die Beschreibung nicht, der Regex-Test in `beschwerdeErstellen()` prüft nur den Teststring und nicht die Implementierung.
+
+### Fehlende Tests
+
+- Ablehnen aus einem anderen Status als `EINGEREICHT`
+- Weiterleiten einer abgelehnten Beschwerde
+- Einreichen mit leerer oder zu kurzer Beschreibung
+- Edge Cases wie Statusänderung aus einem Endzustand
 
 ## Code-Review mit LLM
 
