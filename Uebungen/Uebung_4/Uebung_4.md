@@ -60,3 +60,36 @@ Bei der Regex-validierung wurde folgende Regel verwendet um sicher zu gehen, das
     String regex = "^(?=.*\\S).{10,}$";
 
 
+# 3. Implementierung der Domänenlogik (TDD Schritt 2) mit LLM-Pair-Programming
+
+## 3.1 LLM Prompt
+
+Das LLM bekam die Rolle eines Senior Java-Entwicklers, den Statusablauf einer Beschwerde, die Package-Struktur und alle acht Testdateien aus Aufgabe 2 (vollständiger Prompt: [llm-prompts/aufg-4-3-1-prompt.md](llm-prompts/aufg-4-3-1-prompt.md)).
+Verlangt wurde zunächst die minimale Implementierung ohne fortgeschrittene Techniken, Widersprüche in den Tests sollte das LLM nur auflisten und nicht selbst entscheiden.
+
+## 3.2 Code-Generierung
+
+Aus den Tests entstanden sechs Klassen in den Packages `model`, `valueObjects` und `exception`, mit denen alle 13 Tests grün sind.
+Kern ist eine Hilfsmethode in `Beschwerde`, die jeden Statusübergang gegen den erlaubten Vorgängerstatus prüft, in der Historie festhält und sonst eine `UngueltigerBeschwerdeStatusException` wirft.
+
+## 3.3 Iterative Verbesserung
+
+Im zweiten Schritt schlug das LLM pro Technik (Records, Generics, Lambdas, Optional, Streams) eine Vorher/Nachher-Variante vor, übernommen wurden nur zwei davon.
+
+- Records für die Value Objects `StatusHistorie` und `Fachamt`, das spart Boilerplate und liefert Unveränderlichkeit
+- Generische Klasse `Uebergangsregeln<S extends Enum<S>>`, die den gesamten Lebenszyklus an einer Stelle deklarativ beschreibt
+- Lambdas, Optional und Streams abgelehnt, weil es im Aggregat keinen echten Bedarf dafür gibt
+
+## 3.4 Kritische Qualitätsprüfung
+
+- Gut: Ein abgelehnter Übergang verändert weder Status noch Historie, und die Historie wird nur als unveränderliche Sicht herausgegeben
+- Schwach: `Fachamt` als Record hat Wertegleichheit, obwohl es fachlich eine Entität mit eigener ID wäre
+- Fehlend: Tests für ungültige Übergänge aus Endzuständen und für leere oder zu kurze Beschreibungen
+
+## 3.5 Code-Review mit LLM
+
+Das abschließende Review fand trotz grüner Tests die fehlende Validierung in `einreichen()`, die doppelte Übergangsprüfung in `weiterleiten()` und die weiterhin veränderbare `Uebergangsregeln`-Tabelle.
+
+## 3.6 Fazit zum Pair-Programming-Prozess
+
+Das zweistufige Vorgehen hat sich bewährt: erst eine minimale, testgetriebene Version, dann gezielte Verbesserungen, die nur übernommen wurden, wenn sie einen echten Qualitätsgewinn bringen.

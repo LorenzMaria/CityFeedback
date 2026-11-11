@@ -1,7 +1,12 @@
 package beschwerdemanagement.domain.event;
 
-import org.junit.jupiter.api.Test;
+import beschwerdemanagement.domain.model.Beschwerde;
+import beschwerdemanagement.domain.model.Fachamt;
+import beschwerdemanagement.domain.valueObjects.BeschwerdeStatus;
+import beschwerdemanagement.domain.valueObjects.Kategorie;
+import beschwerdemanagement.domain.valueObjects.StatusHistorie;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -32,7 +37,7 @@ void vollstaendigenBeschwerdeprozessDurchlaufen() {
         .isEqualTo(BeschwerdeStatus.ERLEDIGT);
 
     assertThat(beschwerde.getStatusHistorie())
-        .extracting(StatusHistorie::getStatus)
+        .extracting(StatusHistorie::status)
         .containsExactly(
             BeschwerdeStatus.EINGEREICHT,
             BeschwerdeStatus.ANGENOMMEN,
