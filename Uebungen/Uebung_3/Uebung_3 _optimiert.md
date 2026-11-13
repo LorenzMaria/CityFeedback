@@ -238,16 +238,16 @@ Jeder Bounded Context aus Teilaufgabe 3 wird ein eigenes Package, die anderen dr
 ```
 de.cityfeedback
  ├── beschwerdemanagement
- │    ├── domain        (Beschwerde, Kommentar, Fachamt, Events)
- │    ├── repository
- │    └── service       (ZuweisungsService)
+ │    ├── domain          (Beschwerde, Kommentar, Fachamt, Events, BeschwerdeRepository als Port)
+ │    ├── service         (ZuweisungsService)
+ │    └── infrastructure  (Spring-Data-Adapter für BeschwerdeRepository)
  ├── buergerbeteiligung
  ├── benutzerverwaltung
  └── benachrichtigung
 ```
 
 1. **Entitäten und Aggregate:** Eine Java-Klasse pro Entität und Aggregat mit den Attributen und Methoden aus Teilaufgabe 4, dabei gibt es keine Framework-Abhängigkeiten.
-2. **Repositories:** Ein Interface pro Aggregate Root aus Teilaufgabe 5, umgesetzt mit Spring Data.
+2. **Repositories:** Ein Interface pro Aggregate Root aus Teilaufgabe 5 als Port in der Domäne, ohne Framework-Abhängigkeit. Die Umsetzung mit Spring Data liegt als Adapter im Package `infrastructure`.
 3. **Domain Services:** Eine Klasse pro Service aus Teilaufgabe 5, die Aggregate über die Repositories lädt und speichert.
 4. **Domain Events:** Zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, auf die der Context Benachrichtigung reagiert.
 5. **Tests:** Unit-Tests mit JUnit für die Aggregate (ohne Spring), Integrationstests mit `@SpringBootTest` für Services und Repositories.
