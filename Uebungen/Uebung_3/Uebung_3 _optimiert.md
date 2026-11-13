@@ -90,11 +90,13 @@ Das Domänenmodell leitet sich direkt aus den Aggregaten des Event Stormings ab.
 
 | Aggregat (Root) | Enthaltene Entitäten | Enthaltene Werte | Abgeleitet aus den Events |
 |---|---|---|---|
-| Beschwerde | BeschwerdeKommentar | Standort, Kategorie, Anhang, StatusAenderung | eingereicht, angenommen/abgelehnt, weitergeleitet, Bearbeitung begonnen, erledigt |
-| Vorschlag | VorschlagKommentar | Standort, Kategorie, Unterstuetzung, Stellungnahme | eingereicht, veröffentlicht, unterstützt, Kommentar verfasst, Stellungnahme veröffentlicht |
+| Beschwerde | BeschwerdeKommentar | BeschwerdeStandort, Kategorie, Anhang, StatusAenderung | eingereicht, angenommen/abgelehnt, weitergeleitet, Bearbeitung begonnen, erledigt |
+| Vorschlag | VorschlagKommentar | VorschlagStandort, Kategorie, Unterstuetzung, Stellungnahme | eingereicht, veröffentlicht, unterstützt, Kommentar verfasst, Stellungnahme veröffentlicht |
 | Benutzerkonto | – | EmailAdresse, Rolle | Benutzerkonto registriert |
 | Fachamt | – | Kategorie (Zuständigkeit) | Beschwerde an Fachamt weitergeleitet |
 | Benachrichtigung | – | – | Eingangsbestätigung versendet, Bürger:in über Status benachrichtigt |
+
+Kommentar und Standort gibt es je einmal pro Aggregat (`BeschwerdeKommentar` und `VorschlagKommentar`, `BeschwerdeStandort` und `VorschlagStandort`), weil ein Teil einer Komposition nur einen Eigentümer haben kann.
 
 Aggregate verweisen untereinander nur über IDs und nicht über direkte Objektreferenzen. Eine Beschwerde kennt also die `BenutzerId` der einreichenden Person und die `FachamtId` des zuständigen Amts, enthält aber nicht deren ganze Objekte. So bleiben die Aggregate unabhängig voneinander.
 
@@ -170,7 +172,7 @@ Jede Methode prüft den aktuellen Status und erzeugt das passende Domain Event.
 
 | Baustein | Art | Attribute | Methoden | erzeugtes Domainevent |
 |---|---|---|---|---|
-| Beschwerde | Aggregate Root | `BeschwerdeId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `BeschwerdeStatus status`, `BenutzerId eingereichtVon`, `FachamtId zustaendigesFachamt`, `LocalDateTime eingereichtAm`, `List<Anhang> anhaenge`, `List<StatusAenderung> statusAenderungen`, `List<Kommentar> kommentare` | `static einreichen(BenutzerId, String titel, String beschreibung, Kategorie, Standort)`, `annehmen()`, `ablehnen()`, `weiterleiten(FachamtId)`, `bearbeitungStarten()`, `abschliessen()`, `kommentieren(BenutzerId, String)` | BeschwerdeEingereicht, BeschwerdeAngenommen, BeschwerdeAbgelehnt, BeschwerdeWeitergeleitet, BearbeitungBegonnen, BeschwerdeErledigt, BeschwerdeKommentarVerfasst |
+| Beschwerde | Aggregate Root | `BeschwerdeId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `BeschwerdeStandort standort`, `BeschwerdeStatus status`, `BenutzerId eingereichtVon`, `FachamtId zustaendigesFachamt`, `LocalDateTime eingereichtAm`, `List<Anhang> anhaenge`, `List<StatusAenderung> statusAenderungen`, `List<BeschwerdeKommentar> kommentare` | `static einreichen(BenutzerId, String titel, String beschreibung, Kategorie, BeschwerdeStandort)`, `annehmen()`, `ablehnen()`, `weiterleiten(FachamtId)`, `bearbeitungStarten()`, `abschliessen()`, `kommentieren(BenutzerId, String)` | BeschwerdeEingereicht, BeschwerdeAngenommen, BeschwerdeAbgelehnt, BeschwerdeWeitergeleitet, BearbeitungBegonnen, BeschwerdeErledigt, BeschwerdeKommentarVerfasst |
 | BeschwerdeKommentar | Entity (Teil der Beschwerde) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
 | Fachamt | Aggregate Root | `FachamtId id`, `String name`, `List<Kategorie> zustaendigFuer` | `istZustaendigFuer(Kategorie)` |
 
@@ -181,7 +183,7 @@ Jede Statusänderung wird als `StatusAenderung` gespeichert.
 
 | Baustein | Art | Attribute | Methoden |
 |---|---|---|---|
-| Vorschlag | Aggregate Root | `VorschlagId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `VorschlagStatus status`, `BenutzerId eingereichtVon`, `LocalDateTime eingereichtAm`, `List<Unterstuetzung> unterstuetzungen`, `List<Kommentar> kommentare`, `Stellungnahme stellungnahme` | `static einreichen(BenutzerId, String titel, String beschreibung, Kategorie, Standort)`, `freigeben()`, `unterstuetzen(BenutzerId)`, `kommentieren(BenutzerId, String)`, `stellungnahmeAbgeben(String)` |
+| Vorschlag | Aggregate Root | `VorschlagId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `VorschlagStandort standort`, `VorschlagStatus status`, `BenutzerId eingereichtVon`, `LocalDateTime eingereichtAm`, `List<Unterstuetzung> unterstuetzungen`, `List<VorschlagKommentar> kommentare`, `Stellungnahme stellungnahme` | `static einreichen(BenutzerId, String titel, String beschreibung, Kategorie, VorschlagStandort)`, `freigeben()`, `unterstuetzen(BenutzerId)`, `kommentieren(BenutzerId, String)`, `stellungnahmeAbgeben(String)` |
 | VorschlagKommentar | Entity (Teil des Vorschlags) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
 
 Wie in Prozess 3 aus Teilaufgabe 1 ist Unterstützen und Kommentieren erst nach der Freigabe möglich, und jede Person kann einen Vorschlag nur einmal unterstützen.
@@ -222,11 +224,11 @@ Wie in Teilaufgabe 2 beschrieben, verweisen Aggregate nur über IDs aufeinander,
 Beschwerde
  ├── eingereichtVon (BenutzerId) ──> Benutzerkonto
  ├── zustaendigesFachamt (FachamtId) ──> Fachamt
- └── enthält: BeschwerdeKommentare, Anhänge, Statusänderungen, Standort
+ └── enthält: BeschwerdeKommentare, Anhänge, Statusänderungen, BeschwerdeStandort
 
 Vorschlag
  ├── eingereichtVon (BenutzerId) ──> Benutzerkonto
- └── enthält: VorschlagKommentare, Unterstützungen, Stellungnahme, Standort
+ └── enthält: VorschlagKommentare, Unterstützungen, Stellungnahme, VorschlagStandort
 ```
 
 ## 5. Domain Services und Repositories
