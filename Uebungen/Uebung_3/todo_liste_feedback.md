@@ -20,9 +20,9 @@
 - [x] **Context-Beziehung Benutzerverwaltung**: Customer/Supplier überdenken – ggf. Conformist oder Anti-Corruption Layer als passendere Pattern
 - [x] **BenachrichtigungsService**: Als Anwendungsservice mit Port zum Mailversand korrigieren (enthält keine Fachregel)
 - [x] **einreichen()**: Als Factory-Methode implementieren
-- [ ] **Invarianten & Aggregate-Größe**:
-  - [ ] Invarianten pro Aggregate auflisten
-  - [ ] Größe der Aggregates begründen (insb. bei unbegrenzten Listen von Unterstützungen)
+- [x] **Invarianten & Aggregate-Größe**:
+  - [x] Invarianten pro Aggregate auflisten
+  - [x] Größe der Aggregates begründen (insb. bei unbegrenzten Listen von Unterstützungen)
 
 ---
 

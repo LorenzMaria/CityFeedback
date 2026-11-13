@@ -187,7 +187,19 @@ Wie in Prozess 3 aus Teilaufgabe 1 ist Unterstützen und Kommentieren erst nach 
 
 Benutzerkonto und Benachrichtigung gehören zu den unterstützenden Contexts und werden direkt wie im Domänenmodell (Teilaufgabe 2) übernommen.
 
-### 4.3. Beziehungen zwischen den Aggregaten
+### 4.3. Invarianten und Größe der Aggregate
+
+Invarianten sind Regeln, die für ein Aggregat immer gelten müssen. Sie bestimmen, was ins Aggregat gehört: Alles, was zum Prüfen einer Regel gebraucht wird, muss gemeinsam geladen und gespeichert werden.
+
+| Aggregat | Invarianten | Begründung der Größe |
+|---|---|---|
+| Beschwerde | Statuswechsel nur in der Reihenfolge aus Prozess 2 (z. B. weiterleiten nur aus `ANGENOMMEN`). Jeder Statuswechsel ist als `StatusAenderung` protokolliert. Ab `WEITERGELEITET` ist ein zuständiges Fachamt gesetzt. | Status und Statusänderungen gehören ins Aggregat, weil jede Methode sie prüft. Kommentare und Anhänge bleiben drin, weil sie nur für Beteiligte sichtbar sind und pro Beschwerde wenige Einträge haben. |
+| Vorschlag | Unterstützen und Kommentieren nur im Status `VEROEFFENTLICHT`. Jede Person unterstützt höchstens einmal. Höchstens eine Stellungnahme. | Die Liste der Unterstützungen ist unbegrenzt und kann bei beliebten Vorschlägen groß werden. Sie bleibt trotzdem im Aggregat, weil die Regel „höchstens einmal unterstützen“ nur so beim Aufruf von `unterstuetzen(BenutzerId)` geprüft werden kann. Für eine Stadt-App ist die Größe vertretbar. Sollte sie zum Problem werden, kann die Unterstützung später als eigenes Aggregat herausgelöst werden. |
+| Benutzerkonto | Genau eine Rolle. Die E-Mail-Adresse ist eindeutig (geprüft vom RegistrierungsService, weil es mehrere Konten betrifft). | Enthält keine Listen und bleibt klein. |
+| Fachamt | Zuständig für mindestens eine Kategorie. | Enthält nur die Zuständigkeiten und bleibt klein. |
+| Benachrichtigung | Hat immer einen Empfänger und ein auslösendes Event. | Enthält keine Listen und bleibt klein. |
+
+### 4.4. Beziehungen zwischen den Aggregaten
 
 Wie in Teilaufgabe 2 beschrieben, verweisen Aggregate nur über IDs aufeinander, Entitäten und Werte gehören fest zu ihrem Aggregat.
 
