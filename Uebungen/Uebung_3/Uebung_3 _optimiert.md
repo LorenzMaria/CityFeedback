@@ -224,19 +224,13 @@ Domain Services enthalten Fachregeln, die zu keinem einzelnen Aggregat gehören.
 | ZuweisungsService | Beschwerdemanagement | Sucht das Fachamt für die Kategorie der Beschwerde und ruft `beschwerde.weiterleiten(fachamtId)` auf |
 | RegistrierungsService | Benutzerverwaltung | Prüft, ob die E-Mail-Adresse noch frei ist, und legt das Benutzerkonto an |
 
-### 5.3. Anwendungsservice und Port im Context Benachrichtigung
+### 5.3. Anwendungsservice im Context Benachrichtigung
 
-Der BenachrichtigungsService enthält keine Fachregel. Er koordiniert nur den Ablauf: Event entgegennehmen, Daten laden, Aggregat speichern, Mail anstoßen. Deshalb ist er kein Domain Service, sondern ein Anwendungsservice.
+Der BenachrichtigungsService enthält keine Fachregel, sondern koordiniert nur den Ablauf. Er ist deshalb ein Anwendungsservice und kein Domain Service. Den Versand übernimmt der Port `MailVersand`, damit die Domäne nicht vom Mail-Provider abhängt.
 
 | Anwendungsservice | Context | Aufgabe |
 |---|---|---|
-| BenachrichtigungsService | Benachrichtigung | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse zur `BenutzerId`, legt eine `Benachrichtigung` an, speichert sie über das `BenachrichtigungRepository` und übergibt sie an den Port `MailVersand` |
-
-Der eigentliche Versand liegt hinter einem Port, damit die Domäne nicht vom Mail-Provider abhängt:
-
-| Port | Context | Methoden | Adapter |
-|---|---|---|---|
-| MailVersand | Benachrichtigung | `sende(EmailAdresse empfaenger, String betreff, String text)` | SMTP-Adapter im Package `infrastructure`, im Test ein Fake, der die Aufrufe nur aufzeichnet |
+| BenachrichtigungsService | Benachrichtigung | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse zur `BenutzerId`, speichert die `Benachrichtigung` und übergibt sie an den Port `MailVersand` |
 
 ## 6. Implementierungsstrategie
 
