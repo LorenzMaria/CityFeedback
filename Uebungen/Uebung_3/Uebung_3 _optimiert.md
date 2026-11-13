@@ -264,7 +264,15 @@ public class Beschwerde {
   private BeschwerdeStatus status;
   private FachamtId zustaendigesFachamt;
   private final List<StatusAenderung> statusAenderungen = new ArrayList<>();
+  // Clock wird injiziert statt LocalDateTime.now() direkt aufzurufen,
+  // damit Tests eine feste Zeit vorgeben können (Clock.fixed(...))
+  private final Clock clock;
   // weitere Attribute siehe Teilaufgabe 4
+
+  public Beschwerde(BeschwerdeId id, Clock clock) {
+    this.id = id;
+    this.clock = clock;
+  }
 
   public void weiterleiten(FachamtId fachamtId) {
     if (status != BeschwerdeStatus.ANGENOMMEN) {
@@ -272,7 +280,7 @@ public class Beschwerde {
     }
     zustaendigesFachamt = fachamtId;
     // Jeder Statuswechsel wird für die Historie gespeichert
-    statusAenderungen.add(new StatusAenderung(status, BeschwerdeStatus.WEITERGELEITET, LocalDateTime.now()));
+    statusAenderungen.add(new StatusAenderung(status, BeschwerdeStatus.WEITERGELEITET, LocalDateTime.now(clock)));
     status = BeschwerdeStatus.WEITERGELEITET;
   }
 }

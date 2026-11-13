@@ -29,5 +29,5 @@
 ## 3. Implementierungstechnische Hinweise
 
 - [ ] **Domain-Interface**: Port in der Domäne definieren, Adapter in der Infrastruktur (kein Spring Data in der Domäne → vermeidet Framework-Abhängigkeit)
-- [ ] **Zeit für Tests**: `LocalDateTime.now()` durch injectbare `Clock` ersetzen (erleichtert Testbarkeit)
+- [x] **Zeit für Tests**: `LocalDateTime.now()` durch injectbare `Clock` ersetzen (erleichtert Testbarkeit)
 - [x] **HTML-Kommentare**: Alle Kommentare mit Bearbeiternamen aus dem Dokument entfernen
