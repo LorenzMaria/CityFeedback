@@ -1,7 +1,6 @@
 # Übung 3: Systemarchitektur
 
 ## 1. Event Storming
-<!-- Maria, Jesse, Yara finalisiert -->
 
 Die Event-Storming-Session haben wir auf unserem gemeinsamen Excalidraw-Board durchgeführt. Für die Darstellung nutzen wir vier Typen von Haftnotizen:
 
@@ -80,7 +79,6 @@ Für die weiteren Teilaufgaben konzentrieren wir uns auf die folgenden Events (i
 Sie decken beide Kernprozesse ab, vom Einreichen bis zum Abschluss.
 
 ## 2. Domänenmodell
-<!-- Yara -->
 
 Das Domänenmodell leitet sich direkt aus den Aggregaten des Event Stormings ab. Wir unterscheiden dabei drei Arten von Bausteinen:
 
@@ -114,7 +112,6 @@ Die festen Wertebereiche haben wir als Aufzählungstypen (Enums) angelegt. Sie s
 | Rolle | BUERGER_IN, STADTVERWALTUNG, FACHAMT |
 
 ## 3. Bounded Contexts
-<!-- Yara -->
 
 Aus dem Domänenmodell ergeben sich vier fachliche Bereiche, die jeweils ein eigenes Modell und eine eigene Sprache haben. Die Grenzen haben wir dort gezogen, wo die Events einen anderen Geschäftsprozess oder eine andere Verantwortung betreffen.
 
@@ -156,7 +153,6 @@ Die Trennung zeigt sich auch daran, dass manche Begriffe in den Contexts etwas a
 Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch wenn die Klassen ähnlich heißen.
 
 ## 4. Entitäten und Aggregates
-<!-- Maria -->
 
 Die Attribute stammen aus dem Domänenmodell (Teilaufgabe 2, Abbildung 2), die Typen `Kategorie`, `BeschwerdeStatus` und `VorschlagStatus` sind die dort definierten Enums.
 Die Methoden entsprechen den Commands aus dem Event Storming (Teilaufgabe 1).
@@ -200,7 +196,6 @@ Vorschlag
 ```
 
 ## 5. Domain Services und Repositories
-<!-- Jesse -->
 
 ### 5.1. Repositories
 
@@ -225,7 +220,6 @@ Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
 | BenachrichtigungsService | Benachrichtigung | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse und versendet die Benachrichtigung |
 
 ## 6. Implementierungsstrategie
-<!-- Jesse -->
 
 ### 6.1. Technische Annahmen
 

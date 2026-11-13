@@ -30,4 +30,4 @@
 
 - [ ] **Domain-Interface**: Port in der Domäne definieren, Adapter in der Infrastruktur (kein Spring Data in der Domäne → vermeidet Framework-Abhängigkeit)
 - [ ] **Zeit für Tests**: `LocalDateTime.now()` durch injectbare `Clock` ersetzen (erleichtert Testbarkeit)
-- [ ] **HTML-Kommentare**: Alle Kommentare mit Bearbeiternamen aus dem Dokument entfernen
+- [x] **HTML-Kommentare**: Alle Kommentare mit Bearbeiternamen aus dem Dokument entfernen
