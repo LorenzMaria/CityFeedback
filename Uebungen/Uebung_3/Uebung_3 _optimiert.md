@@ -246,18 +246,18 @@ Pro Aggregate Root aus Teilaufgabe 4 gibt es genau ein Repository.
 
 Domain Services enthalten Fachregeln, die zu keinem einzelnen Aggregat gehören.
 
-| Domain Service | Context | Aufgabe |
-|---|---|---|
-| ZuweisungsService | Beschwerdemanagement | Sucht das Fachamt für die Kategorie der Beschwerde und ruft `beschwerde.weiterleiten(fachamtId)` auf |
-| RegistrierungsService | Benutzerverwaltung | Prüft, ob die E-Mail-Adresse noch frei ist, und legt das Benutzerkonto an |
+| Domain Service | Context | Methoden | Aufgabe |
+|---|---|---|---|
+| ZuweisungsService | Beschwerdemanagement | weiseBeschwerdeIDZu(BeschwerdeId) | Sucht das Fachamt für die Kategorie der Beschwerde und ruft `beschwerde.weiterleiten(fachamtId)` auf |
+| RegistrierungsService | Benutzerverwaltung  | registriereBenutzerKonto(Benutzerkonto) | Prüft, ob die E-Mail-Adresse noch frei ist, und legt das Benutzerkonto an |
 
 ### 5.3. Anwendungsservice im Context Benachrichtigung
 
 Der BenachrichtigungsService enthält keine Fachregel, sondern koordiniert nur den Ablauf. Er ist deshalb ein Anwendungsservice und kein Domain Service. Den Versand übernimmt der Port `MailVersand`, damit die Domäne nicht vom Mail-Provider abhängt.
 
-| Anwendungsservice | Context | Aufgabe |
-|---|---|---|
-| BenachrichtigungsService | Benachrichtigung | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse zur `BenutzerId`, speichert die `Benachrichtigung` und übergibt sie an den Port `MailVersand` |
+| Anwendungsservice | Context | Methoden | Aufgabe |
+|---|---|---|---|
+| BenachrichtigungsService | Benachrichtigung | erarbeiteBeschwerdeEingereicht(BeschwerdeEingereicht), verarbeiteStausGeaendert(BeschwerdeStatusGeaendert), verarbeiteBeschwerdeEerledigt(BeschwerdeErledigt) | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse zur `BenutzerId`, speichert die `Benachrichtigung` und übergibt sie an den Port `MailVersand` |
 
 ## 6. Implementierungsstrategie
 
