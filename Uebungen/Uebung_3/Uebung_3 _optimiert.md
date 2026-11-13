@@ -232,11 +232,11 @@ Pro Aggregate Root aus Teilaufgabe 4 gibt es genau ein Repository.
 
 Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
 
-| Domain Service | Context | Aufgabe |
-|---|---|---|
-| ZuweisungsService | Beschwerdemanagement | Sucht das Fachamt für die Kategorie der Beschwerde und ruft `beschwerde.weiterleiten(fachamtId)` auf |
-| RegistrierungsService | Benutzerverwaltung | Prüft, ob die E-Mail-Adresse noch frei ist, und legt das Benutzerkonto an |
-| BenachrichtigungsService | Benachrichtigung | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse und versendet die Benachrichtigung |
+| Domain Service | Context | Methoden | Aufgabe |
+|---|---|---|---|
+| ZuweisungsService | Beschwerdemanagement | weiseBeschwerdeIDZu(BeschwerdeId) | Sucht das Fachamt für die Kategorie der Beschwerde und ruft `beschwerde.weiterleiten(fachamtId)` auf |
+| RegistrierungsService | Benutzerverwaltung  | registriereBenutzerKonto(Benutzerkonto) | Prüft, ob die E-Mail-Adresse noch frei ist, und legt das Benutzerkonto an |
+| BenachrichtigungsService | Benachrichtigung | erarbeiteBeschwerdeEingereicht(BeschwerdeEingereicht), verarbeiteStausGeaendert(BeschwerdeStatusGeaendert), verarbeiteBeschwerdeEerledigt(BeschwerdeErledigt) |  Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse und versendet die Benachrichtigung |
 
 ## 6. Implementierungsstrategie
 <!-- Jesse -->
