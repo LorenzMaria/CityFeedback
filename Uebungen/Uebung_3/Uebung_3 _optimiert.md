@@ -14,7 +14,7 @@ Die Event-Storming-Session haben wir auf unserem gemeinsamen Excalidraw-Board du
 
 Jeder Schritt liest sich von oben nach unten: Eine Rolle löst einen Command aus, der Command wird von einem Aggregat verarbeitet und daraus entsteht ein Domain Event. Von links nach rechts ergibt sich die zeitliche Reihenfolge. Eine Policy ist keine Rolle: Sie steht für eine Regel, die ohne menschliches Zutun auf ein Event reagiert und daraus den nächsten Command auslöst.
 
-![Event Storming CityFeedback](img/eventstorming.png)
+![Event Storming CityFeedback](img/eventstorming-optimiert.png)
 
 *Abbildung 1: Event Storming für CityFeedback*
 
