@@ -311,6 +311,8 @@ public class Beschwerde {
   private BeschwerdeStatus status;
   private FachamtId zustaendigesFachamt;
   private final List<StatusAenderung> statusAenderungen = new ArrayList<>();
+  // Domain Events werden gesammelt und nach dem Speichern veröffentlicht (siehe Teilaufgabe 6.2, Schritt 5)
+  private final List<DomainEvent> domainEvents = new ArrayList<>();
   // Clock wird injiziert statt LocalDateTime.now() direkt aufzurufen,
   // damit Tests eine feste Zeit vorgeben können (Clock.fixed(...))
   private final Clock clock;
@@ -337,6 +339,8 @@ public class Beschwerde {
     // Jeder Statuswechsel wird für die Historie gespeichert
     statusAenderungen.add(new StatusAenderung(status, BeschwerdeStatus.WEITERGELEITET, LocalDateTime.now(clock)));
     status = BeschwerdeStatus.WEITERGELEITET;
+    // Jede Methode erzeugt das passende Domain Event (siehe Teilaufgabe 4)
+    domainEvents.add(new BeschwerdeWeitergeleitet(id, fachamtId));
   }
 }
 
