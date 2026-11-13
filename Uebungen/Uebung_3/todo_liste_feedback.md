@@ -16,7 +16,7 @@
 
 ## 2. Fachliche Anmerkungen
 
-- [ ] **Policies vs. Rollen**: „Eingangsbestätigung senden" und „Statusänderung mitteilen" als Policies kennzeichnen (nicht als Rollen)
+- [x] **Policies vs. Rollen**: „Eingangsbestätigung senden" und „Statusänderung mitteilen" als Policies kennzeichnen (nicht als Rollen)
 - [ ] **Context-Beziehung Benutzerverwaltung**: Customer/Supplier überdenken – ggf. Conformist oder Anti-Corruption Layer als passendere Pattern
 - [ ] **BenachrichtigungsService**: Als Anwendungsservice mit Port zum Mailversand korrigieren (enthält keine Fachregel)
 - [ ] **einreichen()**: Als Factory-Methode implementieren

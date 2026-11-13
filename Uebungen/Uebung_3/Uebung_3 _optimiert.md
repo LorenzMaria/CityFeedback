@@ -2,7 +2,7 @@
 
 ## 1. Event Storming
 
-Die Event-Storming-Session haben wir auf unserem gemeinsamen Excalidraw-Board durchgeführt. Für die Darstellung nutzen wir vier Typen von Haftnotizen:
+Die Event-Storming-Session haben wir auf unserem gemeinsamen Excalidraw-Board durchgeführt. Für die Darstellung nutzen wir fünf Typen von Haftnotizen:
 
 | Farbe | Typ | Bedeutung |
 |---|---|---|
@@ -10,8 +10,9 @@ Die Event-Storming-Session haben wir auf unserem gemeinsamen Excalidraw-Board du
 | Gelb | Domain Event | Fachlich relevantes Ereignis, das daraufhin eingetreten ist (immer in der Vergangenheitsform) |
 | Blau | Aggregat | Objekt, auf das sich der Command bezieht und das das Event erzeugt |
 | Grün | User Role | Person oder Rolle, die den Command auslöst |
+| Lila | Policy | Regel, die automatisch auf ein Domain Event reagiert und den nächsten Command auslöst („Immer wenn ..., dann ...“) |
 
-Jeder Schritt liest sich von oben nach unten: Eine Rolle löst einen Command aus, der Command wird von einem Aggregat verarbeitet und daraus entsteht ein Domain Event. Von links nach rechts ergibt sich die zeitliche Reihenfolge.
+Jeder Schritt liest sich von oben nach unten: Eine Rolle löst einen Command aus, der Command wird von einem Aggregat verarbeitet und daraus entsteht ein Domain Event. Von links nach rechts ergibt sich die zeitliche Reihenfolge. Eine Policy ist keine Rolle: Sie steht für eine Regel, die ohne menschliches Zutun auf ein Event reagiert und daraus den nächsten Command auslöst.
 
 ![Event Storming CityFeedback](img/eventstorming.png)
 
@@ -29,17 +30,17 @@ Die Registrierung ist die Voraussetzung für beide fachlichen Prozesse. Danach t
 
 **Prozess 2: Beschwerde melden und bearbeiten**
 
-| Nr. | User Role | Command | Aggregat | Domain Event |
+| Nr. | User Role / Policy | Command | Aggregat | Domain Event |
 |---|---|---|---|---|
 | 2 | Bürger:in | Beschwerde einreichen | Beschwerde | Beschwerde eingereicht |
-| 3 | System (automatisch) | Eingangsbestätigung senden | Benachrichtigung | Eingangsbestätigung versendet |
+| 3 | Policy: immer wenn „Beschwerde eingereicht“ | Eingangsbestätigung senden | Benachrichtigung | Eingangsbestätigung versendet |
 | 4 | Stadtverwaltung | Beschwerde prüfen | Beschwerde | Beschwerde angenommen oder Beschwerde abgelehnt |
 | 5 | Stadtverwaltung | Beschwerde zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
 | 6 | Fachamt | Bearbeitung starten | Beschwerde | Bearbeitung begonnen |
-| 7 | System (automatisch) | Statusänderung mitteilen | Benachrichtigung | Bürger:in über Status benachrichtigt |
+| 7 | Policy: immer wenn sich der Status ändert | Statusänderung mitteilen | Benachrichtigung | Bürger:in über Status benachrichtigt |
 | 8 | Fachamt | Beschwerde abschließen | Beschwerde | Beschwerde erledigt |
 
-Schritt 7 steht stellvertretend für alle Statusänderungen: Auch nach „angenommen“, „abgelehnt“ und „erledigt“ wird die einreichende Person benachrichtigt.
+Die Schritte 3 und 7 werden von keiner Person ausgelöst, sondern von einer Policy, die auf das vorherige Event reagiert. Schritt 7 steht dabei stellvertretend für alle Statusänderungen: Auch nach „angenommen“, „abgelehnt“ und „erledigt“ wird die einreichende Person benachrichtigt.
 
 **Prozess 3: Bürgerbeteiligung (Vorschläge)**
 
