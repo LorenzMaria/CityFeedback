@@ -2,15 +2,15 @@
 
 ## 1. Stimmigkeit / Konsistenz
 
-- [ ] **Beschwerden-Kommentar**: Im Event Storming Command und Event für `kommentieren()` nachtragen (fehlt aktuell)
-- [ ] **Zuweisung klären**: Entscheidung treffen – manuelle Zuweisung (Stadtverwaltung) ODER automatische Zuweisung über Kategorie (ZuweisungsService) – und im gesamten Dokument einheitlich darstellen
-- [ ] **Kommentar & Standort**: Zwei eigene Klassen pro Context erstellen (eine Komposition kann nur ein Aggregate als Eigentümer haben)
-- [ ] **Domain Events**: `weiterleiten()`-Methode so anpassen, dass sie ein Domain Event erzeugt (Abschnitt 4 besagt: jede Methode erzeugt Event)
-- [ ] **Methoden ergänzen**: 
-  - [ ] Benutzerkonto: Methoden aus Aufgabe 2/4 nachtragen
-  - [ ] Benachrichtigung: Methoden aus Aufgabe 2/4 nachtragen
-- [ ] **Service-Tabelle**: Methoden für alle Services ergänzen
-- [ ] **FachamtRepository**: `speichern()`-Methode hinzufügen
+- [x] **Beschwerden-Kommentar**: Im Event Storming Command und Event für `kommentieren()` nachtragen (fehlt aktuell)
+- [x] **Zuweisung klären**: Entscheidung treffen – manuelle Zuweisung (Stadtverwaltung) ODER automatische Zuweisung über Kategorie (ZuweisungsService) – und im gesamten Dokument einheitlich darstellen
+- [x] **Kommentar & Standort**: Zwei eigene Klassen pro Context erstellen (eine Komposition kann nur ein Aggregate als Eigentümer haben)
+- [x] **Domain Events**: `weiterleiten()`-Methode so anpassen, dass sie ein Domain Event erzeugt (Abschnitt 4 besagt: jede Methode erzeugt Event)
+- [x] **Methoden ergänzen**: 
+  - [x] Benutzerkonto: Methoden aus Aufgabe 2/4 nachtragen
+  - [x] Benachrichtigung: Methoden aus Aufgabe 2/4 nachtragen
+- [x] **Service-Tabelle**: Methoden für alle Services ergänzen
+- [x] **FachamtRepository**: `speichern()`-Methode hinzufügen
 
 ---
 
