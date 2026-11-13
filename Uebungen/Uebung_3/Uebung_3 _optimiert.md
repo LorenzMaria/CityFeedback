@@ -30,14 +30,14 @@ Die Registrierung ist die Voraussetzung für beide fachlichen Prozesse. Danach t
 
 **Prozess 2: Beschwerde melden und bearbeiten**
 
-| Nr. | User Role | Command | Aggregat | Domain Event |
+| Nr. | User Role/ Policy | Command | Aggregat | Domain Event |
 |---|---|---|---|---|
 | 2 | Bürger:in | Beschwerde einreichen | Beschwerde | Beschwerde eingereicht |
-| 3 | System (automatisch) | Eingangsbestätigung senden | Benachrichtigung | Eingangsbestätigung versendet |
+| 3 | Policy: Immer wenn Beschwerde eingereicht | Eingangsbestätigung senden | Benachrichtigung | Eingangsbestätigung versendet |
 | 4 | Stadtverwaltung | Beschwerde prüfen | Beschwerde | Beschwerde angenommen oder Beschwerde abgelehnt |
-| 5 | System | Beschwerde automatisch zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
+| 5 | Policy: Immer wenn Beschwerde eingereicht | Beschwerde automatisch zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
 | 6 | Fachamt | Bearbeitung starten | Beschwerde | Bearbeitung begonnen |
-| 7 | System (automatisch) | Statusänderung mitteilen | Benachrichtigung | Bürger:in über Status benachrichtigt |
+| 7 | Policy: Immer wenn Beschwerde eingereicht | Statusänderung mitteilen | Benachrichtigung | Bürger:in über Status benachrichtigt |
 | 8 | Fachamt | Beschwerde abschließen | Beschwerde | Beschwerde erledigt |
 
 Schritt 7 steht stellvertretend für alle Statusänderungen: Auch nach „angenommen“, „abgelehnt“ und „erledigt“ wird die einreichende Person benachrichtigt.
@@ -223,7 +223,7 @@ Pro Aggregate Root aus Teilaufgabe 4 gibt es genau ein Repository.
 | Repository | Context | Methoden |
 |---|---|---|
 | BeschwerdeRepository | Beschwerdemanagement | `speichern(Beschwerde)`, `findeNachId(BeschwerdeId)`, `findeNachEinreicher(BenutzerId)`, `findeNachFachamt(FachamtId)` |
-| FachamtRepository | Beschwerdemanagement | `findeNachId(FachamtId)`, `findeNachKategorie(Kategorie)` |
+| FachamtRepository | Beschwerdemanagement | `findeNachId(FachamtId)`, `findeNachKategorie(Kategorie)`, `speichern(Fachamt)` |
 | VorschlagRepository | Bürgerbeteiligung | `speichern(Vorschlag)`, `findeNachId(VorschlagId)`, `findeVeroeffentlichte()` |
 | BenutzerkontoRepository | Benutzerverwaltung | `speichern(Benutzerkonto)`, `findeNachId(BenutzerId)`, `findeNachEmail(EmailAdresse)` |
 | BenachrichtigungRepository | Benachrichtigung | `speichern(Benachrichtigung)`, `findeNachEmpfaenger(BenutzerId)` |
