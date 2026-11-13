@@ -163,12 +163,13 @@ Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch w
 Die Attribute stammen aus dem Domänenmodell (Teilaufgabe 2, Abbildung 2), die Typen `Kategorie`, `BeschwerdeStatus` und `VorschlagStatus` sind die dort definierten Enums.
 Die Methoden entsprechen den Commands aus dem Event Storming (Teilaufgabe 1).
 Jede Methode prüft den aktuellen Status und erzeugt das passende Domain Event.
+`einreichen(...)` ist dabei eine statische Factory-Methode: Sie ist der einzige Weg, ein neues Aggregat zu erzeugen, und stellt sicher, dass es vollständig und im Status `EINGEREICHT` entsteht. Der Konstruktor ist privat.
 
 ### 4.1. Bounded Context Beschwerdemanagement
 
 | Baustein | Art | Attribute | Methoden |
 |---|---|---|---|
-| Beschwerde | Aggregate Root | `BeschwerdeId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `BeschwerdeStatus status`, `BenutzerId eingereichtVon`, `FachamtId zustaendigesFachamt`, `LocalDateTime eingereichtAm`, `List<Anhang> anhaenge`, `List<StatusAenderung> statusAenderungen`, `List<Kommentar> kommentare` | `einreichen()`, `annehmen()`, `ablehnen()`, `weiterleiten(FachamtId)`, `bearbeitungStarten()`, `abschliessen()`, `kommentieren(BenutzerId, String)` |
+| Beschwerde | Aggregate Root | `BeschwerdeId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `BeschwerdeStatus status`, `BenutzerId eingereichtVon`, `FachamtId zustaendigesFachamt`, `LocalDateTime eingereichtAm`, `List<Anhang> anhaenge`, `List<StatusAenderung> statusAenderungen`, `List<Kommentar> kommentare` | `static einreichen(BenutzerId, String titel, String beschreibung, Kategorie, Standort)`, `annehmen()`, `ablehnen()`, `weiterleiten(FachamtId)`, `bearbeitungStarten()`, `abschliessen()`, `kommentieren(BenutzerId, String)` |
 | Kommentar | Entity (Teil der Beschwerde) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
 | Fachamt | Aggregate Root | `FachamtId id`, `String name`, `List<Kategorie> zustaendigFuer` | `istZustaendigFuer(Kategorie)` |
 
@@ -179,7 +180,7 @@ Jede Statusänderung wird als `StatusAenderung` gespeichert.
 
 | Baustein | Art | Attribute | Methoden |
 |---|---|---|---|
-| Vorschlag | Aggregate Root | `VorschlagId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `VorschlagStatus status`, `BenutzerId eingereichtVon`, `LocalDateTime eingereichtAm`, `List<Unterstuetzung> unterstuetzungen`, `List<Kommentar> kommentare`, `Stellungnahme stellungnahme` | `einreichen()`, `freigeben()`, `unterstuetzen(BenutzerId)`, `kommentieren(BenutzerId, String)`, `stellungnahmeAbgeben(String)` |
+| Vorschlag | Aggregate Root | `VorschlagId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `VorschlagStatus status`, `BenutzerId eingereichtVon`, `LocalDateTime eingereichtAm`, `List<Unterstuetzung> unterstuetzungen`, `List<Kommentar> kommentare`, `Stellungnahme stellungnahme` | `static einreichen(BenutzerId, String titel, String beschreibung, Kategorie, Standort)`, `freigeben()`, `unterstuetzen(BenutzerId)`, `kommentieren(BenutzerId, String)`, `stellungnahmeAbgeben(String)` |
 | Kommentar | Entity (Teil des Vorschlags) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
 
 Wie in Prozess 3 aus Teilaufgabe 1 ist Unterstützen und Kommentieren erst nach der Freigabe möglich, und jede Person kann einen Vorschlag nur einmal unterstützen.
@@ -277,7 +278,10 @@ de.cityfeedback
 // Die Geschäftsregeln (z. B. nur angenommene Beschwerden weiterleiten) liegen im Aggregat selbst.
 public class Beschwerde {
   private final BeschwerdeId id;
-  private Kategorie kategorie;
+  private final String titel;
+  private final Kategorie kategorie;
+  private final BenutzerId eingereichtVon;
+  private final LocalDateTime eingereichtAm;
   private BeschwerdeStatus status;
   private FachamtId zustaendigesFachamt;
   private final List<StatusAenderung> statusAenderungen = new ArrayList<>();
@@ -286,9 +290,23 @@ public class Beschwerde {
   private final Clock clock;
   // weitere Attribute siehe Teilaufgabe 4
 
-  public Beschwerde(BeschwerdeId id, Clock clock) {
+  // Der Konstruktor ist privat: Eine Beschwerde entsteht nur über die Factory-Methode einreichen(...)
+  private Beschwerde(BeschwerdeId id, String titel, Kategorie kategorie, BenutzerId eingereichtVon, Clock clock) {
     this.id = id;
+    this.titel = titel;
+    this.kategorie = kategorie;
+    this.eingereichtVon = eingereichtVon;
     this.clock = clock;
+    this.eingereichtAm = LocalDateTime.now(clock);
+    this.status = BeschwerdeStatus.EINGEREICHT;
+  }
+
+  // Factory-Methode: prüft die Eingaben und liefert ein vollständiges Aggregat im Startzustand
+  public static Beschwerde einreichen(BenutzerId eingereichtVon, String titel, Kategorie kategorie, Clock clock) {
+    if (titel == null || titel.isBlank()) {
+      throw new IllegalArgumentException("Eine Beschwerde braucht einen Titel");
+    }
+    return new Beschwerde(BeschwerdeId.neu(), titel, kategorie, eingereichtVon, clock);
   }
 
   public void weiterleiten(FachamtId fachamtId) {
