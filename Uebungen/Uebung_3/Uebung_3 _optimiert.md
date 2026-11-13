@@ -129,19 +129,24 @@ Die beiden Core Domains sind das, was CityFeedback ausmacht. Benutzerverwaltung 
 
 ![Bounded Contexts CityFeedback](img/bounded_contexts.png)
 
-*Abbildung 3: Bounded Contexts und ihre Beziehungen (durchgezogen: Abfrage von Daten, gestrichelt: Domain Events)*
+*Abbildung 3: Bounded Contexts und ihre Beziehungen (durchgezogen: Abfrage von Daten über ACL bzw. Conformist, gestrichelt: Domain Events)*
 
 | Von (Upstream) | Nach (Downstream) | Art der Beziehung | Was ausgetauscht wird |
 |---|---|---|---|
-| Benutzerverwaltung | Beschwerdemanagement | Customer/Supplier | BenutzerId und Rolle der angemeldeten Person |
-| Benutzerverwaltung | Bürgerbeteiligung | Customer/Supplier | BenutzerId der angemeldeten Person |
-| Benutzerverwaltung | Benachrichtigung | Customer/Supplier | E-Mail-Adresse zur BenutzerId |
+| Benutzerverwaltung | Beschwerdemanagement | Anti-Corruption Layer | BenutzerId und Rolle der angemeldeten Person |
+| Benutzerverwaltung | Bürgerbeteiligung | Anti-Corruption Layer | BenutzerId der angemeldeten Person |
+| Benutzerverwaltung | Benachrichtigung | Conformist | E-Mail-Adresse zur BenutzerId |
 | Beschwerdemanagement | Benachrichtigung | Domain Events (Publish/Subscribe) | Beschwerde eingereicht, Statusänderungen, Beschwerde erledigt |
 | Bürgerbeteiligung | Benachrichtigung | Domain Events (Publish/Subscribe) | Stellungnahme veröffentlicht |
 
+Die Benutzerverwaltung ist eine Generic Subdomain, die wir später durch eine fertige Lösung (z. B. einen externen Identity Provider) ersetzen könnten. Ein Customer/Supplier-Verhältnis passt dazu nicht, weil die Downstream-Contexts dann keinen Einfluss auf das Modell des Lieferanten hätten. Stattdessen entscheiden wir je nach Wert des Downstream-Contexts:
+
+- **Anti-Corruption Layer für die beiden Core Domains:** Beschwerdemanagement und Bürgerbeteiligung dürfen nicht vom Modell der Benutzerverwaltung abhängen. Eine Übersetzungsschicht im jeweiligen Context holt das Benutzerkonto ab und bildet es auf die eigenen Begriffe ab: Im Beschwerdemanagement wird daraus nur eine `BenutzerId` und die Information, ob die Person für die Stadtverwaltung oder ein Fachamt handelt, in der Bürgerbeteiligung nur eine `BenutzerId`. Ändert sich das Benutzermodell oder wird die Benutzerverwaltung ausgetauscht, muss nur diese Schicht angepasst werden.
+- **Conformist für die Benachrichtigung:** Der Benachrichtigungs-Context ist eine Supporting Subdomain und braucht nur die E-Mail-Adresse zu einer `BenutzerId`. Er übernimmt das Modell der Benutzerverwaltung unverändert. Eine eigene Übersetzungsschicht wäre hier Aufwand ohne fachlichen Nutzen.
+
 Das Beschwerdemanagement und die Bürgerbeteiligung schicken keine Nachrichten selbst. Sie veröffentlichen nur ihre Events, und der Benachrichtigungs-Context entscheidet, wer worüber informiert wird. Dadurch können wir später zum Beispiel eine Push-Benachrichtigung ergänzen, ohne die Kernlogik anzufassen.
 
-### 3.1. Kontextabhängige Fachbegriffe (Ubiquitous Language )
+### 3.1. Kontextabhängige Fachbegriffe (Ubiquitous Language)
 
 Die Trennung zeigt sich auch daran, dass manche Begriffe in den Contexts etwas anderes bedeuten:
 
@@ -151,7 +156,7 @@ Die Trennung zeigt sich auch daran, dass manche Begriffe in den Contexts etwas a
 | Benutzer:in | Einreichende Person, nur über die BenutzerId bekannt | Einreichende oder unterstützende Person, nur über die BenutzerId bekannt | Vollständiges Konto mit Name, E-Mail und Rolle |
 | Status | Bearbeitungsstand der Beschwerde (eingereicht bis erledigt) | Stand des Vorschlags (eingereicht, veröffentlicht, beantwortet) | – |
 
-Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch wenn die Klassen ähnlich heißen.
+Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch wenn die Klassen ähnlich heißen. Für die Benutzer:in ist das genau die Aufgabe des Anti-Corruption Layers aus dem vorherigen Abschnitt: Er übersetzt das vollständige Konto der Benutzerverwaltung in die reduzierte Sicht der beiden Core Domains.
 
 ## 4. Entitäten und Aggregates
 
