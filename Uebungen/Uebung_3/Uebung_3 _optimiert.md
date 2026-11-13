@@ -35,23 +35,23 @@ Die Registrierung ist die Voraussetzung für beide fachlichen Prozesse. Danach t
 | 2 | Bürger:in | Beschwerde einreichen | Beschwerde | Beschwerde eingereicht |
 | 3 | Policy: immer wenn „Beschwerde eingereicht“ | Eingangsbestätigung senden | Benachrichtigung | Eingangsbestätigung versendet |
 | 4 | Stadtverwaltung | Beschwerde prüfen | Beschwerde | Beschwerde angenommen oder Beschwerde abgelehnt |
-| 5 | Policy: Immer wenn Beschwerde angenommen | Beschwerde automatisch zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
-| 6 | Fachamt | Kommentar hinzufügen | Beschwerde | Kommentar hinzugefügt
-| 7 | Fachamt | Bearbeitung starten | Beschwerde | Bearbeitung begonnen |
+| 5 | Policy: immer wenn „Beschwerde angenommen“ | Beschwerde automatisch zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
+| 6 | Fachamt | Bearbeitung starten | Beschwerde | Bearbeitung begonnen |
+| 7 | Fachamt | Kommentar hinzufügen | Beschwerde | Kommentar hinzugefügt |
 | 8 | Policy: immer wenn sich der Status ändert | Statusänderung mitteilen | Benachrichtigung | Bürger:in über Status benachrichtigt |
 | 9 | Fachamt | Beschwerde abschließen | Beschwerde | Beschwerde erledigt |
 
-Die Schritte 3 und 7 werden von keiner Person ausgelöst, sondern von einer Policy, die auf das vorherige Event reagiert. Schritt 7 steht dabei stellvertretend für alle Statusänderungen: Auch nach „angenommen“, „abgelehnt“ und „erledigt“ wird die einreichende Person benachrichtigt.
+Die Schritte 3, 5 und 8 werden von keiner Person ausgelöst, sondern von einer Policy, die auf das vorherige Event reagiert. Schritt 8 steht dabei stellvertretend für alle Statusänderungen: Auch nach „angenommen“, „abgelehnt“ und „erledigt“ wird die einreichende Person benachrichtigt.
 
 **Prozess 3: Bürgerbeteiligung (Vorschläge)**
 
 | Nr. | User Role | Command | Aggregat | Domain Event |
 |---|---|---|---|---|
-| 9 | Bürger:in | Vorschlag einreichen | Vorschlag | Vorschlag eingereicht |
-| 10 | Stadtverwaltung | Vorschlag freigeben | Vorschlag | Vorschlag veröffentlicht |
-| 11 | Bürger:in | Vorschlag unterstützen | Vorschlag | Vorschlag unterstützt |
-| 12 | Bürger:in | Vorschlag kommentieren | Vorschlag | Kommentar verfasst |
-| 13 | Stadtverwaltung | Stellungnahme abgeben | Vorschlag | Stellungnahme veröffentlicht |
+| 10 | Bürger:in | Vorschlag einreichen | Vorschlag | Vorschlag eingereicht |
+| 11 | Stadtverwaltung | Vorschlag freigeben | Vorschlag | Vorschlag veröffentlicht |
+| 12 | Bürger:in | Vorschlag unterstützen | Vorschlag | Vorschlag unterstützt |
+| 13 | Bürger:in | Vorschlag kommentieren | Vorschlag | Kommentar verfasst |
+| 14 | Stadtverwaltung | Stellungnahme abgeben | Vorschlag | Stellungnahme veröffentlicht |
 
 Unterstützen und Kommentieren können beliebig oft und in beliebiger Reihenfolge passieren, sobald ein Vorschlag veröffentlicht ist.
 
@@ -294,7 +294,7 @@ de.cityfeedback
 2. **Repositories:** Ein Interface pro Aggregate Root aus Teilaufgabe 5.1 als Port in der Domäne, ohne Framework-Abhängigkeit. Die Umsetzung mit Spring Data liegt als Adapter im Package `infrastructure`.
 3. **Domain Services:** Eine Klasse pro Service aus Teilaufgabe 5.2, die Aggregate über die Repositories lädt und speichert.
 4. **Anwendungsservice:** Der BenachrichtigungsService aus Teilaufgabe 5.3 als Spring-Event-Listener, der den Port `MailVersand` nutzt. Der SMTP-Adapter liegt im Package `infrastructure`.
-5. **Domain Events:** Die Aggregate erzeugen bei fachlichen Zustandsänderungen die entsprechenden Domain Events,. Zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, auf die der Context Benachrichtigung reagiert.
+5. **Domain Events:** Die Aggregate erzeugen bei fachlichen Zustandsänderungen die entsprechenden Domain Events, zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, auf die der Context Benachrichtigung reagiert.
 6. **Tests:** Unit-Tests mit JUnit für die Aggregate (ohne Spring), Integrationstests mit `@SpringBootTest` für Services und Repositories. Beim BenachrichtigungsService wird der Port `MailVersand` im Test durch einen Fake ersetzt, damit keine echten Mails verschickt werden.
 
 ### 6.3. Codebeispiel
