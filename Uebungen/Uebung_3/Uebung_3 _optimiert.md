@@ -35,7 +35,7 @@ Die Registrierung ist die Voraussetzung für beide fachlichen Prozesse. Danach t
 | 2 | Bürger:in | Beschwerde einreichen | Beschwerde | Beschwerde eingereicht |
 | 3 | Policy: immer wenn „Beschwerde eingereicht“ | Eingangsbestätigung senden | Benachrichtigung | Eingangsbestätigung versendet |
 | 4 | Stadtverwaltung | Beschwerde prüfen | Beschwerde | Beschwerde angenommen oder Beschwerde abgelehnt |
-| 5 | System | Beschwerde automatisch zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
+| 5 | Policy: Immer wenn Beschwerde eingereicht | Beschwerde automatisch zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
 | 6 | Fachamt | Bearbeitung starten | Beschwerde | Bearbeitung begonnen |
 | 7 | Policy: immer wenn sich der Status ändert | Statusänderung mitteilen | Benachrichtigung | Bürger:in über Status benachrichtigt |
 | 8 | Fachamt | Beschwerde abschließen | Beschwerde | Beschwerde erledigt |
@@ -237,7 +237,7 @@ Pro Aggregate Root aus Teilaufgabe 4 gibt es genau ein Repository.
 | Repository | Context | Methoden |
 |---|---|---|
 | BeschwerdeRepository | Beschwerdemanagement | `speichern(Beschwerde)`, `findeNachId(BeschwerdeId)`, `findeNachEinreicher(BenutzerId)`, `findeNachFachamt(FachamtId)` |
-| FachamtRepository | Beschwerdemanagement | `findeNachId(FachamtId)`, `findeNachKategorie(Kategorie)` |
+| FachamtRepository | Beschwerdemanagement | `findeNachId(FachamtId)`, `findeNachKategorie(Kategorie)`, `speichern(Fachamt)` |
 | VorschlagRepository | Bürgerbeteiligung | `speichern(Vorschlag)`, `findeNachId(VorschlagId)`, `findeVeroeffentlichte()` |
 | BenutzerkontoRepository | Benutzerverwaltung | `speichern(Benutzerkonto)`, `findeNachId(BenutzerId)`, `findeNachEmail(EmailAdresse)` |
 | BenachrichtigungRepository | Benachrichtigung | `speichern(Benachrichtigung)`, `findeNachEmpfaenger(BenutzerId)` |
