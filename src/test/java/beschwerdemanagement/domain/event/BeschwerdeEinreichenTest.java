@@ -1,17 +1,18 @@
 package beschwerdemanagement.domain.event;
 
+import beschwerdemanagement.domain.model.Beschwerde;
+import beschwerdemanagement.domain.valueObjects.BeschwerdeStatus;
+import beschwerdemanagement.domain.valueObjects.Kategorie;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import org.junit.jupiter.api.DisplayName;
-
 
 public class BeschwerdeEinreichenTest {
 
 @Test
 @DisplayName("Eine Beschwerde wird eingereicht")
-void beschwerdeErstellen() () {
+void beschwerdeErstellen() {
 
     // Arrange
     String beschreibung = "Straßenbeleuchtung funktioniert nicht";
