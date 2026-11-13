@@ -35,10 +35,11 @@ Die Registrierung ist die Voraussetzung für beide fachlichen Prozesse. Danach t
 | 2 | Bürger:in | Beschwerde einreichen | Beschwerde | Beschwerde eingereicht |
 | 3 | Policy: Immer wenn Beschwerde eingereicht | Eingangsbestätigung senden | Benachrichtigung | Eingangsbestätigung versendet |
 | 4 | Stadtverwaltung | Beschwerde prüfen | Beschwerde | Beschwerde angenommen oder Beschwerde abgelehnt |
-| 5 | Policy: Immer wenn Beschwerde eingereicht | Beschwerde automatisch zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
-| 6 | Fachamt | Bearbeitung starten | Beschwerde | Bearbeitung begonnen |
-| 7 | Policy: Immer wenn Beschwerde eingereicht | Statusänderung mitteilen | Benachrichtigung | Bürger:in über Status benachrichtigt |
-| 8 | Fachamt | Beschwerde abschließen | Beschwerde | Beschwerde erledigt |
+| 5 | Policy: Immer wenn Beschwerde angenommen | Beschwerde automatisch zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
+| 6 | Fachamt | Kommentar hinzufügen | Beschwerde | Kommentar hinzugefügt
+| 7 | Fachamt | Bearbeitung starten | Beschwerde | Bearbeitung begonnen |
+| 8 | Policy: Immer wenn Beschwerde eingereicht | Statusänderung mitteilen | Benachrichtigung | Bürger:in über Status benachrichtigt |
+| 9 | Fachamt | Beschwerde abschließen | Beschwerde | Beschwerde erledigt |
 
 Schritt 7 steht stellvertretend für alle Statusänderungen: Auch nach „angenommen“, „abgelehnt“ und „erledigt“ wird die einreichende Person benachrichtigt.
 
@@ -191,10 +192,10 @@ Benutzerkonto und Benachrichtigung gehören zu den unterstützenden Contexts und
 
 Die Registrierung legt ein neues Benutzerkonto an und erzeugt das Domain Event BenutzerkontoRegistriert. Die Anmeldung dient der Authentifizierung des Benutzers. Änderungen an Rolle und E-Mail-Adresse werden über das Benutzerkonto vorgenommen.
 
-### 4.4 Bounded Context Benutzerverwaltung
+### 4.4 Bounded Context Benachrichtigung
 | Baustein | Art | Attribute | Methoden |
 |---|---|---|---|
-| Benachrichitgung | Aggregate Root | `Benachrichitgung id`, `Benutzer id`, `String nachricht `, `Typ typ`, `LocalDate erstelltAm`, `LocalDate versendetAm`  | `erstellen()`, `versenden()` |
+| Benachrichtigung | Aggregate Root | `Benachrichtigung id`, `Benutzer id`, `String nachricht `, `Typ typ`, `LocalDate erstelltAm`, `LocalDate versendetAm`  | `erstellen()`, `versenden()` |
 
 Die Benachrichtigung wird durch relevante Domain Events anderer Bounded Contexts ausgelöst. Die Methode erstellen() legt eine Benachrichtigung für den jeweiligen Empfänger an. Die Methode versenden() dokumentiert den erfolgreichen Versand und den Versandzeitpunkt.
 
@@ -210,7 +211,7 @@ Beschwerde
 
 Vorschlag
  ├── eingereichtVon (BenutzerId) ──> Benutzerkonto
- └── enthält: BeschwerdeKommentare, Unterstützungen, Stellungnahme, Standort
+ └── enthält: VorschlagKommentare, Unterstützungen, Stellungnahme, Standort
 ```
 
 ## 5. Domain Services und Repositories
@@ -236,7 +237,7 @@ Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
 |---|---|---|---|
 | ZuweisungsService | Beschwerdemanagement | weiseBeschwerdeIDZu(BeschwerdeId) | Sucht das Fachamt für die Kategorie der Beschwerde und ruft `beschwerde.weiterleiten(fachamtId)` auf |
 | RegistrierungsService | Benutzerverwaltung  | registriereBenutzerKonto(Benutzerkonto) | Prüft, ob die E-Mail-Adresse noch frei ist, und legt das Benutzerkonto an |
-| BenachrichtigungsService | Benachrichtigung | erarbeiteBeschwerdeEingereicht(BeschwerdeEingereicht), verarbeiteStausGeaendert(BeschwerdeStatusGeaendert), verarbeiteBeschwerdeEerledigt(BeschwerdeErledigt) |  Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse und versendet die Benachrichtigung |
+| BenachrichtigungsService | Benachrichtigung | verarbeiteBeschwerdeEingereicht(BeschwerdeEingereicht), verarbeiteStatusGeaendert(BeschwerdeStatusGeaendert), verarbeiteBeschwerdeErledigt(BeschwerdeErledigt) |  Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse und versendet die Benachrichtigung |
 
 ## 6. Implementierungsstrategie
 <!-- Jesse -->
