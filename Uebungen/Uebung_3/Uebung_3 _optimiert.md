@@ -35,7 +35,7 @@ Die Registrierung ist die Voraussetzung für beide fachlichen Prozesse. Danach t
 | 2 | Bürger:in | Beschwerde einreichen | Beschwerde | Beschwerde eingereicht |
 | 3 | System (automatisch) | Eingangsbestätigung senden | Benachrichtigung | Eingangsbestätigung versendet |
 | 4 | Stadtverwaltung | Beschwerde prüfen | Beschwerde | Beschwerde angenommen oder Beschwerde abgelehnt |
-| 5 | Stadtverwaltung | Beschwerde zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
+| 5 | System | Beschwerde automatisch zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
 | 6 | Fachamt | Bearbeitung starten | Beschwerde | Bearbeitung begonnen |
 | 7 | System (automatisch) | Statusänderung mitteilen | Benachrichtigung | Bürger:in über Status benachrichtigt |
 | 8 | Fachamt | Beschwerde abschließen | Beschwerde | Beschwerde erledigt |
@@ -90,8 +90,8 @@ Das Domänenmodell leitet sich direkt aus den Aggregaten des Event Stormings ab.
 
 | Aggregat (Root) | Enthaltene Entitäten | Enthaltene Werte | Abgeleitet aus den Events |
 |---|---|---|---|
-| Beschwerde | Kommentar | Standort, Kategorie, Anhang, StatusAenderung | eingereicht, angenommen/abgelehnt, weitergeleitet, Bearbeitung begonnen, erledigt |
-| Vorschlag | Kommentar | Standort, Kategorie, Unterstuetzung, Stellungnahme | eingereicht, veröffentlicht, unterstützt, Kommentar verfasst, Stellungnahme veröffentlicht |
+| Beschwerde | BeschwerdeKommentar | Standort, Kategorie, Anhang, StatusAenderung | eingereicht, angenommen/abgelehnt, weitergeleitet, Bearbeitung begonnen, erledigt |
+| Vorschlag | VorschlagKommentar | Standort, Kategorie, Unterstuetzung, Stellungnahme | eingereicht, veröffentlicht, unterstützt, Kommentar verfasst, Stellungnahme veröffentlicht |
 | Benutzerkonto | – | EmailAdresse, Rolle | Benutzerkonto registriert |
 | Fachamt | – | Kategorie (Zuständigkeit) | Beschwerde an Fachamt weitergeleitet |
 | Benachrichtigung | – | – | Eingangsbestätigung versendet, Bürger:in über Status benachrichtigt |
@@ -120,7 +120,7 @@ Aus dem Domänenmodell ergeben sich vier fachliche Bereiche, die jeweils ein eig
 
 | Bounded Context | Verantwortung | Aggregate | Zugehörige Events | Art |
 |---|---|---|---|---|
-| Beschwerdemanagement | Beschwerden einreichen, prüfen, an Fachämter zuweisen, bearbeiten und abschließen | Beschwerde, Fachamt | Beschwerde eingereicht, angenommen/abgelehnt, an Fachamt weitergeleitet, Bearbeitung begonnen, erledigt | Core Domain |
+| Beschwerdemanagement | Beschwerden einreichen, prüfen, an Fachämter zuweisen, bearbeiten und abschließen | Beschwerde, Fachamt | Beschwerde eingereicht, angenommen/abgelehnt, anhand der Kategorie an Fachamt weitergeleitet, Bearbeitung begonnen, erledigt | Core Domain |
 | Bürgerbeteiligung | Vorschläge einreichen, freigeben, unterstützen, kommentieren und beantworten | Vorschlag | Vorschlag eingereicht, veröffentlicht, unterstützt, Kommentar verfasst, Stellungnahme veröffentlicht | Core Domain |
 | Benutzerverwaltung | Registrierung, Anmeldung und Rollen (Bürger:in, Stadtverwaltung, Fachamt) | Benutzerkonto | Benutzerkonto registriert | Generic Subdomain |
 | Benachrichtigung | Bürger:innen über Eingang und Statusänderungen informieren | Benachrichtigung | Eingangsbestätigung versendet, Bürger:in über Status benachrichtigt | Supporting Subdomain |
@@ -167,7 +167,7 @@ Jede Methode prüft den aktuellen Status und erzeugt das passende Domain Event.
 | Baustein | Art | Attribute | Methoden |
 |---|---|---|---|
 | Beschwerde | Aggregate Root | `BeschwerdeId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `BeschwerdeStatus status`, `BenutzerId eingereichtVon`, `FachamtId zustaendigesFachamt`, `LocalDateTime eingereichtAm`, `List<Anhang> anhaenge`, `List<StatusAenderung> statusAenderungen`, `List<Kommentar> kommentare` | `einreichen()`, `annehmen()`, `ablehnen()`, `weiterleiten(FachamtId)`, `bearbeitungStarten()`, `abschliessen()`, `kommentieren(BenutzerId, String)` |
-| Kommentar | Entity (Teil der Beschwerde) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
+| BeschwerdeKommentar | Entity (Teil der Beschwerde) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
 | Fachamt | Aggregate Root | `FachamtId id`, `String name`, `List<Kategorie> zustaendigFuer` | `istZustaendigFuer(Kategorie)` |
 
 Die Reihenfolge der Methoden folgt Prozess 2 aus Teilaufgabe 1: Eine Beschwerde kann nur weitergeleitet werden, wenn sie angenommen ist, und nur abgeschlossen werden, wenn sie in Bearbeitung ist.
@@ -178,7 +178,7 @@ Jede Statusänderung wird als `StatusAenderung` gespeichert.
 | Baustein | Art | Attribute | Methoden |
 |---|---|---|---|
 | Vorschlag | Aggregate Root | `VorschlagId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `VorschlagStatus status`, `BenutzerId eingereichtVon`, `LocalDateTime eingereichtAm`, `List<Unterstuetzung> unterstuetzungen`, `List<Kommentar> kommentare`, `Stellungnahme stellungnahme` | `einreichen()`, `freigeben()`, `unterstuetzen(BenutzerId)`, `kommentieren(BenutzerId, String)`, `stellungnahmeAbgeben(String)` |
-| Kommentar | Entity (Teil des Vorschlags) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
+| VorschlagKommentar | Entity (Teil des Vorschlags) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
 
 Wie in Prozess 3 aus Teilaufgabe 1 ist Unterstützen und Kommentieren erst nach der Freigabe möglich, und jede Person kann einen Vorschlag nur einmal unterstützen.
 
@@ -192,11 +192,11 @@ Wie in Teilaufgabe 2 beschrieben, verweisen Aggregate nur über IDs aufeinander,
 Beschwerde
  ├── eingereichtVon (BenutzerId) ──> Benutzerkonto
  ├── zustaendigesFachamt (FachamtId) ──> Fachamt
- └── enthält: Kommentare, Anhänge, Statusänderungen, Standort
+ └── enthält: BeschwerdeKommentare, Anhänge, Statusänderungen, Standort
 
 Vorschlag
  ├── eingereichtVon (BenutzerId) ──> Benutzerkonto
- └── enthält: Kommentare, Unterstützungen, Stellungnahme, Standort
+ └── enthält: BeschwerdeKommentare, Unterstützungen, Stellungnahme, Standort
 ```
 
 ## 5. Domain Services und Repositories
@@ -244,7 +244,7 @@ Jeder Bounded Context aus Teilaufgabe 3 wird ein eigenes Package, die anderen dr
 ```
 de.cityfeedback
  ├── beschwerdemanagement
- │    ├── domain        (Beschwerde, Kommentar, Fachamt, Events)
+ │    ├── domain        (Beschwerde, BeschwerdeKommentar, Fachamt, Events)
  │    ├── repository
  │    └── service       (ZuweisungsService)
  ├── buergerbeteiligung
