@@ -278,10 +278,7 @@ de.cityfeedback
 // Die Geschäftsregeln (z. B. nur angenommene Beschwerden weiterleiten) liegen im Aggregat selbst.
 public class Beschwerde {
   private final BeschwerdeId id;
-  private final String titel;
   private final Kategorie kategorie;
-  private final BenutzerId eingereichtVon;
-  private final LocalDateTime eingereichtAm;
   private BeschwerdeStatus status;
   private FachamtId zustaendigesFachamt;
   private final List<StatusAenderung> statusAenderungen = new ArrayList<>();
@@ -290,23 +287,17 @@ public class Beschwerde {
   private final Clock clock;
   // weitere Attribute siehe Teilaufgabe 4
 
-  // Der Konstruktor ist privat: Eine Beschwerde entsteht nur über die Factory-Methode einreichen(...)
-  private Beschwerde(BeschwerdeId id, String titel, Kategorie kategorie, BenutzerId eingereichtVon, Clock clock) {
+  // Der Konstruktor ist privat: Eine Beschwerde entsteht nur über einreichen(...)
+  private Beschwerde(BeschwerdeId id, Kategorie kategorie, Clock clock) {
     this.id = id;
-    this.titel = titel;
     this.kategorie = kategorie;
-    this.eingereichtVon = eingereichtVon;
     this.clock = clock;
-    this.eingereichtAm = LocalDateTime.now(clock);
     this.status = BeschwerdeStatus.EINGEREICHT;
   }
 
-  // Factory-Methode: prüft die Eingaben und liefert ein vollständiges Aggregat im Startzustand
-  public static Beschwerde einreichen(BenutzerId eingereichtVon, String titel, Kategorie kategorie, Clock clock) {
-    if (titel == null || titel.isBlank()) {
-      throw new IllegalArgumentException("Eine Beschwerde braucht einen Titel");
-    }
-    return new Beschwerde(BeschwerdeId.neu(), titel, kategorie, eingereichtVon, clock);
+  // Factory-Methode: liefert ein vollständiges Aggregat im Startzustand
+  public static Beschwerde einreichen(Kategorie kategorie, Clock clock) {
+    return new Beschwerde(BeschwerdeId.neu(), kategorie, clock);
   }
 
   public void weiterleiten(FachamtId fachamtId) {
