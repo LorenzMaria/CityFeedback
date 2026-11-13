@@ -217,13 +217,26 @@ Pro Aggregate Root aus Teilaufgabe 4 gibt es genau ein Repository.
 
 ### 5.2. Domain Services
 
-Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
+Domain Services enthalten Fachregeln, die zu keinem einzelnen Aggregat gehören.
 
 | Domain Service | Context | Aufgabe |
 |---|---|---|
 | ZuweisungsService | Beschwerdemanagement | Sucht das Fachamt für die Kategorie der Beschwerde und ruft `beschwerde.weiterleiten(fachamtId)` auf |
 | RegistrierungsService | Benutzerverwaltung | Prüft, ob die E-Mail-Adresse noch frei ist, und legt das Benutzerkonto an |
-| BenachrichtigungsService | Benachrichtigung | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse und versendet die Benachrichtigung |
+
+### 5.3. Anwendungsservice und Port im Context Benachrichtigung
+
+Der BenachrichtigungsService enthält keine Fachregel. Er koordiniert nur den Ablauf: Event entgegennehmen, Daten laden, Aggregat speichern, Mail anstoßen. Deshalb ist er kein Domain Service, sondern ein Anwendungsservice.
+
+| Anwendungsservice | Context | Aufgabe |
+|---|---|---|
+| BenachrichtigungsService | Benachrichtigung | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse zur `BenutzerId`, legt eine `Benachrichtigung` an, speichert sie über das `BenachrichtigungRepository` und übergibt sie an den Port `MailVersand` |
+
+Der eigentliche Versand liegt hinter einem Port, damit die Domäne nicht vom Mail-Provider abhängt:
+
+| Port | Context | Methoden | Adapter |
+|---|---|---|---|
+| MailVersand | Benachrichtigung | `sende(EmailAdresse empfaenger, String betreff, String text)` | SMTP-Adapter im Package `infrastructure`, im Test ein Fake, der die Aufrufe nur aufzeichnet |
 
 ## 6. Implementierungsstrategie
 
@@ -239,7 +252,7 @@ Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
 
 ### 6.2. Vorgehen
 
-Jeder Bounded Context aus Teilaufgabe 3 wird ein eigenes Package, die anderen drei Contexts sind genauso aufgebaut wie `beschwerdemanagement`:
+Jeder Bounded Context aus Teilaufgabe 3 wird ein eigenes Package. `buergerbeteiligung` und `benutzerverwaltung` sind genauso aufgebaut wie `beschwerdemanagement`, `benachrichtigung` hat statt eines Domain Service einen Anwendungsservice und einen zweiten Port:
 
 ```
 de.cityfeedback
@@ -250,13 +263,17 @@ de.cityfeedback
  ├── buergerbeteiligung
  ├── benutzerverwaltung
  └── benachrichtigung
+      ├── domain          (Benachrichtigung, BenachrichtigungRepository und MailVersand als Ports)
+      ├── application     (BenachrichtigungsService)
+      └── infrastructure  (Spring-Data-Adapter für BenachrichtigungRepository, SMTP-Adapter für MailVersand)
 ```
 
 1. **Entitäten und Aggregate:** Eine Java-Klasse pro Entität und Aggregat mit den Attributen und Methoden aus Teilaufgabe 4, dabei gibt es keine Framework-Abhängigkeiten.
-2. **Repositories:** Ein Interface pro Aggregate Root aus Teilaufgabe 5 als Port in der Domäne, ohne Framework-Abhängigkeit. Die Umsetzung mit Spring Data liegt als Adapter im Package `infrastructure`.
-3. **Domain Services:** Eine Klasse pro Service aus Teilaufgabe 5, die Aggregate über die Repositories lädt und speichert.
-4. **Domain Events:** Zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, auf die der Context Benachrichtigung reagiert.
-5. **Tests:** Unit-Tests mit JUnit für die Aggregate (ohne Spring), Integrationstests mit `@SpringBootTest` für Services und Repositories.
+2. **Repositories:** Ein Interface pro Aggregate Root aus Teilaufgabe 5.1 als Port in der Domäne, ohne Framework-Abhängigkeit. Die Umsetzung mit Spring Data liegt als Adapter im Package `infrastructure`.
+3. **Domain Services:** Eine Klasse pro Service aus Teilaufgabe 5.2, die Aggregate über die Repositories lädt und speichert.
+4. **Anwendungsservice:** Der BenachrichtigungsService aus Teilaufgabe 5.3 als Spring-Event-Listener, der den Port `MailVersand` nutzt. Der SMTP-Adapter liegt im Package `infrastructure`.
+5. **Domain Events:** Zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, auf die der Context Benachrichtigung reagiert.
+6. **Tests:** Unit-Tests mit JUnit für die Aggregate (ohne Spring), Integrationstests mit `@SpringBootTest` für Services und Repositories. Beim BenachrichtigungsService wird der Port `MailVersand` im Test durch einen Fake ersetzt, damit keine echten Mails verschickt werden.
 
 ### 6.3. Codebeispiel
 
