@@ -127,7 +127,7 @@ Die beiden Core Domains sind das, was CityFeedback ausmacht. Benutzerverwaltung 
 
 ### Beziehungen zwischen den Contexts
 
-![Bounded Contexts CityFeedback](img/bounded_contexts.png)
+![Bounded Contexts CityFeedback](img/bounded-contexts-optimiert.png)
 
 *Abbildung 3: Bounded Contexts und ihre Beziehungen (durchgezogen: Abfrage von Daten über ACL bzw. Conformist, gestrichelt: Domain Events)*
 
