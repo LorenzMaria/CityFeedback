@@ -1,9 +1,8 @@
 # Übung 3: Systemarchitektur
 
 ## 1. Event Storming
-<!-- Maria, Jesse, Yara finalisiert -->
 
-Die Event-Storming-Session haben wir auf unserem gemeinsamen Excalidraw-Board durchgeführt. Für die Darstellung nutzen wir vier Typen von Haftnotizen:
+Die Event-Storming-Session haben wir auf unserem gemeinsamen Excalidraw-Board durchgeführt. Für die Darstellung nutzen wir fünf Typen von Haftnotizen:
 
 | Farbe | Typ | Bedeutung |
 |---|---|---|
@@ -11,10 +10,11 @@ Die Event-Storming-Session haben wir auf unserem gemeinsamen Excalidraw-Board du
 | Gelb | Domain Event | Fachlich relevantes Ereignis, das daraufhin eingetreten ist (immer in der Vergangenheitsform) |
 | Blau | Aggregat | Objekt, auf das sich der Command bezieht und das das Event erzeugt |
 | Grün | User Role | Person oder Rolle, die den Command auslöst |
+| Lila | Policy | Regel, die automatisch auf ein Domain Event reagiert und den nächsten Command auslöst („Immer wenn ..., dann ...“) |
 
-Jeder Schritt liest sich von oben nach unten: Eine Rolle löst einen Command aus, der Command wird von einem Aggregat verarbeitet und daraus entsteht ein Domain Event. Von links nach rechts ergibt sich die zeitliche Reihenfolge.
+Jeder Schritt liest sich von oben nach unten: Eine Rolle löst einen Command aus, der Command wird von einem Aggregat verarbeitet und daraus entsteht ein Domain Event. Von links nach rechts ergibt sich die zeitliche Reihenfolge. Eine Policy ist keine Rolle: Sie steht für eine Regel, die ohne menschliches Zutun auf ein Event reagiert und daraus den nächsten Command auslöst.
 
-![Event Storming CityFeedback](img/eventstorming.png)
+![Event Storming CityFeedback](img/eventstorming-optimiert.png)
 
 *Abbildung 1: Event Storming für CityFeedback*
 
@@ -30,17 +30,17 @@ Die Registrierung ist die Voraussetzung für beide fachlichen Prozesse. Danach t
 
 **Prozess 2: Beschwerde melden und bearbeiten**
 
-| Nr. | User Role | Command | Aggregat | Domain Event |
+| Nr. | User Role / Policy | Command | Aggregat | Domain Event |
 |---|---|---|---|---|
 | 2 | Bürger:in | Beschwerde einreichen | Beschwerde | Beschwerde eingereicht |
-| 3 | System (automatisch) | Eingangsbestätigung senden | Benachrichtigung | Eingangsbestätigung versendet |
+| 3 | Policy: immer wenn „Beschwerde eingereicht“ | Eingangsbestätigung senden | Benachrichtigung | Eingangsbestätigung versendet |
 | 4 | Stadtverwaltung | Beschwerde prüfen | Beschwerde | Beschwerde angenommen oder Beschwerde abgelehnt |
 | 5 | Stadtverwaltung | Beschwerde zuweisen | Beschwerde | Beschwerde an Fachamt weitergeleitet |
 | 6 | Fachamt | Bearbeitung starten | Beschwerde | Bearbeitung begonnen |
-| 7 | System (automatisch) | Statusänderung mitteilen | Benachrichtigung | Bürger:in über Status benachrichtigt |
+| 7 | Policy: immer wenn sich der Status ändert | Statusänderung mitteilen | Benachrichtigung | Bürger:in über Status benachrichtigt |
 | 8 | Fachamt | Beschwerde abschließen | Beschwerde | Beschwerde erledigt |
 
-Schritt 7 steht stellvertretend für alle Statusänderungen: Auch nach „angenommen“, „abgelehnt“ und „erledigt“ wird die einreichende Person benachrichtigt.
+Die Schritte 3 und 7 werden von keiner Person ausgelöst, sondern von einer Policy, die auf das vorherige Event reagiert. Schritt 7 steht dabei stellvertretend für alle Statusänderungen: Auch nach „angenommen“, „abgelehnt“ und „erledigt“ wird die einreichende Person benachrichtigt.
 
 **Prozess 3: Bürgerbeteiligung (Vorschläge)**
 
@@ -80,7 +80,6 @@ Für die weiteren Teilaufgaben konzentrieren wir uns auf die folgenden Events (i
 Sie decken beide Kernprozesse ab, vom Einreichen bis zum Abschluss.
 
 ## 2. Domänenmodell
-<!-- Yara -->
 
 Das Domänenmodell leitet sich direkt aus den Aggregaten des Event Stormings ab. Wir unterscheiden dabei drei Arten von Bausteinen:
 
@@ -114,7 +113,6 @@ Die festen Wertebereiche haben wir als Aufzählungstypen (Enums) angelegt. Sie s
 | Rolle | BUERGER_IN, STADTVERWALTUNG, FACHAMT |
 
 ## 3. Bounded Contexts
-<!-- Yara -->
 
 Aus dem Domänenmodell ergeben sich vier fachliche Bereiche, die jeweils ein eigenes Modell und eine eigene Sprache haben. Die Grenzen haben wir dort gezogen, wo die Events einen anderen Geschäftsprozess oder eine andere Verantwortung betreffen.
 
@@ -129,21 +127,26 @@ Die beiden Core Domains sind das, was CityFeedback ausmacht. Benutzerverwaltung 
 
 ### Beziehungen zwischen den Contexts
 
-![Bounded Contexts CityFeedback](img/bounded_contexts.png)
+![Bounded Contexts CityFeedback](img/bounded-contexts-optimiert.png)
 
-*Abbildung 3: Bounded Contexts und ihre Beziehungen (durchgezogen: Abfrage von Daten, gestrichelt: Domain Events)*
+*Abbildung 3: Bounded Contexts und ihre Beziehungen (durchgezogen: Abfrage von Daten über ACL bzw. Conformist, gestrichelt: Domain Events)*
 
 | Von (Upstream) | Nach (Downstream) | Art der Beziehung | Was ausgetauscht wird |
 |---|---|---|---|
-| Benutzerverwaltung | Beschwerdemanagement | Customer/Supplier | BenutzerId und Rolle der angemeldeten Person |
-| Benutzerverwaltung | Bürgerbeteiligung | Customer/Supplier | BenutzerId der angemeldeten Person |
-| Benutzerverwaltung | Benachrichtigung | Customer/Supplier | E-Mail-Adresse zur BenutzerId |
+| Benutzerverwaltung | Beschwerdemanagement | Anti-Corruption Layer | BenutzerId und Rolle der angemeldeten Person |
+| Benutzerverwaltung | Bürgerbeteiligung | Anti-Corruption Layer | BenutzerId der angemeldeten Person |
+| Benutzerverwaltung | Benachrichtigung | Conformist | E-Mail-Adresse zur BenutzerId |
 | Beschwerdemanagement | Benachrichtigung | Domain Events (Publish/Subscribe) | Beschwerde eingereicht, Statusänderungen, Beschwerde erledigt |
 | Bürgerbeteiligung | Benachrichtigung | Domain Events (Publish/Subscribe) | Stellungnahme veröffentlicht |
 
+Weil die Benutzerverwaltung eine austauschbare Generic Subdomain ist, passt ein Customer/Supplier-Verhältnis nicht: Die Downstream-Contexts hätten keinen Einfluss auf das Modell des Lieferanten. Stattdessen entscheiden wir je nach Wert des Downstream-Contexts:
+
+- **Anti-Corruption Layer für die beiden Core Domains:** Beschwerdemanagement und Bürgerbeteiligung dürfen nicht vom Modell der Benutzerverwaltung abhängen. Eine Übersetzungsschicht im jeweiligen Context holt das Benutzerkonto ab und bildet es auf die eigenen Begriffe ab: Im Beschwerdemanagement wird daraus nur eine `BenutzerId` und die Information, ob die Person für die Stadtverwaltung oder ein Fachamt handelt, in der Bürgerbeteiligung nur eine `BenutzerId`. Ändert sich das Benutzermodell oder wird die Benutzerverwaltung ausgetauscht, muss nur diese Schicht angepasst werden.
+- **Conformist für die Benachrichtigung:** Der Benachrichtigungs-Context ist eine Supporting Subdomain und braucht nur die E-Mail-Adresse zu einer `BenutzerId`. Er übernimmt das Modell der Benutzerverwaltung unverändert. Eine eigene Übersetzungsschicht wäre hier Aufwand ohne fachlichen Nutzen.
+
 Das Beschwerdemanagement und die Bürgerbeteiligung schicken keine Nachrichten selbst. Sie veröffentlichen nur ihre Events, und der Benachrichtigungs-Context entscheidet, wer worüber informiert wird. Dadurch können wir später zum Beispiel eine Push-Benachrichtigung ergänzen, ohne die Kernlogik anzufassen.
 
-### 3.1. Kontextabhängige Fachbegriffe (Ubiquitous Language )
+### 3.1. Kontextabhängige Fachbegriffe (Ubiquitous Language)
 
 Die Trennung zeigt sich auch daran, dass manche Begriffe in den Contexts etwas anderes bedeuten:
 
@@ -153,20 +156,20 @@ Die Trennung zeigt sich auch daran, dass manche Begriffe in den Contexts etwas a
 | Benutzer:in | Einreichende Person, nur über die BenutzerId bekannt | Einreichende oder unterstützende Person, nur über die BenutzerId bekannt | Vollständiges Konto mit Name, E-Mail und Rolle |
 | Status | Bearbeitungsstand der Beschwerde (eingereicht bis erledigt) | Stand des Vorschlags (eingereicht, veröffentlicht, beantwortet) | – |
 
-Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch wenn die Klassen ähnlich heißen.
+Deshalb bekommt jeder Context in der Implementierung sein eigenes Modell, auch wenn die Klassen ähnlich heißen. Für die Benutzer:in ist das genau die Aufgabe des Anti-Corruption Layers aus dem vorherigen Abschnitt: Er übersetzt das vollständige Konto der Benutzerverwaltung in die reduzierte Sicht der beiden Core Domains.
 
 ## 4. Entitäten und Aggregates
-<!-- Maria -->
 
 Die Attribute stammen aus dem Domänenmodell (Teilaufgabe 2, Abbildung 2), die Typen `Kategorie`, `BeschwerdeStatus` und `VorschlagStatus` sind die dort definierten Enums.
 Die Methoden entsprechen den Commands aus dem Event Storming (Teilaufgabe 1).
 Jede Methode prüft den aktuellen Status und erzeugt das passende Domain Event.
+`einreichen(...)` ist dabei eine statische Factory-Methode: Sie ist der einzige Weg, ein neues Aggregat zu erzeugen, und stellt sicher, dass es vollständig und im Status `EINGEREICHT` entsteht. Der Konstruktor ist privat.
 
 ### 4.1. Bounded Context Beschwerdemanagement
 
 | Baustein | Art | Attribute | Methoden |
 |---|---|---|---|
-| Beschwerde | Aggregate Root | `BeschwerdeId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `BeschwerdeStatus status`, `BenutzerId eingereichtVon`, `FachamtId zustaendigesFachamt`, `LocalDateTime eingereichtAm`, `List<Anhang> anhaenge`, `List<StatusAenderung> statusAenderungen`, `List<Kommentar> kommentare` | `einreichen()`, `annehmen()`, `ablehnen()`, `weiterleiten(FachamtId)`, `bearbeitungStarten()`, `abschliessen()`, `kommentieren(BenutzerId, String)` |
+| Beschwerde | Aggregate Root | `BeschwerdeId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `BeschwerdeStatus status`, `BenutzerId eingereichtVon`, `FachamtId zustaendigesFachamt`, `LocalDateTime eingereichtAm`, `List<Anhang> anhaenge`, `List<StatusAenderung> statusAenderungen`, `List<Kommentar> kommentare` | `static einreichen(BenutzerId, String titel, String beschreibung, Kategorie, Standort)`, `annehmen()`, `ablehnen()`, `weiterleiten(FachamtId)`, `bearbeitungStarten()`, `abschliessen()`, `kommentieren(BenutzerId, String)` |
 | Kommentar | Entity (Teil der Beschwerde) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
 | Fachamt | Aggregate Root | `FachamtId id`, `String name`, `List<Kategorie> zustaendigFuer` | `istZustaendigFuer(Kategorie)` |
 
@@ -177,14 +180,26 @@ Jede Statusänderung wird als `StatusAenderung` gespeichert.
 
 | Baustein | Art | Attribute | Methoden |
 |---|---|---|---|
-| Vorschlag | Aggregate Root | `VorschlagId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `VorschlagStatus status`, `BenutzerId eingereichtVon`, `LocalDateTime eingereichtAm`, `List<Unterstuetzung> unterstuetzungen`, `List<Kommentar> kommentare`, `Stellungnahme stellungnahme` | `einreichen()`, `freigeben()`, `unterstuetzen(BenutzerId)`, `kommentieren(BenutzerId, String)`, `stellungnahmeAbgeben(String)` |
+| Vorschlag | Aggregate Root | `VorschlagId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `VorschlagStatus status`, `BenutzerId eingereichtVon`, `LocalDateTime eingereichtAm`, `List<Unterstuetzung> unterstuetzungen`, `List<Kommentar> kommentare`, `Stellungnahme stellungnahme` | `static einreichen(BenutzerId, String titel, String beschreibung, Kategorie, Standort)`, `freigeben()`, `unterstuetzen(BenutzerId)`, `kommentieren(BenutzerId, String)`, `stellungnahmeAbgeben(String)` |
 | Kommentar | Entity (Teil des Vorschlags) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
 
 Wie in Prozess 3 aus Teilaufgabe 1 ist Unterstützen und Kommentieren erst nach der Freigabe möglich, und jede Person kann einen Vorschlag nur einmal unterstützen.
 
 Benutzerkonto und Benachrichtigung gehören zu den unterstützenden Contexts und werden direkt wie im Domänenmodell (Teilaufgabe 2) übernommen.
 
-### 4.3. Beziehungen zwischen den Aggregaten
+### 4.3. Invarianten und Größe der Aggregate
+
+Invarianten sind Regeln, die für ein Aggregat immer gelten müssen. Sie bestimmen, was ins Aggregat gehört: Alles, was zum Prüfen einer Regel gebraucht wird, muss gemeinsam geladen und gespeichert werden.
+
+| Aggregat | Invarianten | Begründung der Größe |
+|---|---|---|
+| Beschwerde | Statuswechsel nur in der Reihenfolge aus Prozess 2 (z. B. weiterleiten nur aus `ANGENOMMEN`). Jeder Statuswechsel ist als `StatusAenderung` protokolliert. Ab `WEITERGELEITET` ist ein zuständiges Fachamt gesetzt. | Status und Statusänderungen gehören ins Aggregat, weil jede Methode sie prüft. Kommentare und Anhänge bleiben drin, weil sie nur für Beteiligte sichtbar sind und pro Beschwerde wenige Einträge haben. |
+| Vorschlag | Unterstützen und Kommentieren nur im Status `VEROEFFENTLICHT`. Jede Person unterstützt höchstens einmal. Höchstens eine Stellungnahme. | Die Liste der Unterstützungen ist unbegrenzt und kann bei beliebten Vorschlägen groß werden. Sie bleibt trotzdem im Aggregat, weil die Regel „höchstens einmal unterstützen“ nur so beim Aufruf von `unterstuetzen(BenutzerId)` geprüft werden kann. Für eine Stadt-App ist die Größe vertretbar. Sollte sie zum Problem werden, kann die Unterstützung später als eigenes Aggregat herausgelöst werden. |
+| Benutzerkonto | Genau eine Rolle. Die E-Mail-Adresse ist eindeutig (geprüft vom RegistrierungsService, weil es mehrere Konten betrifft). | Enthält keine Listen und bleibt klein. |
+| Fachamt | Zuständig für mindestens eine Kategorie. | Enthält nur die Zuständigkeiten und bleibt klein. |
+| Benachrichtigung | Hat immer einen Empfänger und ein auslösendes Event. | Enthält keine Listen und bleibt klein. |
+
+### 4.4. Beziehungen zwischen den Aggregaten
 
 Wie in Teilaufgabe 2 beschrieben, verweisen Aggregate nur über IDs aufeinander, Entitäten und Werte gehören fest zu ihrem Aggregat.
 
@@ -200,7 +215,6 @@ Vorschlag
 ```
 
 ## 5. Domain Services und Repositories
-<!-- Jesse -->
 
 ### 5.1. Repositories
 
@@ -216,16 +230,22 @@ Pro Aggregate Root aus Teilaufgabe 4 gibt es genau ein Repository.
 
 ### 5.2. Domain Services
 
-Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
+Domain Services enthalten Fachregeln, die zu keinem einzelnen Aggregat gehören.
 
 | Domain Service | Context | Aufgabe |
 |---|---|---|
 | ZuweisungsService | Beschwerdemanagement | Sucht das Fachamt für die Kategorie der Beschwerde und ruft `beschwerde.weiterleiten(fachamtId)` auf |
 | RegistrierungsService | Benutzerverwaltung | Prüft, ob die E-Mail-Adresse noch frei ist, und legt das Benutzerkonto an |
-| BenachrichtigungsService | Benachrichtigung | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse und versendet die Benachrichtigung |
+
+### 5.3. Anwendungsservice im Context Benachrichtigung
+
+Der BenachrichtigungsService enthält keine Fachregel, sondern koordiniert nur den Ablauf. Er ist deshalb ein Anwendungsservice und kein Domain Service. Den Versand übernimmt der Port `MailVersand`, damit die Domäne nicht vom Mail-Provider abhängt.
+
+| Anwendungsservice | Context | Aufgabe |
+|---|---|---|
+| BenachrichtigungsService | Benachrichtigung | Reagiert auf die Domain Events aus Teilaufgabe 3, holt die E-Mail-Adresse zur `BenutzerId`, speichert die `Benachrichtigung` und übergibt sie an den Port `MailVersand` |
 
 ## 6. Implementierungsstrategie
-<!-- Jesse -->
 
 ### 6.1. Technische Annahmen
 
@@ -239,24 +259,28 @@ Domain Services enthalten Logik, die zu keinem einzelnen Aggregat gehört.
 
 ### 6.2. Vorgehen
 
-Jeder Bounded Context aus Teilaufgabe 3 wird ein eigenes Package, die anderen drei Contexts sind genauso aufgebaut wie `beschwerdemanagement`:
+Jeder Bounded Context aus Teilaufgabe 3 wird ein eigenes Package. `buergerbeteiligung` und `benutzerverwaltung` sind genauso aufgebaut wie `beschwerdemanagement`, `benachrichtigung` hat statt eines Domain Service einen Anwendungsservice und einen zweiten Port:
 
 ```
 de.cityfeedback
  ├── beschwerdemanagement
- │    ├── domain        (Beschwerde, Kommentar, Fachamt, Events)
- │    ├── repository
- │    └── service       (ZuweisungsService)
+ │    ├── domain          (Beschwerde, Kommentar, Fachamt, Events, BeschwerdeRepository als Port)
+ │    ├── service         (ZuweisungsService)
+ │    └── infrastructure  (Spring-Data-Adapter für BeschwerdeRepository)
  ├── buergerbeteiligung
  ├── benutzerverwaltung
  └── benachrichtigung
+      ├── domain          (Benachrichtigung, BenachrichtigungRepository und MailVersand als Ports)
+      ├── application     (BenachrichtigungsService)
+      └── infrastructure  (Spring-Data-Adapter für BenachrichtigungRepository, SMTP-Adapter für MailVersand)
 ```
 
 1. **Entitäten und Aggregate:** Eine Java-Klasse pro Entität und Aggregat mit den Attributen und Methoden aus Teilaufgabe 4, dabei gibt es keine Framework-Abhängigkeiten.
-2. **Repositories:** Ein Interface pro Aggregate Root aus Teilaufgabe 5, umgesetzt mit Spring Data.
-3. **Domain Services:** Eine Klasse pro Service aus Teilaufgabe 5, die Aggregate über die Repositories lädt und speichert.
-4. **Domain Events:** Zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, auf die der Context Benachrichtigung reagiert.
-5. **Tests:** Unit-Tests mit JUnit für die Aggregate (ohne Spring), Integrationstests mit `@SpringBootTest` für Services und Repositories.
+2. **Repositories:** Ein Interface pro Aggregate Root aus Teilaufgabe 5.1 als Port in der Domäne, ohne Framework-Abhängigkeit. Die Umsetzung mit Spring Data liegt als Adapter im Package `infrastructure`.
+3. **Domain Services:** Eine Klasse pro Service aus Teilaufgabe 5.2, die Aggregate über die Repositories lädt und speichert.
+4. **Anwendungsservice:** Der BenachrichtigungsService aus Teilaufgabe 5.3 als Spring-Event-Listener, der den Port `MailVersand` nutzt. Der SMTP-Adapter liegt im Package `infrastructure`.
+5. **Domain Events:** Zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, auf die der Context Benachrichtigung reagiert.
+6. **Tests:** Unit-Tests mit JUnit für die Aggregate (ohne Spring), Integrationstests mit `@SpringBootTest` für Services und Repositories. Beim BenachrichtigungsService wird der Port `MailVersand` im Test durch einen Fake ersetzt, damit keine echten Mails verschickt werden.
 
 ### 6.3. Codebeispiel
 
@@ -266,11 +290,27 @@ de.cityfeedback
 // Die Geschäftsregeln (z. B. nur angenommene Beschwerden weiterleiten) liegen im Aggregat selbst.
 public class Beschwerde {
   private final BeschwerdeId id;
-  private Kategorie kategorie;
+  private final Kategorie kategorie;
   private BeschwerdeStatus status;
   private FachamtId zustaendigesFachamt;
   private final List<StatusAenderung> statusAenderungen = new ArrayList<>();
+  // Clock wird injiziert statt LocalDateTime.now() direkt aufzurufen,
+  // damit Tests eine feste Zeit vorgeben können (Clock.fixed(...))
+  private final Clock clock;
   // weitere Attribute siehe Teilaufgabe 4
+
+  // Der Konstruktor ist privat: Eine Beschwerde entsteht nur über einreichen(...)
+  private Beschwerde(BeschwerdeId id, Kategorie kategorie, Clock clock) {
+    this.id = id;
+    this.kategorie = kategorie;
+    this.clock = clock;
+    this.status = BeschwerdeStatus.EINGEREICHT;
+  }
+
+  // Factory-Methode: liefert ein vollständiges Aggregat im Startzustand
+  public static Beschwerde einreichen(Kategorie kategorie, Clock clock) {
+    return new Beschwerde(BeschwerdeId.neu(), kategorie, clock);
+  }
 
   public void weiterleiten(FachamtId fachamtId) {
     if (status != BeschwerdeStatus.ANGENOMMEN) {
@@ -278,7 +318,7 @@ public class Beschwerde {
     }
     zustaendigesFachamt = fachamtId;
     // Jeder Statuswechsel wird für die Historie gespeichert
-    statusAenderungen.add(new StatusAenderung(status, BeschwerdeStatus.WEITERGELEITET, LocalDateTime.now()));
+    statusAenderungen.add(new StatusAenderung(status, BeschwerdeStatus.WEITERGELEITET, LocalDateTime.now(clock)));
     status = BeschwerdeStatus.WEITERGELEITET;
   }
 }

@@ -16,18 +16,18 @@
 
 ## 2. Fachliche Anmerkungen
 
-- [ ] **Policies vs. Rollen**: „Eingangsbestätigung senden" und „Statusänderung mitteilen" als Policies kennzeichnen (nicht als Rollen)
-- [ ] **Context-Beziehung Benutzerverwaltung**: Customer/Supplier überdenken – ggf. Conformist oder Anti-Corruption Layer als passendere Pattern
-- [ ] **BenachrichtigungsService**: Als Anwendungsservice mit Port zum Mailversand korrigieren (enthält keine Fachregel)
-- [ ] **einreichen()**: Als Factory-Methode implementieren
-- [ ] **Invarianten & Aggregate-Größe**:
-  - [ ] Invarianten pro Aggregate auflisten
-  - [ ] Größe der Aggregates begründen (insb. bei unbegrenzten Listen von Unterstützungen)
+- [x] **Policies vs. Rollen**: „Eingangsbestätigung senden" und „Statusänderung mitteilen" als Policies kennzeichnen (nicht als Rollen)
+- [x] **Context-Beziehung Benutzerverwaltung**: Customer/Supplier überdenken – ggf. Conformist oder Anti-Corruption Layer als passendere Pattern
+- [x] **BenachrichtigungsService**: Als Anwendungsservice mit Port zum Mailversand korrigieren (enthält keine Fachregel)
+- [x] **einreichen()**: Als Factory-Methode implementieren
+- [x] **Invarianten & Aggregate-Größe**:
+  - [x] Invarianten pro Aggregate auflisten
+  - [x] Größe der Aggregates begründen (insb. bei unbegrenzten Listen von Unterstützungen)
 
 ---
 
 ## 3. Implementierungstechnische Hinweise
 
-- [ ] **Domain-Interface**: Port in der Domäne definieren, Adapter in der Infrastruktur (kein Spring Data in der Domäne → vermeidet Framework-Abhängigkeit)
-- [ ] **Zeit für Tests**: `LocalDateTime.now()` durch injectbare `Clock` ersetzen (erleichtert Testbarkeit)
-- [ ] **HTML-Kommentare**: Alle Kommentare mit Bearbeiternamen aus dem Dokument entfernen
+- [x] **Domain-Interface**: Port in der Domäne definieren, Adapter in der Infrastruktur (kein Spring Data in der Domäne → vermeidet Framework-Abhängigkeit)
+- [x] **Zeit für Tests**: `LocalDateTime.now()` durch injectbare `Clock` ersetzen (erleichtert Testbarkeit)
+- [x] **HTML-Kommentare**: Alle Kommentare mit Bearbeiternamen aus dem Dokument entfernen
