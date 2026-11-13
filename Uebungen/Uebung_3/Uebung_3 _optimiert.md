@@ -167,9 +167,9 @@ Jede Methode prüft den aktuellen Status und erzeugt das passende Domain Event.
 
 ### 4.1. Bounded Context Beschwerdemanagement
 
-| Baustein | Art | Attribute | Methoden |
-|---|---|---|---|
-| Beschwerde | Aggregate Root | `BeschwerdeId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `BeschwerdeStatus status`, `BenutzerId eingereichtVon`, `FachamtId zustaendigesFachamt`, `LocalDateTime eingereichtAm`, `List<Anhang> anhaenge`, `List<StatusAenderung> statusAenderungen`, `List<Kommentar> kommentare` | `static einreichen(BenutzerId, String titel, String beschreibung, Kategorie, Standort)`, `annehmen()`, `ablehnen()`, `weiterleiten(FachamtId)`, `bearbeitungStarten()`, `abschliessen()`, `kommentieren(BenutzerId, String)` |
+| Baustein | Art | Attribute | Methoden | erzeugtes Domainevent |
+|---|---|---|---|---|
+| Beschwerde | Aggregate Root | `BeschwerdeId id`, `String titel`, `String beschreibung`, `Kategorie kategorie`, `Standort standort`, `BeschwerdeStatus status`, `BenutzerId eingereichtVon`, `FachamtId zustaendigesFachamt`, `LocalDateTime eingereichtAm`, `List<Anhang> anhaenge`, `List<StatusAenderung> statusAenderungen`, `List<Kommentar> kommentare` | `static einreichen(BenutzerId, String titel, String beschreibung, Kategorie, Standort)`, `annehmen()`, `ablehnen()`, `weiterleiten(FachamtId)`, `bearbeitungStarten()`, `abschliessen()`, `kommentieren(BenutzerId, String)` | BeschwerdeEingereicht, BeschwerdeAngenommen, BeschwerdeAbgelehnt, BeschwerdeWeitergeleitet, BearbeitungBegonnen, BeschwerdeErledigt, BeschwerdeKommentarVerfasst |
 | BeschwerdeKommentar | Entity (Teil der Beschwerde) | `KommentarId id`, `BenutzerId verfasstVon`, `String text`, `LocalDateTime verfasstAm` | – |
 | Fachamt | Aggregate Root | `FachamtId id`, `String name`, `List<Kategorie> zustaendigFuer` | `istZustaendigFuer(Kategorie)` |
 
@@ -279,7 +279,7 @@ de.cityfeedback
 2. **Repositories:** Ein Interface pro Aggregate Root aus Teilaufgabe 5.1 als Port in der Domäne, ohne Framework-Abhängigkeit. Die Umsetzung mit Spring Data liegt als Adapter im Package `infrastructure`.
 3. **Domain Services:** Eine Klasse pro Service aus Teilaufgabe 5.2, die Aggregate über die Repositories lädt und speichert.
 4. **Anwendungsservice:** Der BenachrichtigungsService aus Teilaufgabe 5.3 als Spring-Event-Listener, der den Port `MailVersand` nutzt. Der SMTP-Adapter liegt im Package `infrastructure`.
-5. **Domain Events:** Zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, auf die der Context Benachrichtigung reagiert.
+5. **Domain Events:** Die Aggregate erzeugen bei fachlichen Zustandsänderungen die entsprechenden Domain Events,. Zum Beispiel `BeschwerdeEingereicht` und `BeschwerdeWeitergeleitet`, auf die der Context Benachrichtigung reagiert.
 6. **Tests:** Unit-Tests mit JUnit für die Aggregate (ohne Spring), Integrationstests mit `@SpringBootTest` für Services und Repositories. Beim BenachrichtigungsService wird der Port `MailVersand` im Test durch einen Fake ersetzt, damit keine echten Mails verschickt werden.
 
 ### 6.3. Codebeispiel
