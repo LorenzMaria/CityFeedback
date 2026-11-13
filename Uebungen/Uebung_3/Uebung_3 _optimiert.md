@@ -184,7 +184,21 @@ Wie in Prozess 3 aus Teilaufgabe 1 ist Unterstützen und Kommentieren erst nach 
 
 Benutzerkonto und Benachrichtigung gehören zu den unterstützenden Contexts und werden direkt wie im Domänenmodell (Teilaufgabe 2) übernommen.
 
-### 4.3. Beziehungen zwischen den Aggregaten
+### 4.3 Bounded Context Benutzerverwaltung
+| Baustein | Art | Attribute | Methoden |
+|---|---|---|---|
+| Benutzerkonto | Aggregate Root | `Benutzer id`, `String name`, `EmailAdresse emailadresse ` | `registrieren()`, `anmelden()`, `emailAdresseAendern(EmailAdresse)` |
+
+Die Registrierung legt ein neues Benutzerkonto an und erzeugt das Domain Event BenutzerkontoRegistriert. Die Anmeldung dient der Authentifizierung des Benutzers. Änderungen an Rolle und E-Mail-Adresse werden über das Benutzerkonto vorgenommen.
+
+### 4.4 Bounded Context Benutzerverwaltung
+| Baustein | Art | Attribute | Methoden |
+|---|---|---|---|
+| Benachrichitgung | Aggregate Root | `Benachrichitgung id`, `Benutzer id`, `String nachricht `, `Typ typ`, `LocalDate erstelltAm`, `LocalDate versendetAm`  | `erstellen()`, `versenden()` |
+
+Die Benachrichtigung wird durch relevante Domain Events anderer Bounded Contexts ausgelöst. Die Methode erstellen() legt eine Benachrichtigung für den jeweiligen Empfänger an. Die Methode versenden() dokumentiert den erfolgreichen Versand und den Versandzeitpunkt.
+
+### 4.5. Beziehungen zwischen den Aggregaten
 
 Wie in Teilaufgabe 2 beschrieben, verweisen Aggregate nur über IDs aufeinander, Entitäten und Werte gehören fest zu ihrem Aggregat.
 
