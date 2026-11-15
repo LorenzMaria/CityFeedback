@@ -21,7 +21,7 @@ public class BeschwerdeWeiterleitenTest {
 @DisplayName("Eine angenommene Beschwerde wird weitergeleitet")
 void sollteBeschwerdeAnFachamtWeiterleiten() {
 
-    // Arrange: Fixture erzeugt die Beschwerde über die Factory-Methode einreichen(),
+        // Arrange: Fixture erzeugt die Beschwerde über die Factory-Methode einreichen(),
         // Status ist danach EINGEREICHT, mit annehmen() wird er ANGENOMMEN
         Beschwerde beschwerde = neueBeschwerde();
         beschwerde.annehmen();
@@ -57,44 +57,44 @@ void sollteBeschwerdeAnFachamtWeiterleiten() {
 @DisplayName("Eine Beschwerde darf nur an ein zuständiges Fachamt weitergeleitet werden")
 void sollteBeschwerdeNurAnZustaendigesFachamtWeiterleiten() {
 
-    // Arrange
-    Beschwerde beschwerde = Beschwerde.einreichen(
-        "Straßenbeleuchtung funktioniert nicht",
-        Kategorie.INFRASTRUKTUR
-    );
+        // Arrange
+        Beschwerde beschwerde = Beschwerde.einreichen(
+            "Straßenbeleuchtung funktioniert nicht",
+            Kategorie.INFRASTRUKTUR
+        );
 
-    beschwerde.annehmen();
+        beschwerde.annehmen();
 
-    Fachamt fachamt = new Fachamt(
-        "Gesundheitsamt",
-        Kategorie.GESUNDHEIT
-    );
+        Fachamt fachamt = new Fachamt(
+            "Gesundheitsamt",
+            Kategorie.GESUNDHEIT
+        );
 
-    // Act & Assert: Kategorie der Beschwerde (INFRASTRUKTUR) passt nicht zum Fachamt (GESUNDHEIT)
-    assertThatThrownBy(() -> beschwerde.weiterleiten(fachamt))
-        .isInstanceOf(IllegalArgumentException.class);
+        // Act & Assert: Kategorie der Beschwerde (INFRASTRUKTUR) passt nicht zum Fachamt (GESUNDHEIT)
+        assertThatThrownBy(() -> beschwerde.weiterleiten(fachamt))
+            .isInstanceOf(IllegalArgumentException.class);
 
-    assertThat(beschwerde.getStatus())
-        .isEqualTo(BeschwerdeStatus.ANGENOMMEN);
+        assertThat(beschwerde.getStatus())
+            .isEqualTo(BeschwerdeStatus.ANGENOMMEN);
 }
 
 @Test
 @DisplayName("Die Bearbeitung darf nicht vor der Weiterleitung beginnen")
 void bearbeitungVorWeiterleitungVerhindern() {
 
-    // Arrange
-    Beschwerde beschwerde = Beschwerde.einreichen(
-        "Straßenbeleuchtung funktioniert nicht",
-        Kategorie.INFRASTRUKTUR
-    );
+        // Arrange
+        Beschwerde beschwerde = Beschwerde.einreichen(
+            "Straßenbeleuchtung funktioniert nicht",
+            Kategorie.INFRASTRUKTUR
+        );
 
-    beschwerde.annehmen();
+        beschwerde.annehmen();
 
-    // Act & Assert: Reihenfolge aus Prozess 2 (angenommen -> weitergeleitet -> in Bearbeitung)
-    assertThatThrownBy(() -> beschwerde.bearbeitungBeginnen())
-        .isInstanceOf(UngueltigerBeschwerdeStatusException.class);
+        // Act & Assert: Reihenfolge aus Prozess 2 (angenommen -> weitergeleitet -> in Bearbeitung)
+        assertThatThrownBy(() -> beschwerde.bearbeitungBeginnen())
+            .isInstanceOf(UngueltigerBeschwerdeStatusException.class);
 
-    assertThat(beschwerde.getStatus())
-        .isEqualTo(BeschwerdeStatus.ANGENOMMEN);
-}
+        assertThat(beschwerde.getStatus())
+            .isEqualTo(BeschwerdeStatus.ANGENOMMEN);
+    }
 }
