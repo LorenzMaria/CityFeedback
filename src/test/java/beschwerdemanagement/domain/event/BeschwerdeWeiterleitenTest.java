@@ -13,13 +13,16 @@ import static beschwerdemanagement.domain.event.BeschwerdeTestFixtures.zustaendi
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+// Unit-Test:
+// Die Geschäftsregeln liegen im Aggregat Beschwerde, deshalb reicht JUnit.
 public class BeschwerdeWeiterleitenTest {
-    
+
 @Test
 @DisplayName("Eine angenommene Beschwerde wird weitergeleitet")
 void sollteBeschwerdeAnFachamtWeiterleiten() {
 
-    // Arrange
+    // Arrange: Fixture erzeugt die Beschwerde über die Factory-Methode einreichen(),
+        // Status ist danach EINGEREICHT, mit annehmen() wird er ANGENOMMEN
         Beschwerde beschwerde = neueBeschwerde();
         beschwerde.annehmen();
 
@@ -28,7 +31,7 @@ void sollteBeschwerdeAnFachamtWeiterleiten() {
         // Act
         beschwerde.weiterleiten(fachamt);
 
-        // Assert
+        // Assert: Statuswechsel ANGENOMMEN -> WEITERGELEITET
         assertThat(beschwerde.getStatus()).isEqualTo(BeschwerdeStatus.WEITERGELEITET);
     }
 
@@ -37,14 +40,15 @@ void sollteBeschwerdeAnFachamtWeiterleiten() {
 @DisplayName("Eine nicht angenommene Beschwerde darf nicht weitergeleitet werden")
     void sollteNichtAngenommeneBeschwerdeNichtWeiterleiten() {
 
-        // Arrange
+        // Arrange: Beschwerde bleibt im Status EINGEREICHT
         Beschwerde beschwerde = neueBeschwerde();
 
-        // Act & Assert
+        // Act & Assert: Invariante "nur angenommene Beschwerden weiterleiten"
         assertThatThrownBy(() ->
                 beschwerde.weiterleiten(zustaendigesFachamt())
         ).isInstanceOf(IllegalStateException.class);
 
+        // Der Status darf sich bei einer abgelehnten Operation nicht ändern
         assertThat(beschwerde.getStatus())
                 .isEqualTo(BeschwerdeStatus.EINGEREICHT);
     }
@@ -66,7 +70,7 @@ void sollteBeschwerdeNurAnZustaendigesFachamtWeiterleiten() {
         Kategorie.GESUNDHEIT
     );
 
-    // Act & Assert
+    // Act & Assert: Kategorie der Beschwerde (INFRASTRUKTUR) passt nicht zum Fachamt (GESUNDHEIT)
     assertThatThrownBy(() -> beschwerde.weiterleiten(fachamt))
         .isInstanceOf(IllegalArgumentException.class);
 
@@ -86,7 +90,7 @@ void bearbeitungVorWeiterleitungVerhindern() {
 
     beschwerde.annehmen();
 
-    // Act & Assert
+    // Act & Assert: Reihenfolge aus Prozess 2 (angenommen -> weitergeleitet -> in Bearbeitung)
     assertThatThrownBy(() -> beschwerde.bearbeitungBeginnen())
         .isInstanceOf(UngueltigerBeschwerdeStatusException.class);
 
