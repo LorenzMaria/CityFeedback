@@ -93,3 +93,13 @@ Das abschließende Review fand trotz grüner Tests die fehlende Validierung in `
 ## 3.6 Fazit zum Pair-Programming-Prozess
 
 Das zweistufige Vorgehen hat sich bewährt: erst eine minimale, testgetriebene Version, dann gezielte Verbesserungen, die nur übernommen wurden, wenn sie einen echten Qualitätsgewinn bringen.
+
+# 5. Modularität und Testbarkeit via CI/CD sicherstellen
+
+## 5.1. 
+
+Bei der Entwicklung von CityFeedback haben wir uns an den Prinzipien des Domain-Driven Designs  orientiert und eine modulare Architektur umgesetzt. Dazu haben wir die Anwendung unter anderm in die  Bounded Contexts Beschwerdemanagement, Bürgerbeteiligung unterteilt. Innerhalb der fachlich orientierten Verzeichnisstruktur werden fachliche Logik und technische Verantwortlichkeiten voneinander getrennt, um eine klare Struktur und eine bessere Wartbarkeit zu erreichen. Die Kommunikation zwischen den fachlichen Bereichen erfolgt über klar definierte Schnittstellen und Domain Events. Die Teststruktur orientiert sich ebenfalls an der Struktur des Java-Codes, sodass die Tests den jeweiligen fachlichen Bereichen und Klassen zugeordnet sind. Zur Sicherstellung der Testbarkeit haben wir automatisierte Tests mit JUnit und AssertJ implementiert, um insbesondere die fachliche Logik und das erwartete Verhalten unserer Anwendung zu überprüfen.
+
+## 5.2.
+
+Für die kontinuierliche Integration haben wir eine CI-Pipeline mit GitHub Actions eingerichtet, die bei Pushes auf die relevanten Branches main und dev sowie bei Pull Requests automatisch gestartet wird. Die Pipeline Gradle und ist in separate Jobs für Build, Linting, Tests und Reports aufgeteilt. Dabei überprüfen wir mit Checkstyle die Einhaltung einheitlicher Code-Konventionen und führen anschließend die automatisierten Tests aus. Abschließend werden die Testergebnisse und Testberichte als GitHub-Actions-Artefakte gespeichert, sodass Fehler frühzeitig erkannt und die Qualität des Codes kontinuierlich überprüft werden können.
