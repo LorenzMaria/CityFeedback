@@ -51,8 +51,8 @@ jobs:
       - name: Build
         run: ./gradlew assemble --no-daemon --stacktrace
 
-  test-and-report:
-    name: Test and Report
+  test:
+    name: Test
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -74,6 +74,24 @@ jobs:
 
       - name: Upload test reports
         if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            **/build/reports/tests/test/**
+            **/build/test-results/test/**
+          if-no-files-found: warn
+          retention-days: 7
+
+
+  report:
+    name: Report
+    needs: [build, test]
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Report
         uses: actions/upload-artifact@v4
         with:
           name: test-reports
