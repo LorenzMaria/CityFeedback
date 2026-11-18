@@ -1,28 +1,69 @@
+# Name des GitHub-Actions-Workflows
 name: CI
 
+# Legt fest, bei welchen Ereignissen der Workflow gestartet wird
 on:
+ # Workflow wird bei einem Push auf die angegebenen Branches ausgeführt
   push:
     branches:
      - main
      - dev
+     - feature/**
+
+  # Workflow wird ebenfalls bei Pull Requests auf diese Branches ausgeführt     
   pull_request:
    branches:
      - main
      - dev
 
+# Verhindert unnötige parallele Workflow-Ausführungen, der aktuellste push wird bearbeitet
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+# Definition der auszuführenden Jobs
 jobs:
   build:
+    # Verwendet einen virtuellen Ubuntu-Runner von GitHub
     runs-on: ubuntu-latest
 
+# Begrenzt die maximale Laufzeit
+    timeout-minutes: 15
+
+
     steps:
+       # Repository auschecken, damit der Quellcode verfügbar ist
       - name: Repository Checkout
         uses: actions/checkout@v5
-      
+
+      # Java-Entwicklungsumgebung einrichten
       - name: Set up Java
         uses: actions/setup-java@v5
         with:
+        # Verwendet die Eclipse-Temurin-Distribution
           distribution: temurin
+          # Legt Java 21 als verwendete Version fest
           java-version: '21'
+          # bereits geladene Abhängigkeiten zwischenspeichern, um die Build-Zeit zu verkürzen
+          cache: gradle
+      # Quellcode kompilieren und Build überprüfen
+      - name: Build
+        run: ./gradlew assemble --no-daemon --stacktrace
 
-      - name: run tests
-        run: ./gradlew test
+      # Führt die automatisierten Tests mit Gradle aus
+      - name: Run tests
+        run: ./gradlew test --no-daemon --stacktrace
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            **/build/reports/tests/test/
+            **/build/test-results/test/
+          if-no-files-found: warn
+          retention-days: 7
+
+
