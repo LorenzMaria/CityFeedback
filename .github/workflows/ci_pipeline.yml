@@ -58,6 +58,16 @@ jobs:
     timeout-minutes: 15
 
     steps:
+      - name: Repository Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
       # Führt die automatisierten Tests mit Gradle aus
       - name: Run tests
         run: ./gradlew test --no-daemon --stacktrace
