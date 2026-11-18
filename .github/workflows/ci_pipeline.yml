@@ -53,6 +53,7 @@ jobs:
 
   lint:
     name: Lint
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -118,5 +119,3 @@ jobs:
             **/build/test-results/test/
           if-no-files-found: warn
           retention-days: 7
-
-
