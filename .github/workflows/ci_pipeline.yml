@@ -50,9 +50,28 @@ jobs:
       - name: Build
         run: ./gradlew assemble --no-daemon --stacktrace
 
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Repository Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Run Checkstyle
+        run: ./gradlew checkstyleMain checkstyleTest --no-daemon
+
   test:
     name: Test
-    needs: build
+    needs: [build, lint]
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -84,7 +103,7 @@ jobs:
 
   report:
     name: Report
-    needs: [build, test]
+    needs: [build, lint, test]
     if: always()
     runs-on: ubuntu-latest
 
