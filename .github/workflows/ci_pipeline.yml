@@ -8,6 +8,7 @@ on:
     branches:
      - main
      - dev
+     - feature/**
 
   # Workflow wird ebenfalls bei Pull Requests auf diese Branches ausgeführt     
   pull_request:
