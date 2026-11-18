@@ -51,8 +51,8 @@ jobs:
       - name: Build
         run: ./gradlew assemble --no-daemon --stacktrace
 
-  test:
-    name: Test
+  test-and-report:
+    name: Test and Report
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -62,13 +62,6 @@ jobs:
       - name: Run tests
         run: ./gradlew test --no-daemon --stacktrace
 
-  report:
-    name: report
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-
-    steps:
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
