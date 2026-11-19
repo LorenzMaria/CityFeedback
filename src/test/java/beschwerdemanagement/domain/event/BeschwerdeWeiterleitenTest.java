@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 // Die Geschäftsregeln liegen im Aggregat Beschwerde, deshalb reicht JUnit.
 public class BeschwerdeWeiterleitenTest {
 
+// Happy Path: erlaubter Statuswechsel ANGENOMMEN -> WEITERGELEITET
 @Test
 @DisplayName("Eine angenommene Beschwerde wird weitergeleitet")
 void sollteBeschwerdeAnFachamtWeiterleiten() {
@@ -36,6 +37,7 @@ void sollteBeschwerdeAnFachamtWeiterleiten() {
     }
 
 
+// Negativtest (Invariante): nur angenommene Beschwerden duerfen weitergeleitet werden
 @Test
 @DisplayName("Eine nicht angenommene Beschwerde darf nicht weitergeleitet werden")
     void sollteNichtAngenommeneBeschwerdeNichtWeiterleiten() {
@@ -53,6 +55,7 @@ void sollteBeschwerdeAnFachamtWeiterleiten() {
                 .isEqualTo(BeschwerdeStatus.EINGEREICHT);
     }
 
+// Negativtest (Invariante): nur an ein Fachamt mit passender Kategorie weiterleiten
 @Test
 @DisplayName("Eine Beschwerde darf nur an ein zuständiges Fachamt weitergeleitet werden")
 void sollteBeschwerdeNurAnZustaendigesFachamtWeiterleiten() {
@@ -78,6 +81,7 @@ void sollteBeschwerdeNurAnZustaendigesFachamtWeiterleiten() {
             .isEqualTo(BeschwerdeStatus.ANGENOMMEN);
 }
 
+// Negativtest (Reihenfolge): Bearbeitung erst nach der Weiterleitung
 @Test
 @DisplayName("Die Bearbeitung darf nicht vor der Weiterleitung beginnen")
 void bearbeitungVorWeiterleitungVerhindern() {
