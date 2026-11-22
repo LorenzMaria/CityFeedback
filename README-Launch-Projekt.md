@@ -22,6 +22,9 @@ Der Befehl kompiliert das Projekt, führt Checkstyle aus und startet alle Tests.
 Die Anwendung läuft danach unter `http://localhost:8080`.
 Beenden mit `Ctrl+C`.
 
+Hinweis: Es gibt noch keine Endpoints und keine Startseite.
+`http://localhost:8080/` zeigt deshalb vorerst eine "Whitelabel Error Page" mit Status 404, das ist kein Fehler.
+
 ## H2-Datenbank
 
 Die Anwendung nutzt eine H2-In-Memory-Datenbank.
