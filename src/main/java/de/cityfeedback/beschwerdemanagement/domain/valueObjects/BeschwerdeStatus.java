@@ -1,4 +1,4 @@
-package beschwerdemanagement.domain.valueObjects;
+package de.cityfeedback.beschwerdemanagement.domain.valueObjects;
 
 public enum BeschwerdeStatus {
     EINGEREICHT,

@@ -1,8 +1,8 @@
-package beschwerdemanagement.domain.event;
+package de.cityfeedback.beschwerdemanagement.domain.event;
 
-import beschwerdemanagement.domain.model.Beschwerde;
-import beschwerdemanagement.domain.valueObjects.BeschwerdeStatus;
-import beschwerdemanagement.domain.valueObjects.Kategorie;
+import de.cityfeedback.beschwerdemanagement.domain.model.Beschwerde;
+import de.cityfeedback.beschwerdemanagement.domain.valueObjects.BeschwerdeStatus;
+import de.cityfeedback.beschwerdemanagement.domain.valueObjects.Kategorie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,21 +1,21 @@
-package beschwerdemanagement.domain.model;
+package de.cityfeedback.beschwerdemanagement.domain.model;
 
-import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.ABGELEHNT;
-import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.ANGENOMMEN;
-import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.EINGEREICHT;
-import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.ERLEDIGT;
-import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.IN_BEARBEITUNG;
-import static beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.WEITERGELEITET;
+import static de.cityfeedback.beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.ABGELEHNT;
+import static de.cityfeedback.beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.ANGENOMMEN;
+import static de.cityfeedback.beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.EINGEREICHT;
+import static de.cityfeedback.beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.ERLEDIGT;
+import static de.cityfeedback.beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.IN_BEARBEITUNG;
+import static de.cityfeedback.beschwerdemanagement.domain.valueObjects.BeschwerdeStatus.WEITERGELEITET;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import beschwerdemanagement.domain.exception.UngueltigerBeschwerdeStatusException;
-import beschwerdemanagement.domain.valueObjects.BeschwerdeStatus;
-import beschwerdemanagement.domain.valueObjects.Kategorie;
-import beschwerdemanagement.domain.valueObjects.StatusHistorie;
-import beschwerdemanagement.domain.valueObjects.Uebergangsregeln;
+import de.cityfeedback.beschwerdemanagement.domain.exception.UngueltigerBeschwerdeStatusException;
+import de.cityfeedback.beschwerdemanagement.domain.valueObjects.BeschwerdeStatus;
+import de.cityfeedback.beschwerdemanagement.domain.valueObjects.Kategorie;
+import de.cityfeedback.beschwerdemanagement.domain.valueObjects.StatusHistorie;
+import de.cityfeedback.beschwerdemanagement.domain.valueObjects.Uebergangsregeln;
 
 public class Beschwerde {
 

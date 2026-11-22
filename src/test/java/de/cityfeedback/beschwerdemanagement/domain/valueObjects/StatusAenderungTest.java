@@ -1,10 +1,10 @@
-package beschwerdemanagement.domain.valueObjects;
+package de.cityfeedback.beschwerdemanagement.domain.valueObjects;
 
-import beschwerdemanagement.domain.model.Beschwerde;
+import de.cityfeedback.beschwerdemanagement.domain.model.Beschwerde;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static beschwerdemanagement.domain.event.BeschwerdeTestFixtures.neueBeschwerde;
+import static de.cityfeedback.beschwerdemanagement.domain.event.BeschwerdeTestFixtures.neueBeschwerde;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

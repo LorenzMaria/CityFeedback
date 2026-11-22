@@ -1,4 +1,4 @@
-package beschwerdemanagement.domain.exception;
+package de.cityfeedback.beschwerdemanagement.domain.exception;
 
 public class UngueltigerBeschwerdeStatusException extends IllegalStateException {
 

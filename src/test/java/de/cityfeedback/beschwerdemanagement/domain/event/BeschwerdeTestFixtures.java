@@ -1,8 +1,8 @@
-package beschwerdemanagement.domain.event;
+package de.cityfeedback.beschwerdemanagement.domain.event;
 
-import beschwerdemanagement.domain.model.Beschwerde;
-import beschwerdemanagement.domain.model.Fachamt;
-import beschwerdemanagement.domain.valueObjects.Kategorie;
+import de.cityfeedback.beschwerdemanagement.domain.model.Beschwerde;
+import de.cityfeedback.beschwerdemanagement.domain.model.Fachamt;
+import de.cityfeedback.beschwerdemanagement.domain.valueObjects.Kategorie;
 
 public final class BeschwerdeTestFixtures {
 
