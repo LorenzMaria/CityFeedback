@@ -2,8 +2,27 @@
 
 ## Voraussetzungen
 
-- Java 21 (JDK)
-- Kein lokales Gradle nötig, das Projekt bringt den Gradle Wrapper mit.
+Installiert werden muss nur ein JDK 21.
+Wir nutzen Eclipse Temurin, das gleiche JDK wie in der CI.
+
+| System | Installation |
+|---|---|
+| macOS | `brew install --cask temurin@21` |
+| Windows | `winget install EclipseAdoptium.Temurin.21.JDK` |
+| Linux / manuell | Download unter [adoptium.net](https://adoptium.net/temurin/releases/?version=21) |
+
+Prüfen, ob JDK 21 gefunden wird:
+
+```bash
+/usr/libexec/java_home -V   # macOS
+java -version               # Windows / Linux
+```
+
+Alles andere muss nicht installiert werden:
+
+- Gradle lädt `./gradlew` beim ersten Aufruf selbst herunter.
+- Spring Boot, H2 und alle weiteren Abhängigkeiten lädt Gradle beim ersten Build automatisch.
+  Dafür ist beim ersten Start eine Internetverbindung nötig.
 
 ## Bauen und testen
 
