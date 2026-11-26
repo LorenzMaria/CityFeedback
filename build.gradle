@@ -24,7 +24,7 @@ test {
 }
 sonar {
     properties {
-        property "sonar.projectKey", "cityfeedback"
+        property "sonar.projectKey", "CityFeedback"
         property "sonar.projectName", "CityFeedback"
         property "sonar.host.url", "http://localhost:9000"
     }
