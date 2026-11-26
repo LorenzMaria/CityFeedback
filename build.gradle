@@ -29,4 +29,3 @@ sonar {
         property "sonar.host.url", "http://localhost:9000"
     }
 }
-
