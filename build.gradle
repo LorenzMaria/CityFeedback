@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'checkstyle'
+    id 'org.sonarqube' version '7.2.2.6593'
 }
 
 checkstyle {
@@ -14,10 +15,18 @@ repositories {
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.12.2'
-    testImplementation 'org.assertj:assertj-core:3.27.3'
+    testImplementation 'org.assertj:assertj-core:3.27.7'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
     useJUnitPlatform()
 }
+sonar {
+    properties {
+        property "sonar.projectKey", "CityFeedback"
+        property "sonar.projectName", "CityFeedback"
+        property "sonar.host.url", "http://localhost:9000"
+    }
+}
+
