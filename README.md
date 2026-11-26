@@ -384,3 +384,6 @@ Die Aufgaben zur Erstellung des Git-Handouts wurden wie folgt aufgeteilt:
 
 Alle Teammitglieder haben die Beiträge der anderen überprüft und gegenseitig Feedback gegeben.
 
+
+
+
