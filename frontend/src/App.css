@@ -346,21 +346,23 @@
   border-radius: 12px;
 }
 
-.submission-tab {
+.app-shell > .complaint-page .submission-tab {
   padding: 10px 16px;
-  color: var(--text);
+  min-height: 0;
+  margin-top: 0;
+  color: var(--text-h);
   font: inherit;
   font-size: 14px;
   font-weight: 600;
-  background: transparent;
+  background: var(--border);
   border: 0;
   border-radius: 8px;
   cursor: pointer;
 }
 
-.submission-tab.active {
-  color: var(--text-h);
-  background: var(--bg);
+.app-shell > .complaint-page .submission-tab.active {
+  color: #fff;
+  background: var(--accent);
   box-shadow: var(--shadow);
 }
 
