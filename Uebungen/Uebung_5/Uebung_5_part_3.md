@@ -36,8 +36,8 @@ Veraltete Abhängigkeiten (abgeglichen mit OSV-Datenbank und Maven Central):
 | Abhängigkeit | Version | Aktuell | Befund |
 |---|---|---|---|
 | `assertj-core` | 3.27.3 | 3.27.7 | Sicherheitslücke CVE-2026-24400 (XXE) |
-| Checkstyle | 10.21.0 | 14.x | 4 Major-Versionen zurück |
-| JUnit Jupiter | 5.12.2 | 6.x | 1 Major-Version zurück |
+| Checkstyle | 10.21.0 | 14.4.0 | 4 Major-Versionen zurück |
+| JUnit Jupiter | 5.12.2 | 6.1.3 | 1 Major-Version zurück |
 
 ### 1.4 Prompt an das LLM
 
