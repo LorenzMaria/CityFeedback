@@ -27,7 +27,18 @@ Mit den Standardregeln findet SonarQube also keine technische Schuld, daher erg�
 
 ### 1.4 Antwort des LLM
 
-![LLM-Antwort](img/u5-3-antwort-1.png)
+Vollst채ndige Antwort: [llm-out/u5-3-antwort-1.md](llm-out/u5-3-antwort-1.md)
+
+| Bereich | Funde | Hoch / Mittel / Niedrig | Kernaussage |
+|---|---|---|---|
+| Dom채nenmodell | 7 | 2 / 4 / 1 | Fachamt wird beim Weiterleiten nicht gespeichert, Entity ohne ID, keine Invarianten, uneinheitliche Exceptions |
+| Struktur und Duplizierung | 4 | 0 / 1 / 3 | Package `valueObjects` verletzt Namenskonvention, Status doppelt gehalten, toter Code in `_alt_platzhalter/` |
+| Tooling und CI | 3 | 1 / 1 / 1 | Checkstyle-Regelsatz zu schwach, keine Coverage-Messung, duplizierte CI-Jobs |
+| Abh채ngigkeiten | 3 | 0 / 1 / 2 | AssertJ-CVE patchen, JUnit 6 und Checkstyle 14 nachziehen |
+| **Gesamt** | **17** | **3 / 7 / 7** | |
+
+**Top 3 laut LLM:** Dom채nenmodell vervollst채ndigen, Messbarkeit herstellen (Regelsatz, Coverage, Quality Gate in CI), AssertJ patchen.
+**Kernthese:** "0 Issues" in SonarQube und Checkstyle ist tr체gerisch, weil die Standardregeln die fachliche Schuld nicht erfassen.
 
 ## Phase 2: Auswertung, Bewertung und Einordnung
 
