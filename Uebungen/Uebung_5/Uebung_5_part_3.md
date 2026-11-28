@@ -2,7 +2,7 @@
 
 **Ziel:** Technische Schuld und Regelverletzungen erfassen, nach Schweregrad einordnen und mit LLM-Unterstützung reduzieren
 
-**Tools:** SonarQube (siehe [Teil 1]), Checkstyle, OSV-Datenbank, _LLM_
+**Tools:** SonarQube (siehe Teil 1), SonarQube for IDE, Checkstyle, OSV-Datenbank, _LLM_
 
 ## Phase 1: Analyse mit Tools und LLM
 
@@ -10,9 +10,26 @@
 
 Die SonarQube-Analyse aus Teil 1 dient als Basis und wird hier nicht wiederholt.
 Ergebnis: 0 Issues in Security, Reliability und Maintainability, 0 % Duplizierung, Technical Debt nahe 0, Coverage unter 30 %.
-Mit den Standardregeln findet SonarQube also keine technische Schuld, daher ergänzen wir weitere Quellen.
+Mit den Standardregeln ("Sonar way") findet SonarQube also keine technische Schuld, daher verschärfen wir die Regeln.
 
-### 1.2 Ergänzende Analyse
+### 1.2 Erweiterte Regeln in SonarQube for IDE
+
+Zusätzlich aktiviert: S109 (Magic Numbers), S2384 (Mutable Members), S1176 (Javadoc für öffentliche API).
+S1176 prüft standardmäßig nur Packages unter `**.api.**`, daher wurde `forClasses` auf `beschwerdemanagement.**` gesetzt.
+
+![Zusätzlich aktivierte Regeln](img/u5-3-rules.png)
+![Parameter von S1176](img/u5-3-rule-param.png)
+
+### 1.3 Ergebnisse der Tools
+
+![SonarQube for IDE Report](img/u5-3-sonarcube-analysis.png)
+
+| Regel | Verletzung | Schweregrad | Anzahl | Ort |
+|---|---|---|---|---|
+| S1176 | Öffentliche Klasse, Methode oder Typparameter ohne Javadoc | Mittel | 16 | `main`, 7 Dateien |
+| S5778 | Lambda in `assertThrows` mit mehreren Aufrufen, die eine Exception werfen können | Mittel | 1 | `test` |
+| S1612 | Lambda statt Methodenreferenz | Niedrig | 3 | `test` |
+| **Gesamt** | | | **20** | **10 Dateien** |
 
 | Quelle | Befund |
 |---|---|
@@ -22,24 +39,17 @@ Mit den Standardregeln findet SonarQube also keine technische Schuld, daher erg�
 | | JUnit 5.12.2, aktuell JUnit 6 |
 | Coverage | siehe Teil 2, JaCoCo Auswertung |
 
-### 1.3 Prompt an das LLM
+### 1.4 Prompt an das LLM
 
-![Prompt](img/u5-3-prompt-1.png)
+![Prompt](img/u5-3-prompt-2.png)
 
-### 1.4 Antwort des LLM
+### 1.5 Antwort des LLM
 
-Vollständige Antwort: [llm-out/u5-3-antwort-1.md](llm-out/u5-3-antwort-1.md)
+_TODO_
 
-| Bereich | Funde | Hoch / Mittel / Niedrig | Kernaussage |
-|---|---|---|---|
-| Domänenmodell | 7 | 2 / 4 / 1 | Fachamt wird beim Weiterleiten nicht gespeichert, Entity ohne ID, keine Invarianten, uneinheitliche Exceptions |
-| Struktur und Duplizierung | 4 | 0 / 1 / 3 | Package `valueObjects` verletzt Namenskonvention, Status doppelt gehalten, toter Code in `_alt_platzhalter/` |
-| Tooling und CI | 3 | 1 / 1 / 1 | Checkstyle-Regelsatz zu schwach, keine Coverage-Messung, duplizierte CI-Jobs |
-| Abhängigkeiten | 3 | 0 / 1 / 2 | AssertJ-CVE patchen, JUnit 6 und Checkstyle 14 nachziehen |
-| **Gesamt** | **17** | **3 / 7 / 7** | |
-
-**Top 3 laut LLM:** Domänenmodell vervollständigen, Messbarkeit herstellen (Regelsatz, Coverage, Quality Gate in CI), AssertJ patchen.
-**Kernthese:** "0 Issues" in SonarQube und Checkstyle ist trügerisch, weil die Standardregeln die fachliche Schuld nicht erfassen.
+> **Iteration 1 (verworfen):** Der erste Prompt ließ das LLM selbst im Code nach Schuld suchen, statt Tool-Ergebnisse zu bewerten ([Prompt](img/u5-3-prompt-1.png), [Antwort](llm-out/u5-3-antwort-1.md)).
+> Das widerspricht der Aufgabe, die Funde müssen vom Tool kommen.
+> Übernommen wurde nur die Erkenntnis, dass "0 Issues" mit Standardregeln trügerisch ist, daraus entstanden die erweiterten Regeln in 1.2.
 
 ## Phase 2: Auswertung, Bewertung und Einordnung
 
