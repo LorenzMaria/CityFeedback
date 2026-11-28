@@ -1,5 +1,9 @@
 # 3. Technical Debt und Regelverletzungen mit LLM analysieren
 
+In diesem Teil ermitteln wir die technische Schuld im Code, ordnen sie nach Schweregrad ein und leiten mit einem LLM Maßnahmen zur Reduzierung ab.
+Phase 1 sammelt dazu die Ergebnisse der Tools und die Empfehlungen des LLM, Phase 2 bewertet diese kritisch, damit nur sinnvolle Maßnahmen übernommen werden.
+
+
 **Ziel:** Technische Schuld und Regelverletzungen erfassen, nach Schweregrad einordnen und mit LLM-Unterstützung reduzieren
 
 **Tools:** SonarQube (siehe Teil 1), SonarQube for IDE, IntelliJ Vulnerable Dependencies, Claude Code mit Opus 5.5 (Abfrage Maven Central und LLM-Bewertung)
@@ -102,4 +106,4 @@ Jede Aussage zur Ausnutzbarkeit oder zum Projektkontext muss daher selbst am Cod
 Die Tools liefern vollständige, reproduzierbare Funde, bewerten sie aber nach festen Regeln, unabhängig davon, wie der Code im Projekt genutzt wird.
 Das LLM ergänzt genau diesen Teil: Einordnung, Priorisierung nach Nutzen und Aufwand und konkrete Umsetzungsvorschläge.
 Die Qualität der Antwort hängt dabei direkt davon ab, wie eng der Prompt gefasst ist und welche Tool-Funde er enthält.
-Die Kombination spart Zeit bei der Bewertung, die Entscheidung bleibt aber beim Menschen.
+Die Kombination spart Zeit bei der Bewertung, die Gesamteinordnung und Bewertung muss jedoch manuell erfolgen.
