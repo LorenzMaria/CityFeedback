@@ -2,7 +2,7 @@
 
 **Ziel:** Technische Schuld und Regelverletzungen erfassen, nach Schweregrad einordnen und mit LLM-Unterstützung reduzieren
 
-**Tools:** SonarQube (siehe Teil 1), SonarQube for IDE, Checkstyle, OSV-Datenbank, _LLM_
+**Tools:** SonarQube (siehe Teil 1), SonarQube for IDE, OSV-Datenbank, _LLM_
 
 ## Phase 1: Analyse mit Tools und LLM
 
@@ -31,13 +31,13 @@ S1176 prüft standardmäßig nur Packages unter `**.api.**`, daher wurde `forCla
 | S1612 | "Replace this lambda with method reference" | Niedrig | 3 | `test` |
 | **Gesamt** | | | **20** | **10 Dateien** |
 
-| Quelle | Befund |
-|---|---|
-| Checkstyle (`./gradlew checkstyleMain checkstyleTest`) | 0 Verstöße |
-| Abhängigkeiten (OSV / Maven Central) | `assertj-core` 3.27.3 mit Sicherheitslücke CVE-2026-24400 (XXE) |
-| | Checkstyle 10.21.0, aktuell 14.x |
-| | JUnit 5.12.2, aktuell JUnit 6 |
-| Coverage | siehe Teil 2, JaCoCo Auswertung |
+Veraltete Abhängigkeiten (abgeglichen mit OSV-Datenbank und Maven Central):
+
+| Abhängigkeit | Version | Aktuell | Befund |
+|---|---|---|---|
+| `assertj-core` | 3.27.3 | 3.27.7 | Sicherheitslücke CVE-2026-24400 (XXE) |
+| Checkstyle | 10.21.0 | 14.x | 4 Major-Versionen zurück |
+| JUnit Jupiter | 5.12.2 | 6.x | 1 Major-Version zurück |
 
 ### 1.4 Prompt an das LLM
 
