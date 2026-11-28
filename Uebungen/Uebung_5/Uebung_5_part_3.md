@@ -2,13 +2,13 @@
 
 **Ziel:** Technische Schuld und Regelverletzungen erfassen, nach Schweregrad einordnen und mit LLM-Unterstützung reduzieren
 
-**Tools:** SonarQube (siehe [Teil 1](Uebung_5.md)), Checkstyle, OSV-Datenbank, _LLM_
+**Tools:** SonarQube (siehe [Teil 1]), Checkstyle, OSV-Datenbank, _LLM_
 
 ## Phase 1: Analyse mit Tools und LLM
 
 ### 1.1 Ausgangslage aus Teil 1
 
-Die SonarQube-Analyse aus [Teil 1](Uebung_5.md) dient als Basis und wird hier nicht wiederholt.
+Die SonarQube-Analyse aus Teil 1 dient als Basis und wird hier nicht wiederholt.
 Ergebnis: 0 Issues in Security, Reliability und Maintainability, 0 % Duplizierung, Technical Debt nahe 0, Coverage unter 30 %.
 Mit den Standardregeln findet SonarQube also keine technische Schuld, daher ergänzen wir weitere Quellen.
 
@@ -20,7 +20,7 @@ Mit den Standardregeln findet SonarQube also keine technische Schuld, daher erg�
 | Abhängigkeiten (OSV / Maven Central) | `assertj-core` 3.27.3 mit Sicherheitslücke CVE-2026-24400 (XXE) |
 | | Checkstyle 10.21.0, aktuell 14.x |
 | | JUnit 5.12.2, aktuell JUnit 6 |
-| Coverage (Teil 1) | unter 30 %, wird in Teil 2 bearbeitet |
+| Coverage | siehe Teil 2, JaCoCo ([PR #36](https://github.com/LorenzMaria/CityFeedback/pull/36)) |
 
 ### 1.3 Prompt an das LLM
 
