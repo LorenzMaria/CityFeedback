@@ -60,10 +60,10 @@ Vollständige Antwort: [llm-out/u5-3-antwort-2.md](llm-out/u5-3-antwort-2.md)
 
 ## Phase 2: Auswertung, Bewertung und Einordnung
 
-| Problem | Kategorie | Schweregrad (Tool) | Schweregrad (LLM) | Bewertung |
+| Problem | Kategorie | Schweregrad (SonarQube) | Schweregrad (LLM) | Bewertung |
 |---|---|---|---|---|
-| AssertJ 3.27.3 (CVE-2026-24400) | Abhängigkeit / Sicherheit | – | niedrig | übernehmen, Update auf 3.27.7 |
-| JUnit 5.12.2, Checkstyle 10.21.0 | Abhängigkeit | – | niedrig | übernehmen, je ein eigener Schritt |
+| AssertJ 3.27.3 (CVE-2026-24400) | Abhängigkeit / Sicherheit | – (Fund via OSV / Maven Central, nicht SonarQube) | niedrig | übernehmen, Update auf 3.27.7 |
+| JUnit 5.12.2, Checkstyle 10.21.0 | Abhängigkeit | – (Fund via OSV / Maven Central, nicht SonarQube) | niedrig | übernehmen, je ein eigener Schritt |
 | S1176 fehlende Javadoc (16x) | Code Smell | mittel | niedrig | teilweise, nur `Beschwerde` und `Uebergangsregeln` dokumentieren |
 | S5778 Lambda mit mehreren Aufrufen | Code Smell (Test) | mittel | niedrig | übernehmen |
 | S1612 Lambda statt Methodenreferenz (3x) | Code Smell (Test) | niedrig | niedrig | übernehmen |
