@@ -20,7 +20,7 @@ Mit den Standardregeln findet SonarQube also keine technische Schuld, daher erg�
 | Abhängigkeiten (OSV / Maven Central) | `assertj-core` 3.27.3 mit Sicherheitslücke CVE-2026-24400 (XXE) |
 | | Checkstyle 10.21.0, aktuell 14.x |
 | | JUnit 5.12.2, aktuell JUnit 6 |
-| Coverage | siehe Teil 2, JaCoCo ([PR #36](https://github.com/LorenzMaria/CityFeedback/pull/36)) |
+| Coverage | siehe Teil 2, JaCoCo Auswertung |
 
 ### 1.3 Prompt an das LLM
 
