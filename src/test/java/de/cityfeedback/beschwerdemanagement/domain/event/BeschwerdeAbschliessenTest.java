@@ -1,12 +1,12 @@
-package beschwerdemanagement.domain.event;
+package de.cityfeedback.beschwerdemanagement.domain.event;
 
-import beschwerdemanagement.domain.model.Beschwerde;
-import beschwerdemanagement.domain.valueObjects.BeschwerdeStatus;
+import de.cityfeedback.beschwerdemanagement.domain.model.Beschwerde;
+import de.cityfeedback.beschwerdemanagement.domain.valueObjects.BeschwerdeStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static beschwerdemanagement.domain.event.BeschwerdeTestFixtures.neueBeschwerde;
-import static beschwerdemanagement.domain.event.BeschwerdeTestFixtures.zustaendigesFachamt;
+import static de.cityfeedback.beschwerdemanagement.domain.event.BeschwerdeTestFixtures.neueBeschwerde;
+import static de.cityfeedback.beschwerdemanagement.domain.event.BeschwerdeTestFixtures.zustaendigesFachamt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
