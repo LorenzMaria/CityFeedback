@@ -247,9 +247,9 @@ Die bisherigen Ergebnisse zeigen wiederholend, dass die Klasse „Beschwerde auf
 Die Auswertung zeigt, das das Projekt bestimmte Qualitätsanforderungen erfüllt und wurde ingesamt mit „Passed“ bewertet. 
 
 ![Gesamtübersicht von SonarQube](img/SonarQube_1.PNG)
-![Analyse von SonarQube Part 1](img/SonarQube_2.PNG)
-![Analyse von SonarQube Part 2](img/SonarQube_3.PNG)
-![Analyse von SonarQube Part 3](img/SonarQube_4.PNG)
+<img src="img/SonarQube_2.PNG" alt="Analyse von SonarQube Part 1" width="500">
+<img src="img/SonarQube_3.PNG" alt="Analyse von SonarQube Part 2" width="500">
+<img src="img/SonarQube_4.PNG" alt="Analyse von SonarQube Part 3" width="500">
 
 Interpretation:
 Es gibt wenige Sicherheitsprobleme und die Security-Hotspots sollten zu mindestens 80% überprüft sein. Die Reliability zeigt, dass es möglichst keine Bugs gibt, die zu Fehlverhalten oder Abstürzen führen können. Die Maintainablity ist ebenfalls sehr gering. Der Wert bei Duplications liegt bei unter 3 % und spricht für ein wenig redundanten Code. Es handelt sich mit 143 Lines of Code außerdem um ein kleines Projekt unter 1000 Lines of Code. Die Testabdeckung des Codes beträgt weniger als 30 % und bedeutet, dass ein großer Teil des Codes nicht durch die automatisierten Test abgedeckt ist. Damit stellt die Testabdeckung eine Schwachstelle da, wo Verbesserungsbedarf besteht.
