@@ -2,7 +2,7 @@
 
 **Ziel:** Technische Schuld und Regelverletzungen erfassen, nach Schweregrad einordnen und mit LLM-Unterstützung reduzieren
 
-**Tools:** SonarQube (siehe Teil 1), SonarQube for IDE, IntelliJ Vulnerable Dependencies, Claude Code (Abfrage Maven Central), _LLM_
+**Tools:** SonarQube (siehe Teil 1), SonarQube for IDE, IntelliJ Vulnerable Dependencies, Claude Code mit Opus 5.5 (Abfrage Maven Central und LLM-Bewertung)
 
 ## Phase 1: Analyse mit Tools und LLM
 
@@ -62,7 +62,7 @@ Vollständige Antwort: [llm-out/u5-3-antwort-2.md](llm-out/u5-3-antwort-2.md)
 
 ## Phase 2: Auswertung, Bewertung und Einordnung
 
-| Problem | Fund durch | Kategorie | Schweregrad (Tool) | Schweregrad (LLM) | Bewertung |
+| Problem | Tool | Kategorie | Schweregrad (Tool) | Schweregrad (LLM) | Bewertung |
 |---|---|---|---|---|---|
 | AssertJ 3.27.3 (CVE-2026-24400) | IntelliJ (Vulnerable Dependencies) | Abhängigkeit / Sicherheit | hoch (CVSS 7.3) | niedrig | übernehmen, Update auf 3.27.7 |
 | JUnit 5.12.2, Checkstyle 10.21.0 | Claude Code (Abfrage Maven Central) | Abhängigkeit | – (kein Schweregrad) | niedrig | übernehmen, je ein eigener Schritt |
@@ -78,6 +78,16 @@ Die übernommenen Maßnahmen werden in der nächsten Iteration umgesetzt und dan
 
 ## Reflexion
 
-- **Was hat das LLM gut gemacht?** _TODO_
-- **Wo waren Grenzen / Fehler?** _TODO_
-- **Mehrwert für den Prozess:** _TODO_
+- **Was hat das LLM gut gemacht?**
+  Es hat die Schweregrade der Tools nachvollziehbar im Projektkontext begründet, z. B. dass die AssertJ-Lücke nur im Test-Scope liegt und `isXmlEqualTo` im Projekt nicht genutzt wird (geprüft, stimmt).
+  Es hat sich an die Vorgabe gehalten, keine eigenen Funde zu ergänzen, und konkrete, kleine Maßnahmen mit Codebeispielen geliefert.
+  Statt Pflicht-Javadoc überall schlägt es gezielte Dokumentation an den Stellen mit Fachlogik vor.
+- **Wo waren Grenzen / Fehler?**
+  Das LLM ergänzt Behauptungen ohne Grundlage ("Scanner/CI bleiben rot"), obwohl die CI keinen Scanner enthält.
+  Versionsangaben sind unscharf: Es empfiehlt `junit-bom:6.0.x`, aktuell ist aber 6.1.3.
+  Ohne die Funde der Tools findet das LLM keine verlässliche technische Schuld, die Qualität der Antwort hängt direkt vom Input ab.
+  Jede Aussage zur Ausnutzbarkeit oder zum Projektkontext muss daher selbst am Code geprüft werden.
+- **Mehrwert für den Prozess:**
+  Die Tools liefern vollständige, reproduzierbare Funde, aber ohne Kontext und mit pauschalen Schweregraden.
+  Das LLM ergänzt genau diesen Teil: Einordnung, Priorisierung nach Nutzen und Aufwand und konkrete Umsetzungsvorschläge.
+  Die Kombination spart Zeit bei der Bewertung, die Entscheidung bleibt aber beim Menschen.
