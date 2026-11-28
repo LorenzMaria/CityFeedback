@@ -99,7 +99,7 @@ Jede Aussage zur Ausnutzbarkeit oder zum Projektkontext muss daher selbst am Cod
 
 ### Mehrwert für den Prozess
 
-Die Tools liefern vollständige, reproduzierbare Funde, aber ohne Kontext und mit pauschalen Schweregraden.
+Die Tools liefern vollständige, reproduzierbare Funde, bewerten sie aber nach festen Regeln, unabhängig davon, wie der Code im Projekt genutzt wird.
 Das LLM ergänzt genau diesen Teil: Einordnung, Priorisierung nach Nutzen und Aufwand und konkrete Umsetzungsvorschläge.
 Die Qualität der Antwort hängt dabei direkt davon ab, wie eng der Prompt gefasst ist und welche Tool-Funde er enthält.
 Die Kombination spart Zeit bei der Bewertung, die Entscheidung bleibt aber beim Menschen.
