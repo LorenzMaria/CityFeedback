@@ -2,7 +2,7 @@
 
 **Ziel:** Technische Schuld und Regelverletzungen erfassen, nach Schweregrad einordnen und mit LLM-Unterstützung reduzieren
 
-**Tools:** SonarQube (siehe Teil 1), SonarQube for IDE, OSV-Datenbank, _LLM_
+**Tools:** SonarQube (siehe Teil 1), SonarQube for IDE, IntelliJ Vulnerable Dependencies, Maven Central, _LLM_
 
 ## Phase 1: Analyse mit Tools und LLM
 
@@ -31,11 +31,13 @@ S1176 prüft standardmäßig nur Packages unter `**.api.**`, daher wurde `forCla
 | S1612 | "Replace this lambda with method reference" | Niedrig | 3 | `test` |
 | **Gesamt** | | | **20** | **10 Dateien** |
 
-Veraltete Abhängigkeiten (abgeglichen mit OSV-Datenbank und Maven Central):
+Veraltete Abhängigkeiten: Sicherheitslücken meldet IntelliJ unter "Vulnerable Dependencies", aktuelle Versionen stammen aus Maven Central.
+
+![IntelliJ Vulnerable Dependencies](img/u5-3-gradle-result.png)
 
 | Abhängigkeit | Version | Aktuell | Befund |
 |---|---|---|---|
-| `assertj-core` | 3.27.3 | 3.27.7 | Sicherheitslücke CVE-2026-24400 (XXE) |
+| `assertj-core` | 3.27.3 | 3.27.7 | Sicherheitslücke CVE-2026-24400 (XXE), CVSS 7.3 (hoch) |
 | Checkstyle | 10.21.0 | 14.4.0 | 4 Major-Versionen zurück |
 | JUnit Jupiter | 5.12.2 | 6.1.3 | 1 Major-Version zurück |
 
@@ -56,14 +58,14 @@ Vollständige Antwort: [llm-out/u5-3-antwort-2.md](llm-out/u5-3-antwort-2.md)
 
 **Top 3:** AssertJ patchen, Test-Issues beheben, Updates und gezielte Javadoc.
 
-**Anmerkung:** Das LLM ergänzt Angaben ohne Grundlage: "Tool: hoch" bei der CVE (kein Tool lieferte diesen Schweregrad) und "Scanner/CI bleiben rot" (die CI enthält keinen Scanner).
+**Anmerkung:** Das LLM ergänzt eine Angabe ohne Grundlage: "Scanner/CI bleiben rot", die CI enthält aber keinen Scanner.
 
 ## Phase 2: Auswertung, Bewertung und Einordnung
 
-| Problem | Kategorie | Schweregrad (SonarQube) | Schweregrad (LLM) | Bewertung |
+| Problem | Kategorie | Schweregrad (SonarQube / IntelliJ) | Schweregrad (LLM) | Bewertung |
 |---|---|---|---|---|
-| AssertJ 3.27.3 (CVE-2026-24400) | Abhängigkeit / Sicherheit | – (Fund via OSV / Maven Central, nicht SonarQube) | niedrig | übernehmen, Update auf 3.27.7 |
-| JUnit 5.12.2, Checkstyle 10.21.0 | Abhängigkeit | – (Fund via OSV / Maven Central, nicht SonarQube) | niedrig | übernehmen, je ein eigener Schritt |
+| AssertJ 3.27.3 (CVE-2026-24400) | Abhängigkeit / Sicherheit | hoch (CVSS 7.3, IntelliJ Vulnerable Dependencies) | niedrig | übernehmen, Update auf 3.27.7 |
+| JUnit 5.12.2, Checkstyle 10.21.0 | Abhängigkeit | – (Fund via Maven Central, kein Schweregrad) | niedrig | übernehmen, je ein eigener Schritt |
 | S1176 fehlende Javadoc (16x) | Code Smell | mittel | niedrig | teilweise, nur `Beschwerde` und `Uebergangsregeln` dokumentieren |
 | S5778 Lambda mit mehreren Aufrufen | Code Smell (Test) | mittel | niedrig | übernehmen |
 | S1612 Lambda statt Methodenreferenz (3x) | Code Smell (Test) | niedrig | niedrig | übernehmen |
