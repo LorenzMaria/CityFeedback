@@ -56,27 +56,23 @@ Vollständige Antwort: [llm-out/u5-3-antwort-2.md](llm-out/u5-3-antwort-2.md)
 
 **Top 3:** AssertJ patchen, Test-Issues beheben, Updates und gezielte Javadoc.
 
-> **Hinweis:** Das LLM ergänzt Angaben ohne Grundlage: "Tool: hoch" bei der CVE (kein Tool lieferte diesen Schweregrad) und "Scanner/CI bleiben rot" (die CI enthält keinen Scanner).
-
-> **Iteration 1 (verworfen):** Der erste Prompt ließ das LLM selbst im Code nach Schuld suchen, statt Tool-Ergebnisse zu bewerten ([Prompt](img/u5-3-prompt-1.png), [Antwort](llm-out/u5-3-antwort-1.md)).
-> Das widerspricht der Aufgabe, die Funde müssen vom Tool kommen.
-> Übernommen wurde nur die Erkenntnis, dass "0 Issues" mit Standardregeln trügerisch ist, daraus entstanden die erweiterten Regeln in 1.2.
+**Anmerkung:** Das LLM ergänzt Angaben ohne Grundlage: "Tool: hoch" bei der CVE (kein Tool lieferte diesen Schweregrad) und "Scanner/CI bleiben rot" (die CI enthält keinen Scanner).
 
 ## Phase 2: Auswertung, Bewertung und Einordnung
 
-| Problem | Kategorie (Duplizierung / Abhängigkeit / Smell) | Schweregrad | LLM-Empfehlung | Bewertung (übernehmen / verwerfen) |
-|---|---|---|---|---|
-| _TODO_ | | | | |
-
-**Einordnung:** _TODO, 2-3 Sätze: wo liegt die meiste Schuld, was ist kritisch, wo lag das LLM daneben._
-
-## Phase 3: Optimierung und Reduktion (ongoing)
-
-| # | Maßnahme | Status | Vorher → Nachher |
+| Problem | Kategorie | Schweregrad Tool → LLM | Bewertung |
 |---|---|---|---|
-| 1 | _TODO_ | offen | |
+| AssertJ 3.27.3 (CVE-2026-24400) | Abhängigkeit / Sicherheit | – → niedrig | übernehmen, Update auf 3.27.7 |
+| JUnit 5.12.2, Checkstyle 10.21.0 | Abhängigkeit | – → niedrig | übernehmen, je ein eigener Schritt |
+| S1176 fehlende Javadoc (16x) | Code Smell | mittel → niedrig | teilweise, nur `Beschwerde` und `Uebergangsregeln` dokumentieren |
+| S5778 Lambda mit mehreren Aufrufen | Code Smell (Test) | mittel → niedrig | übernehmen |
+| S1612 Lambda statt Methodenreferenz (3x) | Code Smell (Test) | niedrig → niedrig | übernehmen |
 
-![SonarQube nach Optimierung](img/u5-3-sonarqube-after.png)
+**Einordnung:** Kritische Schuld gibt es nicht, Duplizierung wurde nicht gefunden.
+16 von 20 Funden sind fehlende Javadoc und damit eher formale Schuld, der einzige Sicherheitsfund ist im Projekt nicht ausnutzbar.
+Das LLM hat die Tool-Schweregrade sinnvoll in den Projektkontext eingeordnet, aber auch Angaben ohne Grundlage ergänzt (siehe 1.5).
+
+Die übernommenen Maßnahmen werden in der nächsten Iteration umgesetzt und danach erneut mit SonarQube for IDE geprüft.
 
 ## Reflexion
 
