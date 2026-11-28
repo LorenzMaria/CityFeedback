@@ -1,7 +1,8 @@
 # 3. Technical Debt und Regelverletzungen mit LLM analysieren
 
-**Ziel:** Technische Schuld erfassen, nach Schweregrad einordnen und mit LLM-Unterstützung reduzieren.
-**Tools:** SonarQube (Ergebnisse aus Teil 1), Checkstyle, OSV-Datenbank, _LLM_
+**Ziel:** Technische Schuld und Regelverletzungen erfassen, nach Schweregrad einordnen und mit LLM-Unterstützung reduzieren
+
+**Tools:** SonarQube (siehe [Teil 1](Uebung_5.md)), Checkstyle, OSV-Datenbank, _LLM_
 
 ## Phase 1: Analyse mit Tools und LLM
 
