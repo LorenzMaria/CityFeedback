@@ -84,9 +84,9 @@ An einigen Stellen hat es jedoch Aufgaben übernommen, die nicht verlangt waren,
 
 ### Was hat das LLM gut gemacht?
 
-Es hat die Schweregrade der Tools nachvollziehbar im Projektkontext begründet, z. B. dass die AssertJ-Lücke nur im Test-Scope liegt und `isXmlEqualTo` im Projekt nicht genutzt wird (geprüft, stimmt).
-Mit klarer Vorgabe hat es keine eigenen Funde ergänzt und konkrete, kleine Maßnahmen mit Codebeispielen geliefert.
-Statt Pflicht-Javadoc überall schlägt es gezielte Dokumentation an den Stellen mit Fachlogik vor.
+Als Sparringspartner hat es geholfen, das Vorgehen zu durchdenken und Ideen schnell gegenzuprüfen.
+Beim Entwerfen und Vorformulieren der Texte hat es viel Zeit gespart.
+Beim Erweitern der SonarQube-Regeln und beim Finden und Einordnen der technischen Schuld war es ebenfalls hilfreich.
 
 ### Wo waren Grenzen und Fehler?
 
