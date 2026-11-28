@@ -78,21 +78,28 @@ Die übernommenen Maßnahmen werden in der nächsten Iteration umgesetzt und dan
 
 ## Reflexion
 
+Insgesamt hat sich das LLM (Claude Opus 5.5 über Claude Code) bewährt, als Sparringspartner und zum Entwerfen und Vorformulieren von Texten.
+Auch beim Erweitern der SonarQube-Regeln und beim Einordnen der technischen Schuld war es eine große Hilfe.
+An einigen Stellen hat es jedoch Aufgaben übernommen, die nicht verlangt waren, oder ungenaue Antworten geliefert.
+
 ### Was hat das LLM gut gemacht?
 
 Es hat die Schweregrade der Tools nachvollziehbar im Projektkontext begründet, z. B. dass die AssertJ-Lücke nur im Test-Scope liegt und `isXmlEqualTo` im Projekt nicht genutzt wird (geprüft, stimmt).
-Es hat sich an die Vorgabe gehalten, keine eigenen Funde zu ergänzen, und konkrete, kleine Maßnahmen mit Codebeispielen geliefert.
+Mit klarer Vorgabe hat es keine eigenen Funde ergänzt und konkrete, kleine Maßnahmen mit Codebeispielen geliefert.
 Statt Pflicht-Javadoc überall schlägt es gezielte Dokumentation an den Stellen mit Fachlogik vor.
 
 ### Wo waren Grenzen und Fehler?
 
-Das LLM ergänzt Behauptungen ohne Grundlage ("Scanner/CI bleiben rot"), obwohl die CI keinen Scanner enthält.
+Im ersten Prompt stand statt des Codes nur ein Platzhalter.
+Das LLM hat daraufhin selbstständig das Repo gelesen und 17 eigene Funde geliefert, die mit den Tool-Ergebnissen nichts zu tun hatten ([llm-out/u5-3-antwort-1.md](llm-out/u5-3-antwort-1.md)).
+Diese Antwort wurde verworfen und der Prompt auf die Bewertung der Tool-Funde eingegrenzt.
+Auch in der zweiten Antwort ergänzt es Behauptungen ohne Grundlage ("Scanner/CI bleiben rot"), obwohl die CI keinen Scanner enthält.
 Versionsangaben sind unscharf: Es empfiehlt `junit-bom:6.0.x`, aktuell ist aber 6.1.3.
-Ohne die Funde der Tools findet das LLM keine verlässliche technische Schuld, die Qualität der Antwort hängt direkt vom Input ab.
 Jede Aussage zur Ausnutzbarkeit oder zum Projektkontext muss daher selbst am Code geprüft werden.
 
 ### Mehrwert für den Prozess
 
 Die Tools liefern vollständige, reproduzierbare Funde, aber ohne Kontext und mit pauschalen Schweregraden.
 Das LLM ergänzt genau diesen Teil: Einordnung, Priorisierung nach Nutzen und Aufwand und konkrete Umsetzungsvorschläge.
+Die Qualität der Antwort hängt dabei direkt davon ab, wie eng der Prompt gefasst ist und welche Tool-Funde er enthält.
 Die Kombination spart Zeit bei der Bewertung, die Entscheidung bleibt aber beim Menschen.
