@@ -60,13 +60,13 @@ Vollständige Antwort: [llm-out/u5-3-antwort-2.md](llm-out/u5-3-antwort-2.md)
 
 ## Phase 2: Auswertung, Bewertung und Einordnung
 
-| Problem | Kategorie | Schweregrad Tool → LLM | Bewertung |
-|---|---|---|---|
-| AssertJ 3.27.3 (CVE-2026-24400) | Abhängigkeit / Sicherheit | – → niedrig | übernehmen, Update auf 3.27.7 |
-| JUnit 5.12.2, Checkstyle 10.21.0 | Abhängigkeit | – → niedrig | übernehmen, je ein eigener Schritt |
-| S1176 fehlende Javadoc (16x) | Code Smell | mittel → niedrig | teilweise, nur `Beschwerde` und `Uebergangsregeln` dokumentieren |
-| S5778 Lambda mit mehreren Aufrufen | Code Smell (Test) | mittel → niedrig | übernehmen |
-| S1612 Lambda statt Methodenreferenz (3x) | Code Smell (Test) | niedrig → niedrig | übernehmen |
+| Problem | Kategorie | Schweregrad (Tool) | Schweregrad (LLM) | Bewertung |
+|---|---|---|---|---|
+| AssertJ 3.27.3 (CVE-2026-24400) | Abhängigkeit / Sicherheit | – | niedrig | übernehmen, Update auf 3.27.7 |
+| JUnit 5.12.2, Checkstyle 10.21.0 | Abhängigkeit | – | niedrig | übernehmen, je ein eigener Schritt |
+| S1176 fehlende Javadoc (16x) | Code Smell | mittel | niedrig | teilweise, nur `Beschwerde` und `Uebergangsregeln` dokumentieren |
+| S5778 Lambda mit mehreren Aufrufen | Code Smell (Test) | mittel | niedrig | übernehmen |
+| S1612 Lambda statt Methodenreferenz (3x) | Code Smell (Test) | niedrig | niedrig | übernehmen |
 
 **Einordnung:** Kritische Schuld gibt es nicht, Duplizierung wurde nicht gefunden.
 16 von 20 Funden sind fehlende Javadoc und damit eher formale Schuld, der einzige Sicherheitsfund ist im Projekt nicht ausnutzbar.
