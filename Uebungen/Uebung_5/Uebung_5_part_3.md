@@ -45,7 +45,18 @@ Veraltete Abhängigkeiten (abgeglichen mit OSV-Datenbank und Maven Central):
 
 ### 1.5 Antwort des LLM
 
-_TODO_
+Vollständige Antwort: [llm-out/u5-3-antwort-2.md](llm-out/u5-3-antwort-2.md)
+
+| Fund | Schweregrad laut LLM | Übernehmen? |
+|---|---|---|
+| AssertJ-CVE | niedrig (nur Test-Scope, `isXmlEqualTo` ungenutzt) | ja |
+| JUnit 6, Checkstyle 14 | niedrig | ja, als eigene Schritte |
+| S1176 Javadoc (16x) | niedrig | teilweise, nur `Beschwerde` und `Uebergangsregeln` |
+| S5778, S1612 (4x, Tests) | niedrig | ja |
+
+**Top 3:** AssertJ patchen, Test-Issues beheben, Updates und gezielte Javadoc.
+
+> **Hinweis:** Das LLM ergänzt Angaben ohne Grundlage: "Tool: hoch" bei der CVE (kein Tool lieferte diesen Schweregrad) und "Scanner/CI bleiben rot" (die CI enthält keinen Scanner).
 
 > **Iteration 1 (verworfen):** Der erste Prompt ließ das LLM selbst im Code nach Schuld suchen, statt Tool-Ergebnisse zu bewerten ([Prompt](img/u5-3-prompt-1.png), [Antwort](llm-out/u5-3-antwort-1.md)).
 > Das widerspricht der Aufgabe, die Funde müssen vom Tool kommen.
