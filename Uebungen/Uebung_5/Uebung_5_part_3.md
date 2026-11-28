@@ -26,9 +26,9 @@ S1176 prüft standardmäßig nur Packages unter `**.api.**`, daher wurde `forCla
 
 | Regel | Verletzung | Schweregrad | Anzahl | Ort |
 |---|---|---|---|---|
-| S1176 | Öffentliche Klasse, Methode oder Typparameter ohne Javadoc | Mittel | 16 | `main`, 7 Dateien |
-| S5778 | Lambda in `assertThrows` mit mehreren Aufrufen, die eine Exception werfen können | Mittel | 1 | `test` |
-| S1612 | Lambda statt Methodenreferenz | Niedrig | 3 | `test` |
+| S1176 | "Document this public … by adding an explicit description" (keine Javadoc an öffentlicher API) | Mittel | 16 | `main`, 7 Dateien |
+| S5778 | "Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception" | Mittel | 1 | `test` |
+| S1612 | "Replace this lambda with method reference" | Niedrig | 3 | `test` |
 | **Gesamt** | | | **20** | **10 Dateien** |
 
 | Quelle | Befund |
