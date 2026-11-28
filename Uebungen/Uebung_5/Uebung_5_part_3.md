@@ -1,20 +1,20 @@
 # 3. Technical Debt und Regelverletzungen mit LLM analysieren
 
 **Ziel:** Technische Schuld mit SonarQube erfassen, nach Schweregrad einordnen und mit LLM-Unterstützung reduzieren.
-**Tools:** SonarQube, _LLM_
+**Tools:** SonarQube for IDE (IntelliJ-Plugin), _LLM_
 
 ## Phase 1: Analyse mit SonarQube und LLM
 
 ### 1.1 SonarQube-Analyse
 
-![SonarQube Übersicht](img/u5-3-sonarqube-overview.png)
+![SonarQube for IDE Report](img/u5-3-sonarqube-overview.png)
 
-| Metrik | Wert |
+| Schweregrad | Anzahl Issues |
 |---|---|
-| Technical Debt | _TODO_ |
-| Code Smells | _TODO_ |
-| Bugs / Vulnerabilities | _TODO_ |
-| Duplizierung | _TODO_ |
+| Blocker / Hoch | _TODO_ |
+| Mittel | _TODO_ |
+| Niedrig / Info | _TODO_ |
+| Veraltete Abhängigkeiten | _TODO_ |
 
 ### 1.2 Prompt an das LLM
 
